@@ -1,0 +1,142 @@
+[
+  {
+    "type": "GUADAGNO",
+    "user": "ALE",
+    "money": 100000.0,
+    "date": "2025-08-30",
+    "tags": [
+      {
+        "name": "Bonus",
+        "color": "#000000",
+        "description": "",
+        "parentName": "Entrate"
+      }
+    ]
+  },
+  {
+    "type": "SPESA",
+    "user": "ROSSI",
+    "money": -120.0,
+    "date": "2025-08-30",
+    "tags": [
+      {
+        "name": "Carburante",
+        "color": "#000000",
+        "description": "",
+        "parentName": "Trasporti"
+      }
+    ]
+  },
+  {
+    "type": "SPESA",
+    "user": "ALE",
+    "money": -98.0,
+    "date": "2025-08-30",
+    "tags": [
+      {
+        "name": "Carburante",
+        "color": "#000000",
+        "description": "",
+        "parentName": "Trasporti"
+      }
+    ]
+  },
+  {
+    "type": "SPESA",
+    "user": "ALE",
+    "money": -89.0,
+    "date": "2025-08-30",
+    "tags": [
+      {
+        "name": "Carburante",
+        "color": "#000000",
+        "description": "",
+        "parentName": "Trasporti"
+      }
+    ]
+  },
+  {
+    "type": "SPESA",
+    "user": "ALE",
+    "money": -30.0,
+    "date": "2025-08-30",
+    "tags": [
+      {
+        "name": "Carburante",
+        "color": "#000000",
+        "description": "",
+        "parentName": "Trasporti"
+      }
+    ]
+  },
+  {
+    "type": "SPESA",
+    "user": "ALE",
+    "money": -200.0,
+    "date": "2025-08-30",
+    "tags": [
+      {
+        "name": "Carburante",
+        "color": "#000000",
+        "description": "",
+        "parentName": "Trasporti"
+      }
+    ]
+  },
+  {
+    "type": "SPESA",
+    "user": "ALE",
+    "money": -400.0,
+    "date": "2025-08-31",
+    "tags": [
+      {
+        "name": "Carburante",
+        "color": "#000000",
+        "description": "",
+        "parentName": "Trasporti"
+      }
+    ]
+  },
+  {
+    "type": "SPESA",
+    "user": "ALE",
+    "money": -200.0,
+    "date": "2025-08-30",
+    "tags": [
+      {
+        "name": "Carburante",
+        "color": "#000000",
+        "description": "",
+        "parentName": "Trasporti"
+      }
+    ]
+  },
+  {
+    "type": "SPESA",
+    "user": "ALE",
+    "money": -300.0,
+    "date": "2025-08-30",
+    "tags": [
+      {
+        "name": "Carburante",
+        "color": "#000000",
+        "description": "",
+        "parentName": "Trasporti"
+      }
+    ]
+  },
+  {
+    "type": "SPESA",
+    "user": "Rata 1 - Mutuo Casa",
+    "money": -3950.0753147891637,
+    "date": "2025-08-30",
+    "tags": [
+      {
+        "name": "Mutuo",
+        "color": "#000000",
+        "description": "",
+        "parentName": "Abitazione"
+      }
+    ]
+  }
+]

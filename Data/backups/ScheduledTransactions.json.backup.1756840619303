@@ -1,0 +1,14 @@
+[
+  {
+    "description": "Spotify",
+    "amount": 15.0,
+    "type": "SPESA",
+    "tagNames": [
+      "Supermercato"
+    ],
+    "recurrence": "MENSILE",
+    "startDate": "2025-09-02",
+    "nextExecutionDate": "2025-09-02",
+    "active": true
+  }
+]

@@ -1,0 +1,120 @@
+[
+  {
+    "name": "Farmaci",
+    "parentName": "Salute",
+    "childrenNames": []
+  },
+  {
+    "name": "Carburante",
+    "parentName": "Trasporti",
+    "childrenNames": []
+  },
+  {
+    "name": "Salute",
+    "childrenNames": []
+  },
+  {
+    "name": "Medico",
+    "parentName": "Salute",
+    "childrenNames": []
+  },
+  {
+    "name": "Investimenti",
+    "parentName": "Entrate",
+    "childrenNames": []
+  },
+  {
+    "name": "Utenze",
+    "childrenNames": []
+  },
+  {
+    "name": "Stipendio",
+    "parentName": "Entrate",
+    "childrenNames": []
+  },
+  {
+    "name": "Sport",
+    "parentName": "Svago",
+    "childrenNames": []
+  },
+  {
+    "name": "Ristorante",
+    "parentName": "Alimentari",
+    "childrenNames": []
+  },
+  {
+    "name": "Cinema",
+    "parentName": "Svago",
+    "childrenNames": []
+  },
+  {
+    "name": "Supermercato",
+    "parentName": "Alimentari",
+    "childrenNames": []
+  },
+  {
+    "name": "Bonus",
+    "parentName": "Entrate",
+    "childrenNames": []
+  },
+  {
+    "name": "Trasporti",
+    "childrenNames": []
+  },
+  {
+    "name": "Assicurazione",
+    "parentName": "Trasporti",
+    "childrenNames": []
+  },
+  {
+    "name": "Viaggi",
+    "parentName": "Svago",
+    "childrenNames": []
+  },
+  {
+    "name": "Svago",
+    "childrenNames": []
+  },
+  {
+    "name": "Luce",
+    "parentName": "Utenze",
+    "childrenNames": []
+  },
+  {
+    "name": "Entrate",
+    "childrenNames": []
+  },
+  {
+    "name": "Manutenzione",
+    "parentName": "Trasporti",
+    "childrenNames": []
+  },
+  {
+    "name": "Mutuo",
+    "parentName": "Abitazione",
+    "childrenNames": []
+  },
+  {
+    "name": "Abitazione",
+    "childrenNames": []
+  },
+  {
+    "name": "Alimentari",
+    "childrenNames": []
+  },
+  {
+    "name": "Gas",
+    "parentName": "Utenze",
+    "childrenNames": []
+  },
+  {
+    "name": "Acqua",
+    "parentName": "Utenze",
+    "childrenNames": []
+  },
+  {
+    "name": "Internet",
+    "parentName": "Utenze",
+    "childrenNames": []
+  }
+]

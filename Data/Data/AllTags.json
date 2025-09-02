@@ -1,0 +1,135 @@
+// TIMESTAMP: 2025-09-02 21:07:48
+[
+  {
+    "name": "Farmaci",
+    "parentName": "Salute",
+    "childrenNames": []
+  },
+  {
+    "name": "Carburante",
+    "parentName": "Trasporti",
+    "childrenNames": []
+  },
+  {
+    "name": "Supermercato",
+    "parentName": "Alimentari",
+    "childrenNames": []
+  },
+  {
+    "name": "Salute",
+    "childrenNames": [
+      "Medico",
+      "Farmaci"
+    ]
+  },
+  {
+    "name": "Bonus",
+    "parentName": "Entrate",
+    "childrenNames": []
+  },
+  {
+    "name": "Trasporti",
+    "childrenNames": [
+      "Carburante",
+      "Manutenzione",
+      "Assicurazione"
+    ]
+  },
+  {
+    "name": "Medico",
+    "parentName": "Salute",
+    "childrenNames": []
+  },
+  {
+    "name": "Investimenti",
+    "parentName": "Entrate",
+    "childrenNames": []
+  },
+  {
+    "name": "Utenze",
+    "childrenNames": [
+      "Luce",
+      "Gas",
+      "Acqua",
+      "Internet"
+    ]
+  },
+  {
+    "name": "Assicurazione",
+    "parentName": "Trasporti",
+    "childrenNames": []
+  },
+  {
+    "name": "Viaggi",
+    "parentName": "Svago",
+    "childrenNames": []
+  },
+  {
+    "name": "Svago",
+    "childrenNames": [
+      "Cinema",
+      "Sport",
+      "Viaggi"
+    ]
+  },
+  {
+    "name": "Luce",
+    "parentName": "Utenze",
+    "childrenNames": []
+  },
+  {
+    "name": "Entrate",
+    "childrenNames": [
+      "Stipendio",
+      "Bonus",
+      "Investimenti"
+    ]
+  },
+  {
+    "name": "Stipendio",
+    "parentName": "Entrate",
+    "childrenNames": []
+  },
+  {
+    "name": "Manutenzione",
+    "parentName": "Trasporti",
+    "childrenNames": []
+  },
+  {
+    "name": "Sport",
+    "parentName": "Svago",
+    "childrenNames": []
+  },
+  {
+    "name": "Ristorante",
+    "parentName": "Alimentari",
+    "childrenNames": []
+  },
+  {
+    "name": "Alimentari",
+    "childrenNames": [
+      "Supermercato",
+      "Ristorante"
+    ]
+  },
+  {
+    "name": "Gas",
+    "parentName": "Utenze",
+    "childrenNames": []
+  },
+  {
+    "name": "Acqua",
+    "parentName": "Utenze",
+    "childrenNames": []
+  },
+  {
+    "name": "Internet",
+    "parentName": "Utenze",
+    "childrenNames": []
+  },
+  {
+    "name": "Cinema",
+    "parentName": "Svago",
+    "childrenNames": []
+  }
+]
