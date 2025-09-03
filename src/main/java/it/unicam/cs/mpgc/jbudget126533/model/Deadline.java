@@ -15,22 +15,22 @@ import java.time.LocalDate;
 public class Deadline implements Comparable<Deadline> {
 
     /** Descrizione della scadenza */
-    private String description;
+    private final String description;
 
     /** Data di scadenza */
-    private LocalDate dueDate;
+    private final LocalDate dueDate;
 
     /** Importo della scadenza */
-    private double amount;
+    private final double amount;
 
     /** Tipo di movimento (entrata o uscita) */
-    private MovementType type;
+    private final MovementType type;
 
     /** Tipo di scadenza (programmata o ammortamento) */
-    private DeadlineType deadlineType;
+    private final DeadlineType deadlineType;
 
     /** Identificativo dell'elemento sorgente (transazione o piano di ammortamento) */
-    private String sourceId;
+    private final String sourceId;
 
     /** Stato del pagamento */
     private boolean isPaid;

@@ -166,7 +166,7 @@ public class SyncManager {
                 return newDeviceId;
             }
         } catch (Exception e) {
-            return "device-" + UUID.randomUUID().toString();
+            return "device-" + UUID.randomUUID();
         }
     }
 

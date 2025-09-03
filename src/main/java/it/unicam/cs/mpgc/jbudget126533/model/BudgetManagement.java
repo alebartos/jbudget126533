@@ -273,25 +273,60 @@ public class BudgetManagement implements IBudgetManagement {
         return !date.isBefore(start) && !date.isAfter(end);
     }
 
-    /** Calcola le occorrenze passate fino a oggi di una transazione ricorrente */
-    private int calculateOCCURREDOccurrences(ScheduledTransaction scheduled, LocalDate periodStart, LocalDate periodEnd) {
-        if (!scheduled.isActive()) return 0;
-        // implementazione interna...
-        return 0; // placeholder
-    }
-
     /** Calcola le occorrenze totali in un periodo per una transazione programmata */
     private int calculateScheduledOccurrences(ScheduledTransaction scheduled, LocalDate periodStart, LocalDate periodEnd) {
         if (!scheduled.isActive()) return 0;
-        // implementazione interna...
-        return 0; // placeholder
+
+        int occurrences = 0;
+        LocalDate currentDate = scheduled.getStartDate();
+
+        // Se la transazione non è ancora iniziata nel periodo
+        if (currentDate.isAfter(periodEnd)) {
+            return 0;
+        }
+
+        // Avanza fino all'inizio del periodo
+        while (currentDate.isBefore(periodStart)) {
+            currentDate = calculateNextDate(currentDate, scheduled.getRecurrence());
+            if (currentDate.isAfter(periodEnd) ||
+                    (scheduled.getEndDate() != null && currentDate.isAfter(scheduled.getEndDate()))) {
+                return 0;
+            }
+        }
+
+        // Conta le occorrenze nel periodo (anche future)
+        int maxIterations = 1000;
+        while (!currentDate.isAfter(periodEnd) && occurrences < maxIterations) {
+            if (!currentDate.isBefore(periodStart) &&
+                    (scheduled.getEndDate() == null || !currentDate.isAfter(scheduled.getEndDate()))) {
+                occurrences++;
+            }
+
+            currentDate = calculateNextDate(currentDate, scheduled.getRecurrence());
+            if (currentDate.isAfter(periodEnd) ||
+                    (scheduled.getEndDate() != null && currentDate.isAfter(scheduled.getEndDate()))) {
+                break;
+            }
+        }
+
+        return occurrences;
     }
 
     /** Calcola la prossima data di una transazione programmata in base alla ricorrenza */
     private LocalDate calculateNextDate(LocalDate currentDate, RecurrenceType recurrence) {
-
-        // implementazione interna...
-        return currentDate; // placeholder
+        try {
+            switch (recurrence) {
+                case GIORNALIERO: return currentDate.plusDays(1);
+                case SETTIMANALE: return currentDate.plusWeeks(1);
+                case MENSILE: return currentDate.plusMonths(1);
+                case ANNUALE: return currentDate.plusYears(1);
+                default: return currentDate;
+            }
+        } catch (Exception e) {
+            // In caso di errore (es. data impossibile), ritorna la data corrente
+            System.err.println("Errore nel calcolo della prossima data: " + e.getMessage());
+            return currentDate;
+        }
     }
 
     /** Predicato per filtrare transazioni in un intervallo di date e tipo */

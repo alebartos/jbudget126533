@@ -11,7 +11,7 @@
          prefHeight="800.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE"
          xmlns="http://javafx.com/javafx/17"
          xmlns:fx="http://javafx.com/fxml/1"
-         fx:controller="it.unicam.cs.mpgc.jbudget126533.controller.GUIController"
+         fx:controller="it.unicam.cs.mpgc.jbudget126533.view.GUIController"
          stylesheets="@styles.css">
 
 
@@ -244,7 +244,7 @@
                     <DatePicker fx:id="dateEndForTrend" GridPane.rowIndex="1" GridPane.columnIndex="3" />
 
                     <Label text="Risultato:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
-                    <Label fx:id="balanceTrend" text="N/A" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.columnSpan="3" />
+                    <Label fx:id="balanceTrend" text="N/A" wrapText="true" maxWidth="Infinity" maxHeight="Infinity" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" style="-fx-font-size: 14px;" />
 
                     <Button text="Analizza Trend" onAction="#updateBalanceTrend" GridPane.columnIndex="3" GridPane.rowIndex="3"
                             style="-fx-background-color: #9b59b6; -fx-text-fill: white;" />

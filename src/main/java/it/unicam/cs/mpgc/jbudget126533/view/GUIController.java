@@ -1,5 +1,6 @@
-package it.unicam.cs.mpgc.jbudget126533.controller;
+package it.unicam.cs.mpgc.jbudget126533.view;
 
+import it.unicam.cs.mpgc.jbudget126533.controller.*;
 import it.unicam.cs.mpgc.jbudget126533.model.*;
 
 import java.io.File;
@@ -120,7 +121,7 @@ public class GUIController implements Initializable {
     @FXML private Label dueTodayDeadlinesLabel;
     @FXML private Label futureDeadlinesLabel;
 
-    private Ledger ledger;
+    private final Ledger ledger;
 
     /**
      * Costruttore del controller principale.
@@ -236,7 +237,7 @@ public class GUIController implements Initializable {
             Image img = new Image(getClass().getResourceAsStream("jbudget.jpg"));
             image.setImage(img);
         } catch (Exception e) {
-            System.out.println("");
+            System.out.println();
         }
     }
 

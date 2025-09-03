@@ -1,7 +1,6 @@
 package it.unicam.cs.mpgc.jbudget126533.controller;
 
 import it.unicam.cs.mpgc.jbudget126533.model.*;
-import it.unicam.cs.mpgc.jbudget126533.util.Pair;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -103,14 +102,34 @@ public class StatisticsHandler {
                 endDate = LocalDate.now();
             }
 
-            double result = ledger.balanceForDates(type, startDate, endDate);
-            double scheduledAmount = ledger.calculateScheduledTransactionsForPeriod(type, startDate, endDate);
+            // Calcola i componenti separatamente
+            double realTransactions = calculateRealTransactions(type, startDate, endDate);
+            double scheduledTransactions = ledger.calculateScheduledTransactionsForPeriod(type, startDate, endDate);
+            double amortizationPayments = 0;
 
-            if (scheduledAmount != 0) {
-                balanceForRange.setText(String.format("%.2f € (di cui %.2f € programmati)", result, scheduledAmount));
-            } else {
-                balanceForRange.setText(String.format("%.2f €", result));
+            // Solo per le spese includi gli ammortamenti
+            if (type == null || type == MovementType.SPESA) {
+                amortizationPayments = calculateAmortizationPayments(startDate, endDate);
             }
+
+            double result = realTransactions + scheduledTransactions + amortizationPayments;
+
+            // Crea il messaggio dettagliato
+            StringBuilder details = new StringBuilder();
+            details.append(String.format("%.2f €", result));
+
+            if (scheduledTransactions != 0) {
+                details.append(String.format(" (Prog: %.2f €", scheduledTransactions));
+
+                if (amortizationPayments != 0) {
+                    details.append(String.format(", Amm: %.2f € )", amortizationPayments));
+                }
+
+            } else if (amortizationPayments != 0) {
+                details.append(String.format(" (Ammortamenti: %.2f €)", amortizationPayments));
+            }
+
+            balanceForRange.setText(details.toString());
 
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Errore", "Si è verificato un errore nel calcolo: " + e.getMessage());
@@ -137,44 +156,44 @@ public class StatisticsHandler {
                 endDate = LocalDate.now();
             }
 
-            Pair<Boolean, Double> trendResult = ledger.trendBalance(startDate, endDate).apply(ledger.getTransaction());
-            double realTrend = trendResult.getSecond();
+            // USA I METODI CORRETTI:
+            double realTrend = calculateRealTransactions(null, startDate, endDate);
             double scheduledTrend = ledger.calculateScheduledTransactionsForPeriod(null, startDate, endDate);
+            double amortizationTrend = ledger.calculateAmortizationPaymentsForPeriod(startDate, endDate); // METODO CORRETTO
 
-            double totalTrend = realTrend + scheduledTrend;
+            double totalTrend = realTrend + scheduledTrend + amortizationTrend;
             String trend = totalTrend > 0 ? "📈 Positivo" : "📉 Negativo";
 
-            if (scheduledTrend != 0) {
-                balanceTrend.setText(String.format("%s (Totale: %.2f € | Reali: %.2f € | Programmati: %.2f €)",
-                        trend, totalTrend, realTrend, scheduledTrend));
-            } else {
-                balanceTrend.setText(String.format("%s (%.2f €)", trend, totalTrend));
+            // Conta usando i metodi corretti
+            int realCount = countRealTransactions(null, startDate, endDate);
+            int scheduledCount = countScheduledTransactions(null, startDate, endDate);
+            int amortizationCount = ledger.countAmortizationPaymentsForPeriod(startDate, endDate);
+
+            // Visualizzazione compatta per spazio limitato
+            StringBuilder details = new StringBuilder();
+            details.append(String.format("%s: %.2f €\n", trend, totalTrend));
+
+            // Aggiungi icone e conteggi compatti
+            if (realCount > 0 || scheduledCount > 0 || amortizationCount > 0) {
+
+                if (realCount > 0) {
+                    details.append(String.format("Reali: %.2f € (%d transazioni)\n", realTrend, realCount));
+                }
+
+                if (scheduledCount > 0) {
+                    if (realCount > 0) details.append(String.format("Programmati: %.2f € (%d transazioni)\n", scheduledTrend, scheduledCount));
+                }
+
+                if (amortizationCount > 0) {
+                    if (realCount > 0 || scheduledCount > 0)  details.append(String.format("Ammortamenti: %.2f € (%d rate)", amortizationTrend, amortizationCount));
+                }
+
             }
+
+            balanceTrend.setText(details.toString());
 
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Errore", "Si è verificato un errore nel calcolo: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Popola la tabella dei saldi per ciascun tag in base al tipo di movimento selezionato.
-     *
-     * @param actionEvent evento scatenante
-     */
-    public void showTypeTagTable(ActionEvent actionEvent) {
-        try {
-            MovementType type = choiceTypeForEachTag.getValue();
-            HashMap<String, Double> hashMap = ledger.balanceForEachTag(type);
-
-            List<Map.Entry<String, Double>> sortedEntries = hashMap.entrySet().stream()
-                    .sorted((e1, e2) -> Double.compare(Math.abs(e2.getValue()), Math.abs(e1.getValue())))
-                    .collect(Collectors.toList());
-
-            ObservableList<Map.Entry<String, Double>> items = FXCollections.observableArrayList(sortedEntries);
-            tagTable.setItems(items);
-
-        } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile generare la tabella: " + e.getMessage());
         }
     }
 
@@ -204,6 +223,81 @@ public class StatisticsHandler {
             }
         });
     }
+
+    /**
+     * Calcola le transazioni reali per il periodo.
+     */
+    private double calculateRealTransactions(MovementType type, LocalDate startDate, LocalDate endDate) {
+        return ledger.getTransaction().stream()
+                .filter(t -> type == null || t.getType().equals(type))
+                .filter(t -> !t.getDate().isBefore(startDate) && !t.getDate().isAfter(endDate))
+                .mapToDouble(ITransaction::getMoney)
+                .sum();
+    }
+
+    /**
+     * Conta le transazioni reali nel periodo.
+     */
+    private int countRealTransactions(MovementType type, LocalDate startDate, LocalDate endDate) {
+        return (int) ledger.getTransaction().stream()
+                .filter(t -> type == null || t.getType().equals(type))
+                .filter(t -> !t.getDate().isBefore(startDate) && !t.getDate().isAfter(endDate))
+                .count();
+    }
+
+    /**
+     * Conta le transazioni programmate nel periodo.
+     */
+    private int countScheduledTransactions(MovementType type, LocalDate startDate, LocalDate endDate) {
+        try {
+            return (int) ledger.getScheduledTransactions().stream()
+                    .filter(st -> (type == null || st.getType().equals(type)) && st.isActive())
+                    .filter(st -> st.getNextExecutionDate() != null &&
+                            !st.getNextExecutionDate().isBefore(startDate) &&
+                            !st.getNextExecutionDate().isAfter(endDate))
+                    .count();
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    /**
+     * Popola la tabella dei saldi per ciascun tag in base al tipo di movimento selezionato.
+     * Questo metodo è richiamato dal GUIController.
+     *
+     * @param actionEvent evento di azione
+     */
+    public void showTypeTagTable(ActionEvent actionEvent) {
+        try {
+            MovementType type = choiceTypeForEachTag.getValue();
+            HashMap<String, Double> hashMap = ledger.balanceForEachTag(type);
+
+            List<Map.Entry<String, Double>> sortedEntries = hashMap.entrySet().stream()
+                    .sorted((e1, e2) -> Double.compare(Math.abs(e2.getValue()), Math.abs(e1.getValue())))
+                    .collect(Collectors.toList());
+
+            ObservableList<Map.Entry<String, Double>> items = FXCollections.observableArrayList(sortedEntries);
+            tagTable.setItems(items);
+
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile generare la tabella: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Calcola i pagamenti di ammortamento per il periodo.
+     * Restituisce un valore NEGATIVO perché sono spese.
+     */
+    private double calculateAmortizationPayments(LocalDate startDate, LocalDate endDate) {
+        try {
+            return ledger.calculateAmortizationPaymentsForPeriod(startDate, endDate);
+        } catch (Exception e) {
+            System.err.println("Errore nel calcolo ammortamenti: " + e.getMessage());
+            return 0;
+        }
+    }
+
+
 
     /**
      * Mostra un alert grafico.

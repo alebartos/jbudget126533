@@ -18,7 +18,7 @@ import java.util.*;
 public class AmortizationManager {
 
     /** Mappa dei piani di ammortamento attivi, identificati da un ID univoco. */
-    private Map<String, AmortizationPlan> amortizationPlans = new HashMap<>();
+    private final Map<String, AmortizationPlan> amortizationPlans = new HashMap<>();
 
     /** Gestore della persistenza su file. */
     private final IFileManagement fileManagement;
@@ -124,7 +124,7 @@ public class AmortizationManager {
             }
         }
 
-        return total;
+        return -total;
     }
 
     /**

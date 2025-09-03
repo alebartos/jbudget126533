@@ -281,6 +281,59 @@ public class Ledger {
         return amortizationManager.deleteAmortizationPlan(plan);
     }
 
+    /**
+     * Calcola il totale delle rate di ammortamento in un periodo.
+     *
+     * @param startDate data di inizio
+     * @param endDate data di fine
+     * @return totale rate di ammortamento (valore negativo perché sono spese)
+     */
+    public double calculateAmortizationPaymentsForPeriod(LocalDate startDate, LocalDate endDate) {
+        return amortizationManager.calculateFutureInstallments(startDate, endDate);
+    }
+
+    /**
+     * Conta il numero di rate di ammortamento in un periodo.
+     *
+     * @param startDate data di inizio
+     * @param endDate data di fine
+     * @return numero di rate
+     */
+    public int countAmortizationPaymentsForPeriod(LocalDate startDate, LocalDate endDate) {
+        int count = 0;
+        for (AmortizationPlan plan : amortizationManager.getAmortizationPlans()) {
+            for (Installment installment : plan.getInstallments()) {
+                if (!installment.isPaid() &&
+                        !installment.getDueDate().isBefore(startDate) &&
+                        !installment.getDueDate().isAfter(endDate)) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    /**
+     * Ottiene le rate di ammortamento in un periodo.
+     *
+     * @param startDate data di inizio
+     * @param endDate data di fine
+     * @return lista di rate
+     */
+    public List<Installment> getAmortizationInstallmentsForPeriod(LocalDate startDate, LocalDate endDate) {
+        List<Installment> installments = new ArrayList<>();
+        for (AmortizationPlan plan : amortizationManager.getAmortizationPlans()) {
+            for (Installment installment : plan.getInstallments()) {
+                if (!installment.isPaid() &&
+                        !installment.getDueDate().isBefore(startDate) &&
+                        !installment.getDueDate().isAfter(endDate)) {
+                    installments.add(installment);
+                }
+            }
+        }
+        return installments;
+    }
+
     // ===== SCADENZE =====
 
     public List<Deadline> getAllDeadlines() {

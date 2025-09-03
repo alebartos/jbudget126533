@@ -13,15 +13,15 @@ import java.util.stream.Collectors;
  */
 public class ScheduledTransaction {
 
-    private String description;
-    private double amount;
-    private MovementType type;
+    private final String description;
+    private final double amount;
+    private final MovementType type;
     private transient List<ITag> tags; // Non serializzare direttamente
-    private List<String> tagNames; // Serializza solo i nomi
-    private RecurrenceType recurrence;
-    private LocalDate startDate;
+    private final List<String> tagNames; // Serializza solo i nomi
+    private final RecurrenceType recurrence;
+    private final LocalDate startDate;
     private LocalDate nextExecutionDate;
-    private LocalDate endDate;
+    private final LocalDate endDate;
     private boolean active;
 
     /**
