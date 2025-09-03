@@ -156,15 +156,13 @@ public class StatisticsHandler {
                 endDate = LocalDate.now();
             }
 
-            // USA I METODI CORRETTI:
             double realTrend = calculateRealTransactions(null, startDate, endDate);
             double scheduledTrend = ledger.calculateScheduledTransactionsForPeriod(null, startDate, endDate);
-            double amortizationTrend = ledger.calculateAmortizationPaymentsForPeriod(startDate, endDate); // METODO CORRETTO
+            double amortizationTrend = ledger.calculateAmortizationPaymentsForPeriod(startDate, endDate);
 
             double totalTrend = realTrend + scheduledTrend + amortizationTrend;
             String trend = totalTrend > 0 ? "📈 Positivo" : "📉 Negativo";
 
-            // Conta usando i metodi corretti
             int realCount = countRealTransactions(null, startDate, endDate);
             int scheduledCount = countScheduledTransactions(null, startDate, endDate);
             int amortizationCount = ledger.countAmortizationPaymentsForPeriod(startDate, endDate);
