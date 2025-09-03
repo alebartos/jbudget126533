@@ -112,28 +112,35 @@ public class StatisticsHandler {
                 amortizationPayments = calculateAmortizationPayments(startDate, endDate);
             }
 
-            double result = realTransactions + scheduledTransactions + amortizationPayments;
-
-            // Crea il messaggio dettagliato
-            StringBuilder details = new StringBuilder();
-            details.append(String.format("%.2f €", result));
-
-            if (scheduledTransactions != 0) {
-                details.append(String.format(" (Prog: %.2f €", scheduledTransactions));
-
-                if (amortizationPayments != 0) {
-                    details.append(String.format(", Amm: %.2f € )", amortizationPayments));
-                }
-
-            } else if (amortizationPayments != 0) {
-                details.append(String.format(" (Ammortamenti: %.2f €)", amortizationPayments));
-            }
+            StringBuilder details = getStringBuilder(realTransactions, scheduledTransactions, amortizationPayments);
 
             balanceForRange.setText(details.toString());
 
         } catch (Exception e) {
             showAlert("Si è verificato un errore nel calcolo: " + e.getMessage());
         }
+    }
+
+    private static StringBuilder getStringBuilder(double realTransactions, double scheduledTransactions, double amortizationPayments) {
+        double result = realTransactions + scheduledTransactions + amortizationPayments;
+
+        // Crea il messaggio dettagliato
+        StringBuilder details = new StringBuilder();
+        details.append(String.format("%.2f €", result));
+
+        if (scheduledTransactions != 0) {
+            details.append(String.format(" (Prog: %.2f €", scheduledTransactions));
+
+            if (amortizationPayments != 0) {
+                details.append(String.format(", Amm: %.2f € ", amortizationPayments));
+            }
+
+            details.append(")");
+
+        } else if (amortizationPayments != 0) {
+            details.append(String.format(" (Ammortamenti: %.2f €)", amortizationPayments));
+        }
+        return details;
     }
 
     /**
@@ -239,9 +246,6 @@ public class StatisticsHandler {
     private int countRealTransactions(LocalDate startDate, LocalDate endDate) {
         return (int) ledger.getTransaction().stream()
                 .filter(t -> {
-                    if (null != null) {
-                        t.getType();
-                    }
                     return true;
                 })
                 .filter(t -> !t.getDate().isBefore(startDate) && !t.getDate().isAfter(endDate))

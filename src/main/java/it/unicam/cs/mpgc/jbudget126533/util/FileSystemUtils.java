@@ -8,11 +8,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Classe di utilità per la gestione delle directory e dei file persistenti dell'applicazione.
@@ -27,24 +24,6 @@ import java.util.Map;
  * </ul>
  */
 public class FileSystemUtils {
-
-    /**
-     * Mostra i timestamp di tutti i file di dati gestiti dall'applicazione.
-     * <p>
-     * I timestamp vengono letti tramite {@link TimestampManager} e stampati in formato
-     * "dd/MM/yyyy HH:mm:ss".
-     */
-    public static void displayAllTimestamps() {
-        System.out.println("\n=== TIMESTAMP DEI FILE ===");
-
-        Map<String, LocalDateTime> timestamps = TimestampManager.getAllTimestamps();
-
-        timestamps.forEach((filePath, timestamp) -> {
-            String fileName = new File(filePath).getName();
-            String formattedTime = timestamp.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
-            System.out.printf("%-25s: %s%n", fileName, formattedTime);
-        });
-    }
 
     /**
      * Inizializza la struttura delle directory necessarie per l'applicazione.

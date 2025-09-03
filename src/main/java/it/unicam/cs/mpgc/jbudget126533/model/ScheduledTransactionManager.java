@@ -1,12 +1,9 @@
 package it.unicam.cs.mpgc.jbudget126533.model;
 
-import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import it.unicam.cs.mpgc.jbudget126533.controller.Ledger;
 
-import java.io.File;
 import java.lang.reflect.Type;
-import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -145,23 +142,4 @@ public class ScheduledTransactionManager {
         }
     }
 
-    /**
-     * Reset delle transazioni programmate.
-     * <p>
-     * Se il file esiste, viene creato un backup con timestamp e la lista interna viene svuotata.
-     * </p>
-     */
-    public void resetScheduledTransactions() {
-        try {
-            File file = new File(SCHEDULED_FILE);
-            if (file.exists()) {
-                File backup = new File(SCHEDULED_FILE + ".backup." + System.currentTimeMillis());
-                Files.move(file.toPath(), backup.toPath());
-                System.out.println("File scheduled transactions corrotto, creato backup: " + backup.getName());
-            }
-            scheduledTransactions.clear();
-        } catch (Exception e) {
-            System.err.println("Errore nel reset: " + e.getMessage());
-        }
-    }
 }

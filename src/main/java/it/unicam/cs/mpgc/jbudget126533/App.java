@@ -60,9 +60,8 @@ public class App {
     /**
      * Avvia l'applicazione in modalità Console.
      *
-     * @throws Exception se si verifica un errore durante l'apertura della vista
      */
-    private void startConsole() throws Exception {
+    private void startConsole() {
         view.open();
     }
 

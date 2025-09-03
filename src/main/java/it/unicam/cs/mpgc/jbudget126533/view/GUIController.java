@@ -18,6 +18,7 @@ import javafx.stage.FileChooser;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -166,7 +167,7 @@ public class GUIController implements Initializable {
 
             deadlineHandler = new DeadlineHandler(ledger, deadlinesTable, deadlineFilterType,
                     totalDeadlinesLabel, overdueDeadlinesLabel, dueTodayDeadlinesLabel,
-                    futureDeadlinesLabel);
+                    futureDeadlinesLabel, scheduledTable);
 
             statisticsHandler = new StatisticsHandler(ledger, balanceForRange, dateStartForRange,
                     dateEndForRange, choiceForRange, balanceTrend, dateStartForTrend,
@@ -232,7 +233,7 @@ public class GUIController implements Initializable {
      */
     private void loadImage() {
         try {
-            Image img = new Image(getClass().getResourceAsStream("jbudget.jpg"));
+            Image img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("jbudget.jpg")));
             image.setImage(img);
         } catch (Exception e) {
             System.out.println();
@@ -465,16 +466,6 @@ public class GUIController implements Initializable {
     @FXML
     public void updateBudgets(ActionEvent event) {
         budgetHandler.updateBudgets(event);
-    }
-
-    /**
-     * Delega la pulizia dei budget scaduti al BudgetHandler.
-     *
-     * @param event L'evento di azione che ha triggerato questo metodo
-     */
-    @FXML
-    public void cleanupBudgets(ActionEvent event) {
-        budgetHandler.cleanupBudgets(event);
     }
 
     /**

@@ -52,9 +52,7 @@ public class Ledger {
                 amortizationManager,
                 budgetManager
         );
-        if (this.budgetManagement != null) {
-            this.budgetManagement.setAmortizationManager(amortizationManager);
-        }
+        this.budgetManagement.setAmortizationManager(amortizationManager);
     }
 
     /**
@@ -102,13 +100,6 @@ public class Ledger {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Notifica ai manager che i budget sono cambiati.
-     */
-    public void notifyBudgetChanged() {
-        budgetManager.updateAllBudgets();
     }
 
     /**
@@ -237,6 +228,10 @@ public class Ledger {
         scheduledTransactionManager.checkAndExecuteScheduledTransactions();
     }
 
+    public ScheduledTransactionManager getScheduledTransactionManager() {
+        return scheduledTransactionManager;
+    }
+
     public double calculateScheduledTransactionsForPeriod(MovementType type, LocalDate start, LocalDate end) {
         return budgetManagement.calculateScheduledTransactionsForPeriod(type, start, end);
     }
@@ -271,10 +266,6 @@ public class Ledger {
 
     public List<AmortizationPlan> getAmortizationPlans() {
         return amortizationManager.getAmortizationPlans();
-    }
-
-    public boolean deleteAmortizationPlan(String planId) {
-        return amortizationManager.deleteAmortizationPlan(planId);
     }
 
     public boolean deleteAmortizationPlan(AmortizationPlan plan) {
@@ -313,27 +304,6 @@ public class Ledger {
         return count;
     }
 
-    /**
-     * Ottiene le rate di ammortamento in un periodo.
-     *
-     * @param startDate data di inizio
-     * @param endDate data di fine
-     * @return lista di rate
-     */
-    public List<Installment> getAmortizationInstallmentsForPeriod(LocalDate startDate, LocalDate endDate) {
-        List<Installment> installments = new ArrayList<>();
-        for (AmortizationPlan plan : amortizationManager.getAmortizationPlans()) {
-            for (Installment installment : plan.getInstallments()) {
-                if (!installment.isPaid() &&
-                        !installment.getDueDate().isBefore(startDate) &&
-                        !installment.getDueDate().isAfter(endDate)) {
-                    installments.add(installment);
-                }
-            }
-        }
-        return installments;
-    }
-
     // ===== SCADENZE =====
 
     public List<Deadline> getAllDeadlines() {
@@ -352,7 +322,4 @@ public class Ledger {
         return deadlineManager.getUpcomingDeadlines();
     }
 
-    public List<Deadline> getDeadlinesByType(DeadlineType type) {
-        return deadlineManager.getDeadlinesByType(type);
-    }
 }

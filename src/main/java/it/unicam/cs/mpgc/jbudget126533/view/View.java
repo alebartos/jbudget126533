@@ -1,8 +1,5 @@
 package it.unicam.cs.mpgc.jbudget126533.view;
 
-import it.unicam.cs.mpgc.jbudget126533.util.InvalidInputException;
-import java.io.IOException;
-
 /**
  * Interfaccia che rappresenta una vista generica dell'applicazione.
  * <p>

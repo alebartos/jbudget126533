@@ -1,10 +1,8 @@
 package it.unicam.cs.mpgc.jbudget126533.model;
 
-import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -117,8 +115,6 @@ public class TagManager {
 
     public static boolean isTagSelected(String name) { return selectedTags.contains(name); }
 
-    public static Set<String> getSelectedTags() { return new HashSet<>(selectedTags); }
-
     public static List<ITag> getSelectedTagsList() {
         return selectedTags.stream()
                 .map(TagManager::getTag)
@@ -153,8 +149,6 @@ public class TagManager {
         String name;
         String parentName;
         List<String> childrenNames;
-
-        TagStructure() {}
 
         TagStructure(ITag tag) {
             this.name = tag.getName();

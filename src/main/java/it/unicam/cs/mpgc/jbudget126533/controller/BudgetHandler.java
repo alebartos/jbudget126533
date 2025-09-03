@@ -181,7 +181,7 @@ public class BudgetHandler {
      */
     private void configureBudgetTable() {
         try {
-            if (budgetTable.getColumns().size() > 0) {
+            if (!budgetTable.getColumns().isEmpty()) {
                 TableColumn<Budget, String> categoryColumn = (TableColumn<Budget, String>)
                         budgetTable.getColumns().getFirst();
                 categoryColumn.setCellValueFactory(cellData ->

@@ -1,12 +1,8 @@
 package it.unicam.cs.mpgc.jbudget126533.model;
 
-import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import it.unicam.cs.mpgc.jbudget126533.controller.Ledger;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.*;
@@ -22,14 +18,8 @@ public class BudgetManager {
     /** Gestore delle transazioni */
     private final IBudgetManagement budgetManagement;
 
-    /** Ledger delle transazioni */
-    private final Ledger ledger;
-
     /** Gestore della persistenza */
     private final IFileManagement fileManagement;
-
-    /** File di persistenza dei budget */
-    private static final String BUDGET_FILE = FilePaths.BUDGET_FILE;
 
     /**
      * Costruttore del BudgetManager.
@@ -41,7 +31,7 @@ public class BudgetManager {
 
     public BudgetManager(IBudgetManagement budgetManagement, Ledger ledger, IFileManagement fileManagement) {
         this.budgetManagement = budgetManagement;
-        this.ledger = ledger;
+        /** Ledger delle transazioni */
         this.fileManagement = fileManagement;
         loadBudgets();
         cleanupExpiredBudgets();
@@ -57,8 +47,6 @@ public class BudgetManager {
         double spentAmount;
         LocalDate startDate;
         LocalDate endDate;
-
-        BudgetData() {}
 
         BudgetData(Budget budget) {
             this.category = budget.getCategory();

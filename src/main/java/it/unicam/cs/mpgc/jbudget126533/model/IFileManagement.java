@@ -1,6 +1,5 @@
 package it.unicam.cs.mpgc.jbudget126533.model;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 

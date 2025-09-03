@@ -16,7 +16,7 @@ public class Tag implements ITag {
 
     private String name;
     private ITag parent;
-    private List<ITag> children;
+    private final List<ITag> children;
     private String color;
     private String description;
 
@@ -91,7 +91,6 @@ public class Tag implements ITag {
 
     @Override
     public List<ITag> getChildren() { return new ArrayList<>(children); }
-    public void setChildren(List<ITag> children) { this.children = new ArrayList<>(children); }
 
     @Override
     public void addChild(ITag child) {
@@ -171,25 +170,4 @@ public class Tag implements ITag {
         return getFullPath();
     }
 
-    /**
-     * Imposta il parent senza notificare il vecchio o nuovo genitore.
-     * Utile per operazioni interne o durante la deserializzazione.
-     *
-     * @param parent Nuovo parent
-     */
-    public void setParentWithoutNotification(ITag parent) {
-        this.parent = parent;
-    }
-
-    /**
-     * Aggiunge un figlio senza notificare il parent.
-     * Utile per operazioni interne o durante la deserializzazione.
-     *
-     * @param child Tag figlio
-     */
-    public void addChildWithoutNotification(ITag child) {
-        if (!children.contains(child)) {
-            children.add(child);
-        }
-    }
 }

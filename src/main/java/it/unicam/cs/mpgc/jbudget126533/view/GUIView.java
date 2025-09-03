@@ -6,6 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 /**
  * Classe principale per la GUI dell'applicazione JBudget basata su JavaFX.
  * <p>
@@ -28,7 +30,7 @@ public class GUIView extends Application implements View {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/Menu.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Menu.fxml")));
         primaryStage.setTitle("JBudget");
         primaryStage.setScene(new Scene(root, 1100, 750));
         primaryStage.resizableProperty().setValue(true);

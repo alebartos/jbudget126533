@@ -100,9 +100,8 @@ public final class SyncUtils {
             String backupDir = FilePaths.DATA_DIRECTORY + "/backups/sync";
             new File(backupDir).mkdirs();
 
-            String backupFile = backupDir + "/pre_sync_backup_" + System.currentTimeMillis() + ".zip";
             // La logica di backup completo dovrebbe essere implementata qui
-            return backupFile;
+            return backupDir + "/pre_sync_backup_" + System.currentTimeMillis() + ".zip";
 
         } catch (Exception e) {
             System.err.println("Errore nella creazione del backup: " + e.getMessage());
@@ -116,9 +115,8 @@ public final class SyncUtils {
      * @return oggetto {@link SyncStatistics} con i conteggi dei dati
      */
     public static SyncStatistics calculateStatistics() {
-        SyncStatistics stats = new SyncStatistics();
         // Implementazione specifica per il calcolo delle statistiche
-        return stats;
+        return new SyncStatistics();
     }
 }
 

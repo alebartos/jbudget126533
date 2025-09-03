@@ -24,9 +24,6 @@ public class DeadlineManager {
     /** Gestore dei piani di ammortamento */
     private final AmortizationManager amortizationManager;
 
-    /** Gestore dei budget (opzionale) */
-    private final BudgetManager budgetManager;
-
     /**
      * Costruttore principale.
      *
@@ -39,7 +36,7 @@ public class DeadlineManager {
                            BudgetManager budgetManager) {
         this.scheduledTransactionManager = scheduledTransactionManager;
         this.amortizationManager = amortizationManager;
-        this.budgetManager = budgetManager;
+        /** Gestore dei budget (opzionale) */
     }
 
     /**

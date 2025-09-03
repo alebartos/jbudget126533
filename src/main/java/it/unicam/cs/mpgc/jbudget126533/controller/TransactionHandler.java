@@ -110,9 +110,7 @@ public class TransactionHandler {
                 updateBalance();
                 loadTransactionTable();
                 clearInput();
-                if (transactionTagsListView != null) {
-                    transactionTagsListView.getSelectionModel().clearSelection();
-                }
+                transactionTagsListView.getSelectionModel().clearSelection();
 
                 showAlert(Alert.AlertType.INFORMATION, "Successo", "Transazione aggiunta con successo!");
 
@@ -184,7 +182,7 @@ public class TransactionHandler {
      */
     private void configureTransactionTable() {
         try {
-            if (transactionTable.getColumns().size() > 0) {
+            if (!transactionTable.getColumns().isEmpty()) {
                 TableColumn<ITransaction, String> typeColumn = (TableColumn<ITransaction, String>)
                         transactionTable.getColumns().getFirst();
                 typeColumn.setCellValueFactory(cellData ->

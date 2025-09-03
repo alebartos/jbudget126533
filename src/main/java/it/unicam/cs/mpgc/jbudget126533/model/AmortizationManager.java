@@ -1,7 +1,6 @@
 package it.unicam.cs.mpgc.jbudget126533.model;
 
 import it.unicam.cs.mpgc.jbudget126533.controller.Ledger;
-import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
@@ -23,8 +22,10 @@ public class AmortizationManager {
     /** Gestore della persistenza su file. */
     private final IFileManagement fileManagement;
 
-    /** Nome del file JSON utilizzato per salvare i piani di ammortamento. */
-    private static final String AMORTIZATION_FILE = FilePaths.AMORTIZATION_FILE;
+// --Commented out by Inspection START (03/09/25, 04:37):
+//    /** Nome del file JSON utilizzato per salvare i piani di ammortamento. */
+//    private static final String AMORTIZATION_FILE = FilePaths.AMORTIZATION_FILE;
+// --Commented out by Inspection STOP (03/09/25, 04:37)
 
     /**
      * Costruttore di default.

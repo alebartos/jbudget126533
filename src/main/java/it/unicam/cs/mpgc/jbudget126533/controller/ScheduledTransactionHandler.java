@@ -140,7 +140,6 @@ public class ScheduledTransactionHandler {
     public void checkScheduledTransactions(ActionEvent event) {
         ledger.checkScheduledTransactions();
         updateScheduledTable();
-        showAlert(Alert.AlertType.INFORMATION, "Controllo", "Transazioni programmate verificate!");
     }
 
     /**
@@ -172,7 +171,7 @@ public class ScheduledTransactionHandler {
      */
     private void configureScheduledTable() {
         try {
-            if (scheduledTable.getColumns().size() > 0) {
+            if (!scheduledTable.getColumns().isEmpty()) {
                 TableColumn<ScheduledTransaction, String> descColumn = (TableColumn<ScheduledTransaction, String>)
                         scheduledTable.getColumns().getFirst();
                 descColumn.setCellValueFactory(cellData ->

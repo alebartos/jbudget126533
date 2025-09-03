@@ -130,22 +130,12 @@ public class AmortizationPlan {
     /** @return lista delle rate del piano (nuova lista indipendente) */
     public List<Installment> getInstallments() { return new ArrayList<>(installments); }
 
-    /** @return totale degli interessi da pagare sull’intero piano */
-    public double getTotalInterest() {
-        return installments.stream().mapToDouble(Installment::getInterestAmount).sum();
-    }
-
-    /** @return totale complessivo da pagare (capitale + interessi) */
-    public double getTotalPayment() {
-        return installments.stream().mapToDouble(Installment::getTotalAmount).sum();
-    }
-
     // ===================== SETTERS (necessari per Gson) =====================
 
     public void setId(String id) { this.id = id; }
-    public void setDescription(String description) { this.description = description; }
+
     public void setPrincipalAmount(double principalAmount) { this.principalAmount = principalAmount; }
-    public void setAnnualInterestRate(double annualInterestRate) { this.annualInterestRate = annualInterestRate; }
+
     public void setNumberOfInstallments(int numberOfInstallments) { this.numberOfInstallments = numberOfInstallments; }
     public void setStartDate(LocalDate startDate) { this.startDate = startDate; }
     public void setTags(List<ITag> tags) { this.tags = new ArrayList<>(tags); }

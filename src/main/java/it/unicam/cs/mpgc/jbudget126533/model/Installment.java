@@ -23,9 +23,7 @@ public class Installment {
     private double principalAmount;
     private double interestAmount;
     private double totalAmount;
-    private double remainingBalance;
     private boolean paid;
-    private String planId;
 
     /**
      * Costruttore vuoto richiesto per la deserializzazione con Gson.
@@ -52,9 +50,7 @@ public class Installment {
         this.principalAmount = principalAmount;
         this.interestAmount = interestAmount;
         this.totalAmount = totalAmount;
-        this.remainingBalance = remainingBalance;
         this.paid = paid;
-        this.planId = planId;
     }
 
     // ==================== GETTERS ====================
@@ -65,23 +61,14 @@ public class Installment {
     /** @return data di scadenza della rata */
     public LocalDate getDueDate() { return dueDate; }
 
-    /** @return quota capitale della rata */
-    public double getPrincipalAmount() { return principalAmount; }
-
     /** @return quota interessi della rata */
     public double getInterestAmount() { return interestAmount; }
 
     /** @return importo totale della rata */
     public double getTotalAmount() { return totalAmount; }
 
-    /** @return saldo residuo dopo il pagamento di questa rata */
-    public double getRemainingBalance() { return remainingBalance; }
-
     /** @return true se la rata è già stata pagata */
     public boolean isPaid() { return paid; }
-
-    /** @return identificativo del piano di ammortamento */
-    public String getPlanId() { return planId; }
 
     /**
      * Verifica se la rata è scaduta o in scadenza oggi e non ancora pagata.
@@ -92,25 +79,9 @@ public class Installment {
         return (LocalDate.now().isAfter(dueDate) || LocalDate.now().isEqual(dueDate)) && !paid;
     }
 
-    /**
-     * Verifica se la rata è programmata per una data futura e non ancora pagata.
-     *
-     * @return true se la rata è futura, false altrimenti
-     */
-    public boolean isFuture() {
-        return LocalDate.now().isBefore(dueDate) && !paid;
-    }
-
     // ==================== SETTERS ====================
 
-    public void setNumber(int number) { this.number = number; }
-    public void setDueDate(LocalDate dueDate) { this.dueDate = dueDate; }
-    public void setPrincipalAmount(double principalAmount) { this.principalAmount = principalAmount; }
-    public void setInterestAmount(double interestAmount) { this.interestAmount = interestAmount; }
-    public void setTotalAmount(double totalAmount) { this.totalAmount = totalAmount; }
-    public void setRemainingBalance(double remainingBalance) { this.remainingBalance = remainingBalance; }
     public void setPaid(boolean paid) { this.paid = paid; }
-    public void setPlanId(String planId) { this.planId = planId; }
 
     @Override
     public String toString() {

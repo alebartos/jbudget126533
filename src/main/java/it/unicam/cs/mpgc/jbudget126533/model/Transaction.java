@@ -23,27 +23,6 @@ public class Transaction implements ITransaction {
     }
 
     /**
-     * Costruttore con singolo tag.
-     *
-     * @param type Tipo di movimento (GUADAGNO o SPESA)
-     * @param user Nome utente
-     * @param money Importo
-     * @param date Data della transazione
-     * @param tag Nome del tag singolo
-     */
-    public Transaction(MovementType type, String user, double money, LocalDate date, String tag) {
-        this.type = type;
-        this.user = user;
-        this.money = money;
-        this.date = date;
-        this.tags = new ArrayList<>();
-        if (tag != null && !tag.isEmpty()) {
-            ITag simpleTag = new Tag(tag);
-            this.tags.add(simpleTag);
-        }
-    }
-
-    /**
      * Costruttore con lista di tag multipli.
      *
      * @param type Tipo di movimento

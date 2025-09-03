@@ -1,4 +1,4 @@
-// TIMESTAMP: 2025-09-03 03:08:17
+// TIMESTAMP: 2025-09-03 04:28:44
 [
   {
     "type": "GUADAGNO",
@@ -157,7 +157,7 @@
   {
     "type": "SPESA",
     "user": "Spotify",
-    "money": 15.0,
+    "money": -15.0,
     "date": "2025-09-02",
     "tags": [
       {
@@ -171,7 +171,7 @@
   {
     "type": "SPESA",
     "user": "Spotify",
-    "money": 15.0,
+    "money": -15.0,
     "date": "2025-09-02",
     "tags": [
       {
@@ -184,28 +184,29 @@
   },
   {
     "type": "SPESA",
-    "user": "Rata 1 - Seconda Casa",
-    "money": -4119.077277489366,
-    "date": "2025-09-03",
+    "user": "Spotify",
+    "money": -15.0,
+    "date": "2025-09-02",
     "tags": [
       {
-        "name": "Mutuo",
+        "name": "Supermercato",
         "color": "#000000",
         "description": "",
-        "parentName": "Abitazione"
+        "parentName": "Alimentari"
       }
     ]
   },
   {
     "type": "SPESA",
-    "user": "Rata 1 - Prestito",
-    "money": -40116.860044193694,
-    "date": "2025-09-03",
+    "user": "Spotify",
+    "money": -15.0,
+    "date": "2025-09-02",
     "tags": [
       {
-        "name": "Trasporti",
+        "name": "Supermercato",
         "color": "#000000",
-        "description": ""
+        "description": "",
+        "parentName": "Alimentari"
       }
     ]
   }

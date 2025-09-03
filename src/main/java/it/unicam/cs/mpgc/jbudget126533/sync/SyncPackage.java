@@ -22,12 +22,6 @@ import java.util.List;
  */
 public class SyncPackage {
 
-    /** Timestamp di creazione del pacchetto */
-    private LocalDateTime timestamp;
-
-    /** ID univoco del dispositivo che ha generato il pacchetto */
-    private String deviceId;
-
     /** Lista di transazioni dell'utente */
     private List<ITransaction> transactions;
 
@@ -61,17 +55,13 @@ public class SyncPackage {
 
     // ==================== GETTER E SETTER ====================
 
-    /** Restituisce il timestamp di creazione del pacchetto */
-    public LocalDateTime getTimestamp() { return timestamp; }
-
     /** Imposta il timestamp di creazione del pacchetto */
-    public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
-
-    /** Restituisce l'ID del dispositivo che ha generato il pacchetto */
-    public String getDeviceId() { return deviceId; }
+    public void setTimestamp(LocalDateTime timestamp) { /** Timestamp di creazione del pacchetto */
+    }
 
     /** Imposta l'ID del dispositivo che ha generato il pacchetto */
-    public void setDeviceId(String deviceId) { this.deviceId = deviceId; }
+    public void setDeviceId(String deviceId) { /** ID univoco del dispositivo che ha generato il pacchetto */
+    }
 
     /** Restituisce la lista delle transazioni */
     public List<ITransaction> getTransactions() { return transactions; }

@@ -111,63 +111,6 @@ public final class TimestampManager {
     }
 
     /**
-     * Rimuove il timestamp da un file (utile per operazioni di pulizia).
-     *
-     * @param filePath percorso del file
-     */
-    public static void removeTimestamp(String filePath) {
-        File file = new File(filePath);
-
-        if (!file.exists()) {
-            return;
-        }
-
-        try {
-            String content = new String(Files.readAllBytes(file.toPath()));
-            String[] lines = content.split("\n");
-
-            // Se la prima riga è un timestamp, la salta
-            boolean hasTimestamp = lines.length > 0 && lines[0].startsWith(TIMESTAMP_PREFIX);
-
-            if (hasTimestamp) {
-                StringBuilder newContent = new StringBuilder();
-                for (int i = 1; i < lines.length; i++) {
-                    newContent.append(lines[i]);
-                    if (i < lines.length - 1) {
-                        newContent.append("\n");
-                    }
-                }
-
-                Files.write(
-                        file.toPath(),
-                        newContent.toString().getBytes(),
-                        StandardOpenOption.TRUNCATE_EXISTING,
-                        StandardOpenOption.WRITE
-                );
-            }
-
-            timestampCache.remove(filePath);
-
-        } catch (IOException e) {
-            System.err.println("Errore nella rimozione del timestamp per " + filePath + ": " + e.getMessage());
-        }
-    }
-
-    /**
-     * Restituisce il timestamp formattato come stringa leggibile.
-     *
-     * @param filePath percorso del file principale
-     * @return stringa formattata del timestamp, o "Mai modificato" se non esiste
-     */
-    public static String getFormattedTimestamp(String filePath) {
-        LocalDateTime timestamp = readTimestamp(filePath);
-        if (timestamp == null) {
-            return "Mai modificato";
-        }
-        return timestamp.format(TIMESTAMP_FORMATTER);
-    }
-
-    /**
      * Verifica se un file è stato modificato dopo una certa data.
      *
      * @param filePath percorso del file
@@ -177,24 +120,6 @@ public final class TimestampManager {
     public static boolean isModifiedAfter(String filePath, LocalDateTime since) {
         LocalDateTime timestamp = readTimestamp(filePath);
         return timestamp != null && timestamp.isAfter(since);
-    }
-
-    /**
-     * Carica tutti i timestamp nella cache all'avvio dell'applicazione.
-     */
-    public static void loadAllTimestamps() {
-        String[] mainFiles = {
-                FilePaths.MOVEMENT_FILE,
-                FilePaths.TAG_FILE,
-                FilePaths.ALL_TAGS_FILE,
-                FilePaths.BUDGET_FILE,
-                FilePaths.SCHEDULED_FILE,
-                FilePaths.AMORTIZATION_FILE
-        };
-
-        for (String filePath : mainFiles) {
-            readTimestamp(filePath); // Questo caricherà nella cache
-        }
     }
 
     /**

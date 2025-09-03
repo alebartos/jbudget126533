@@ -3,7 +3,7 @@ package it.unicam.cs.mpgc.jbudget126533.model;
 import com.google.gson.*;
 
 import java.util.Collections;
-import java.util.logging.Logger;
+
 import com.google.gson.reflect.TypeToken;
 import java.io.*;
 import java.lang.reflect.Type;

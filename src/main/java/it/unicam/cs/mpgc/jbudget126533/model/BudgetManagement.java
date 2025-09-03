@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class BudgetManagement implements IBudgetManagement {
 
     /** Lista delle transazioni già avvenute */
-    private ArrayList<ITransaction> transactionsList = new ArrayList<>();
+    private ArrayList<ITransaction> transactionsList;
 
     /** Manager per le transazioni programmate */
     private ScheduledTransactionManager scheduledTransactionManager;
@@ -320,7 +320,6 @@ public class BudgetManagement implements IBudgetManagement {
                 case SETTIMANALE -> currentDate.plusWeeks(1);
                 case MENSILE -> currentDate.plusMonths(1);
                 case ANNUALE -> currentDate.plusYears(1);
-                default -> currentDate;
             };
         } catch (Exception e) {
             // In caso di errore (es. data impossibile), ritorna la data corrente

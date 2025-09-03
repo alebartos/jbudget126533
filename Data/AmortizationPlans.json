@@ -1,5 +1,783 @@
-// TIMESTAMP: 2025-09-03 03:08:17
+// TIMESTAMP: 2025-09-03 04:39:05
 [
+  {
+    "id": "AMORT_1756867145726_abda5aa9",
+    "description": "soldii",
+    "principalAmount": 45678.0,
+    "annualInterestRate": 21.0,
+    "numberOfInstallments": 76,
+    "startDate": "2025-09-04",
+    "tags": [
+      {
+        "name": "Carburante",
+        "color": "#000000",
+        "description": "",
+        "parentName": "Trasporti"
+      }
+    ],
+    "installments": [
+      {
+        "number": 1,
+        "dueDate": "2025-09-04",
+        "principalAmount": 291.9737572551252,
+        "interestAmount": 799.3650000000001,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 45386.026242744876,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 2,
+        "dueDate": "2025-10-04",
+        "principalAmount": 297.08329800708987,
+        "interestAmount": 794.2554592480354,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 45088.942944737784,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 3,
+        "dueDate": "2025-11-04",
+        "principalAmount": 302.282255722214,
+        "interestAmount": 789.0565015329113,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 44786.66068901557,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 4,
+        "dueDate": "2025-12-04",
+        "principalAmount": 307.5721951973528,
+        "interestAmount": 783.7665620577725,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 44479.08849381821,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 5,
+        "dueDate": "2026-01-04",
+        "principalAmount": 312.9547086133065,
+        "interestAmount": 778.3840486418188,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 44166.133785204904,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 6,
+        "dueDate": "2026-02-04",
+        "principalAmount": 318.4314160140394,
+        "interestAmount": 772.9073412410859,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 43847.70236919086,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 7,
+        "dueDate": "2026-03-04",
+        "principalAmount": 324.00396579428514,
+        "interestAmount": 767.3347914608402,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 43523.69840339658,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 8,
+        "dueDate": "2026-04-04",
+        "principalAmount": 329.67403519568506,
+        "interestAmount": 761.6647220594402,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 43194.024368200895,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 9,
+        "dueDate": "2026-05-04",
+        "principalAmount": 335.4433308116096,
+        "interestAmount": 755.8954264435157,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 42858.58103738928,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 10,
+        "dueDate": "2026-06-04",
+        "principalAmount": 341.3135891008128,
+        "interestAmount": 750.0251681543125,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 42517.26744828847,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 11,
+        "dueDate": "2026-07-04",
+        "principalAmount": 347.286576910077,
+        "interestAmount": 744.0521803450483,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 42169.98087137839,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 12,
+        "dueDate": "2026-08-04",
+        "principalAmount": 353.3640920060034,
+        "interestAmount": 737.9746652491219,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 41816.61677937239,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 13,
+        "dueDate": "2026-09-04",
+        "principalAmount": 359.5479636161084,
+        "interestAmount": 731.7907936390169,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 41457.068815756276,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 14,
+        "dueDate": "2026-10-04",
+        "principalAmount": 365.8400529793904,
+        "interestAmount": 725.4987042757349,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 41091.22876277689,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 15,
+        "dueDate": "2026-11-04",
+        "principalAmount": 372.24225390652964,
+        "interestAmount": 719.0965033485957,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 40718.98650887036,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 16,
+        "dueDate": "2026-12-04",
+        "principalAmount": 378.75649334989396,
+        "interestAmount": 712.5822639052313,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 40340.230015520465,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 17,
+        "dueDate": "2027-01-04",
+        "principalAmount": 385.3847319835171,
+        "interestAmount": 705.9540252716082,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 39954.845283536946,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 18,
+        "dueDate": "2027-02-04",
+        "principalAmount": 392.12896479322865,
+        "interestAmount": 699.2097924618967,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 39562.71631874372,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 19,
+        "dueDate": "2027-03-04",
+        "principalAmount": 398.99122167711016,
+        "interestAmount": 692.3475355780151,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 39163.72509706661,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 20,
+        "dueDate": "2027-04-04",
+        "principalAmount": 405.9735680564596,
+        "interestAmount": 685.3651891986657,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 38757.751529010144,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 21,
+        "dueDate": "2027-05-04",
+        "principalAmount": 413.0781054974477,
+        "interestAmount": 678.2606517576776,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 38344.67342351269,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 22,
+        "dueDate": "2027-06-04",
+        "principalAmount": 420.3069723436531,
+        "interestAmount": 671.0317849114722,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 37924.36645116904,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 23,
+        "dueDate": "2027-07-04",
+        "principalAmount": 427.66234435966714,
+        "interestAmount": 663.6764128954582,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 37496.70410680937,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 24,
+        "dueDate": "2027-08-04",
+        "principalAmount": 435.14643538596135,
+        "interestAmount": 656.192321869164,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 37061.557671423405,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 25,
+        "dueDate": "2027-09-04",
+        "principalAmount": 442.7614980052157,
+        "interestAmount": 648.5772592499096,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 36618.79617341819,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 26,
+        "dueDate": "2027-10-04",
+        "principalAmount": 450.509824220307,
+        "interestAmount": 640.8289330348183,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 36168.28634919788,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 27,
+        "dueDate": "2027-11-04",
+        "principalAmount": 458.3937461441624,
+        "interestAmount": 632.9450111109629,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 35709.89260305372,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 28,
+        "dueDate": "2027-12-04",
+        "principalAmount": 466.4156367016851,
+        "interestAmount": 624.9231205534402,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 35243.476966352035,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 29,
+        "dueDate": "2028-01-04",
+        "principalAmount": 474.5779103439646,
+        "interestAmount": 616.7608469111607,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 34768.89905600807,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 30,
+        "dueDate": "2028-02-04",
+        "principalAmount": 482.88302377498405,
+        "interestAmount": 608.4557334801412,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 34286.016032233085,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 31,
+        "dueDate": "2028-03-04",
+        "principalAmount": 491.33347669104626,
+        "interestAmount": 600.005280564079,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 33794.68255554204,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 32,
+        "dueDate": "2028-04-04",
+        "principalAmount": 499.9318125331396,
+        "interestAmount": 591.4069447219857,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 33294.750743008895,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 33,
+        "dueDate": "2028-05-04",
+        "principalAmount": 508.68061925246957,
+        "interestAmount": 582.6581380026557,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 32786.07012375643,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 34,
+        "dueDate": "2028-06-04",
+        "principalAmount": 517.5825300893878,
+        "interestAmount": 573.7562271657375,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 32268.48759366704,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 35,
+        "dueDate": "2028-07-04",
+        "principalAmount": 526.640224365952,
+        "interestAmount": 564.6985328891733,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 31741.84736930109,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 36,
+        "dueDate": "2028-08-04",
+        "principalAmount": 535.8564282923562,
+        "interestAmount": 555.4823289627691,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 31205.990941008735,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 37,
+        "dueDate": "2028-09-04",
+        "principalAmount": 545.2339157874724,
+        "interestAmount": 546.1048414676529,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 30660.75702522126,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 38,
+        "dueDate": "2028-10-04",
+        "principalAmount": 554.7755093137532,
+        "interestAmount": 536.5632479413721,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 30105.981515907508,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 39,
+        "dueDate": "2028-11-04",
+        "principalAmount": 564.4840807267439,
+        "interestAmount": 526.8546765283814,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 29541.497435180765,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 40,
+        "dueDate": "2028-12-04",
+        "principalAmount": 574.3625521394619,
+        "interestAmount": 516.9762051156634,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 28967.134883041304,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 41,
+        "dueDate": "2029-01-04",
+        "principalAmount": 584.4138968019024,
+        "interestAmount": 506.9248604532229,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 28382.7209862394,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 42,
+        "dueDate": "2029-02-04",
+        "principalAmount": 594.6411399959358,
+        "interestAmount": 496.69761725918954,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 27788.079846243465,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 43,
+        "dueDate": "2029-03-04",
+        "principalAmount": 605.0473599458646,
+        "interestAmount": 486.2913973092607,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 27183.0324862976,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 44,
+        "dueDate": "2029-04-04",
+        "principalAmount": 615.6356887449172,
+        "interestAmount": 475.7030685102081,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 26567.396797552683,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 45,
+        "dueDate": "2029-05-04",
+        "principalAmount": 626.4093132979533,
+        "interestAmount": 464.929443957172,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 25940.98748425473,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 46,
+        "dueDate": "2029-06-04",
+        "principalAmount": 637.3714762806675,
+        "interestAmount": 453.9672809744578,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 25303.616007974062,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 47,
+        "dueDate": "2029-07-04",
+        "principalAmount": 648.5254771155792,
+        "interestAmount": 442.8132801395461,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 24655.090530858484,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 48,
+        "dueDate": "2029-08-04",
+        "principalAmount": 659.8746729651018,
+        "interestAmount": 431.4640842900235,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 23995.21585789338,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 49,
+        "dueDate": "2029-09-04",
+        "principalAmount": 671.4224797419911,
+        "interestAmount": 419.9162775131342,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 23323.79337815139,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 50,
+        "dueDate": "2029-10-04",
+        "principalAmount": 683.1723731374759,
+        "interestAmount": 408.16638411764933,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 22640.621005013913,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 51,
+        "dueDate": "2029-11-04",
+        "principalAmount": 695.1278896673819,
+        "interestAmount": 396.2108675877435,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 21945.49311534653,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 52,
+        "dueDate": "2029-12-04",
+        "principalAmount": 707.2926277365609,
+        "interestAmount": 384.0461295185643,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 21238.200487609967,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 53,
+        "dueDate": "2030-01-04",
+        "principalAmount": 719.6702487219509,
+        "interestAmount": 371.6685085331745,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 20518.530238888015,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 54,
+        "dueDate": "2030-02-04",
+        "principalAmount": 732.264478074585,
+        "interestAmount": 359.0742791805403,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 19786.265760813432,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 55,
+        "dueDate": "2030-03-04",
+        "principalAmount": 745.0791064408902,
+        "interestAmount": 346.2596508142351,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 19041.18665437254,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 56,
+        "dueDate": "2030-04-04",
+        "principalAmount": 758.1179908036058,
+        "interestAmount": 333.2207664515195,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 18283.068663568934,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 57,
+        "dueDate": "2030-05-04",
+        "principalAmount": 771.3850556426689,
+        "interestAmount": 319.95370161245637,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 17511.683607926265,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 58,
+        "dueDate": "2030-06-04",
+        "principalAmount": 784.8842941164156,
+        "interestAmount": 306.4544631387097,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 16726.79931380985,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 59,
+        "dueDate": "2030-07-04",
+        "principalAmount": 798.6197692634529,
+        "interestAmount": 292.7189879916724,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 15928.179544546398,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 60,
+        "dueDate": "2030-08-04",
+        "principalAmount": 812.5956152255633,
+        "interestAmount": 278.74314202956197,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 15115.583929320834,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 61,
+        "dueDate": "2030-09-04",
+        "principalAmount": 826.8160384920106,
+        "interestAmount": 264.5227187631146,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 14288.767890828824,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 62,
+        "dueDate": "2030-10-04",
+        "principalAmount": 841.2853191656209,
+        "interestAmount": 250.05343808950443,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 13447.482571663202,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 63,
+        "dueDate": "2030-11-04",
+        "principalAmount": 856.0078122510192,
+        "interestAmount": 235.33094500410607,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 12591.474759412184,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 64,
+        "dueDate": "2030-12-04",
+        "principalAmount": 870.9879489654121,
+        "interestAmount": 220.35080828971323,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 11720.486810446771,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 65,
+        "dueDate": "2031-01-04",
+        "principalAmount": 886.2302380723067,
+        "interestAmount": 205.10851918281853,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 10834.256572374465,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 66,
+        "dueDate": "2031-02-04",
+        "principalAmount": 901.7392672385722,
+        "interestAmount": 189.59949001655315,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 9932.517305135892,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 67,
+        "dueDate": "2031-03-04",
+        "principalAmount": 917.5197044152471,
+        "interestAmount": 173.81905283987814,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 9014.997600720646,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 68,
+        "dueDate": "2031-04-04",
+        "principalAmount": 933.576299242514,
+        "interestAmount": 157.76245801261132,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 8081.421301478132,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 69,
+        "dueDate": "2031-05-04",
+        "principalAmount": 949.913884479258,
+        "interestAmount": 141.42487277586733,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 7131.507416998874,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 70,
+        "dueDate": "2031-06-04",
+        "principalAmount": 966.537377457645,
+        "interestAmount": 124.80137979748031,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 6164.970039541229,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 71,
+        "dueDate": "2031-07-04",
+        "principalAmount": 983.4517815631538,
+        "interestAmount": 107.88697569197151,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 5181.518257978076,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 72,
+        "dueDate": "2031-08-04",
+        "principalAmount": 1000.662187740509,
+        "interestAmount": 90.67656951461633,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 4180.856070237567,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 73,
+        "dueDate": "2031-09-04",
+        "principalAmount": 1018.1737760259679,
+        "interestAmount": 73.16498122915743,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 3162.682294211599,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 74,
+        "dueDate": "2031-10-04",
+        "principalAmount": 1035.9918171064223,
+        "interestAmount": 55.34694014870299,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 2126.690477105177,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 75,
+        "dueDate": "2031-11-04",
+        "principalAmount": 1054.1216739057847,
+        "interestAmount": 37.2170833493406,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 1072.568803199392,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      },
+      {
+        "number": 76,
+        "dueDate": "2031-12-04",
+        "principalAmount": 1072.568803199136,
+        "interestAmount": 18.769954055989363,
+        "totalAmount": 1091.3387572551253,
+        "remainingBalance": 2.560227585490793E-10,
+        "paid": false,
+        "planId": "AMORT_1756867145726_abda5aa9"
+      }
+    ]
+  },
   {
     "id": "AMORT_1756859853062_de81f0db",
     "description": "Prestito",

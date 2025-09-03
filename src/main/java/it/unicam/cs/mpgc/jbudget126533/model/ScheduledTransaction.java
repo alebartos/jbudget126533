@@ -110,10 +110,18 @@ public class ScheduledTransaction {
             return null;
         }
 
+        // Gestisce correttamente il segno per le spese
+        double transactionAmount = amount;
+        if (type == MovementType.SPESA) {
+            transactionAmount = -Math.abs(amount); // Forza negativo per le spese
+        } else if (type == MovementType.GUADAGNO) {
+            transactionAmount = Math.abs(amount); // Forza positivo per i guadagni
+        }
+
         Transaction transaction = new Transaction(
                 type,
                 description,
-                amount,
+                transactionAmount,
                 nextExecutionDate,
                 tags
         );

@@ -107,7 +107,7 @@ public class AmortizationHandler {
             if (!FormValidator.validateTags(selectedTags, msg -> showAlert(Alert.AlertType.WARNING, "Attenzione", msg))) return;
             if (!FormValidator.validateStartDate(startDate, msg -> showAlert(Alert.AlertType.ERROR, "Errore", msg))) return;
 
-            AmortizationPlan plan = ledger.createAmortizationPlan(description, principal, interestRate, installments, startDate, selectedTags);
+            ledger.createAmortizationPlan(description, principal, interestRate, installments, startDate, selectedTags);
             ledger.saveAmortizationPlans();
             loadAmortizationPlans();
             clearAmortizationFields();
@@ -228,7 +228,7 @@ public class AmortizationHandler {
     private void configureAmortizationTables() {
         try {
             // Configura tabella piani di ammortamento
-            if (amortizationPlansTable.getColumns().size() > 0) {
+            if (!amortizationPlansTable.getColumns().isEmpty()) {
                 TableColumn<AmortizationPlan, String> planDescColumn = (TableColumn<AmortizationPlan, String>)
                         amortizationPlansTable.getColumns().getFirst();
                 planDescColumn.setCellValueFactory(cellData ->
@@ -264,7 +264,7 @@ public class AmortizationHandler {
             }
 
             // Configura tabella rate
-            if (amortTable.getColumns().size() > 0) {
+            if (!amortTable.getColumns().isEmpty()) {
                 TableColumn<Installment, String> installmentNumberColumn = (TableColumn<Installment, String>)
                         amortTable.getColumns().getFirst();
                 installmentNumberColumn.setCellValueFactory(cellData ->
