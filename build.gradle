@@ -12,7 +12,7 @@ repositories {
 
 application {
     mainClass = 'it.unicam.cs.mpgc.jbudget126533.App'
-    mainModule = 'it.unicam.cs.mpgc.jbudget126533'
+    mainModule = 'it.unicam.cs.mpgc.jbudget'
 }
 
 javafx {

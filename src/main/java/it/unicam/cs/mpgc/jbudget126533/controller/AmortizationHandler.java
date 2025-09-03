@@ -1,6 +1,7 @@
 package it.unicam.cs.mpgc.jbudget126533.controller;
 
 import it.unicam.cs.mpgc.jbudget126533.model.*;
+import it.unicam.cs.mpgc.jbudget126533.util.FormValidator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -91,15 +92,11 @@ public class AmortizationHandler {
      *
      * @param event evento di azione (es. click su bottone)
      * @throws NumberFormatException se i campi numerici non sono validi
-     * @throws Exception             per errori generici durante la creazione
      */
     public void createAmortizationPlan(ActionEvent event) {
         try {
             String description = amortDescription.getText().trim();
-            if (description.isEmpty()) {
-                showAlert(Alert.AlertType.ERROR, "Errore", "Inserisci una descrizione!");
-                return;
-            }
+            if (!FormValidator.validateDescription(description, msg -> showAlert(Alert.AlertType.ERROR, "Errore", msg))) return;
 
             double principal = Double.parseDouble(amortPrincipal.getText());
             double interestRate = Double.parseDouble(amortInterestRate.getText());
@@ -107,15 +104,8 @@ public class AmortizationHandler {
             LocalDate startDate = amortStartDate.getValue();
 
             List<ITag> selectedTags = new ArrayList<>(amortTags.getSelectionModel().getSelectedItems());
-            if (selectedTags.isEmpty()) {
-                showAlert(Alert.AlertType.WARNING, "Attenzione", "Seleziona almeno un tag!");
-                return;
-            }
-
-            if (startDate == null) {
-                showAlert(Alert.AlertType.ERROR, "Errore", "Seleziona una data di inizio!");
-                return;
-            }
+            if (!FormValidator.validateTags(selectedTags, msg -> showAlert(Alert.AlertType.WARNING, "Attenzione", msg))) return;
+            if (!FormValidator.validateStartDate(startDate, msg -> showAlert(Alert.AlertType.ERROR, "Errore", msg))) return;
 
             AmortizationPlan plan = ledger.createAmortizationPlan(description, principal, interestRate, installments, startDate, selectedTags);
             ledger.saveAmortizationPlans();
@@ -131,6 +121,7 @@ public class AmortizationHandler {
             e.printStackTrace();
         }
     }
+
 
     /**
      * Aggiorna la tabella delle rate mostrando quelle relative al piano selezionato.
@@ -184,15 +175,16 @@ public class AmortizationHandler {
      * @param event evento di azione (es. click su bottone)
      */
     public void processDueInstallments(ActionEvent event) {
-        ledger.processAmortizationDueDates();
-        loadAmortizationPlans();
+        try {
+            ledger.processAmortizationDueDates();
+            showAlert(Alert.AlertType.INFORMATION, "Successo", "Rate scadute processate!");
 
-        AmortizationPlan selectedPlan = amortizationPlansTable.getSelectionModel().getSelectedItem();
-        if (selectedPlan != null) {
-            showAmortizationDetails(selectedPlan);
+            // Aggiorna la visualizzazione
+            loadAmortizationPlans();
+
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Errore", "Errore nel processamento: " + e.getMessage());
         }
-
-        showAlert(Alert.AlertType.INFORMATION, "Scadenze", "Rate scadute processate!");
     }
 
     /**
@@ -238,7 +230,7 @@ public class AmortizationHandler {
             // Configura tabella piani di ammortamento
             if (amortizationPlansTable.getColumns().size() > 0) {
                 TableColumn<AmortizationPlan, String> planDescColumn = (TableColumn<AmortizationPlan, String>)
-                        amortizationPlansTable.getColumns().get(0);
+                        amortizationPlansTable.getColumns().getFirst();
                 planDescColumn.setCellValueFactory(cellData ->
                         new SimpleStringProperty(cellData.getValue().getDescription()));
             }
@@ -274,7 +266,7 @@ public class AmortizationHandler {
             // Configura tabella rate
             if (amortTable.getColumns().size() > 0) {
                 TableColumn<Installment, String> installmentNumberColumn = (TableColumn<Installment, String>)
-                        amortTable.getColumns().get(0);
+                        amortTable.getColumns().getFirst();
                 installmentNumberColumn.setCellValueFactory(cellData ->
                         new SimpleStringProperty(String.valueOf(cellData.getValue().getNumber())));
             }

@@ -225,13 +225,7 @@ public class BudgetManager {
      * Rimuove i budget scaduti (la cui data di fine è passata) e salva le modifiche.
      */
     public void cleanupExpiredBudgets() {
-        Iterator<Map.Entry<String, Budget>> iterator = budgets.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<String, Budget> entry = iterator.next();
-            if (entry.getValue().getEndDate().isBefore(LocalDate.now())) {
-                iterator.remove();
-            }
-        }
+        budgets.entrySet().removeIf(entry -> entry.getValue().getEndDate().isBefore(LocalDate.now()));
         saveBudgets();
     }
 }

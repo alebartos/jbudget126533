@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 
 /**
  * Controller principale per l'interfaccia grafica di JBudget.
- *
+ * <p>
  * Questa classe gestisce tutte le interazioni tra l'interfaccia utente e il modello
  * dell'applicazione, coordinando i vari gestori specializzati per le diverse funzionalità.
  * Implementa l'interfaccia Initializable di JavaFX per l'inizializzazione dei componenti UI.
@@ -139,8 +139,6 @@ public class GUIController implements Initializable {
      * @param location La location utilizzata per risolvere i percorsi relativi per l'oggetto root
      * @param resources Le risorse utilizzate per localizzare l'oggetto root
      *
-     * @throws Exception Se si verifica un errore durante l'inizializzazione dei componenti
-     *                   o il caricamento dei dati
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {

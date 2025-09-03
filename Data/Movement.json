@@ -1,3 +1,4 @@
+// TIMESTAMP: 2025-09-03 03:08:17
 [
   {
     "type": "GUADAGNO",
@@ -136,6 +137,75 @@
         "color": "#000000",
         "description": "",
         "parentName": "Abitazione"
+      }
+    ]
+  },
+  {
+    "type": "GUADAGNO",
+    "user": "ALE",
+    "money": 1.0E7,
+    "date": "2025-09-03",
+    "tags": [
+      {
+        "name": "Bonus",
+        "color": "#000000",
+        "description": "",
+        "parentName": "Entrate"
+      }
+    ]
+  },
+  {
+    "type": "SPESA",
+    "user": "Spotify",
+    "money": 15.0,
+    "date": "2025-09-02",
+    "tags": [
+      {
+        "name": "Supermercato",
+        "color": "#000000",
+        "description": "",
+        "parentName": "Alimentari"
+      }
+    ]
+  },
+  {
+    "type": "SPESA",
+    "user": "Spotify",
+    "money": 15.0,
+    "date": "2025-09-02",
+    "tags": [
+      {
+        "name": "Supermercato",
+        "color": "#000000",
+        "description": "",
+        "parentName": "Alimentari"
+      }
+    ]
+  },
+  {
+    "type": "SPESA",
+    "user": "Rata 1 - Seconda Casa",
+    "money": -4119.077277489366,
+    "date": "2025-09-03",
+    "tags": [
+      {
+        "name": "Mutuo",
+        "color": "#000000",
+        "description": "",
+        "parentName": "Abitazione"
+      }
+    ]
+  },
+  {
+    "type": "SPESA",
+    "user": "Rata 1 - Prestito",
+    "money": -40116.860044193694,
+    "date": "2025-09-03",
+    "tags": [
+      {
+        "name": "Trasporti",
+        "color": "#000000",
+        "description": ""
       }
     ]
   }

@@ -183,7 +183,7 @@ public class BudgetHandler {
         try {
             if (budgetTable.getColumns().size() > 0) {
                 TableColumn<Budget, String> categoryColumn = (TableColumn<Budget, String>)
-                        budgetTable.getColumns().get(0);
+                        budgetTable.getColumns().getFirst();
                 categoryColumn.setCellValueFactory(cellData ->
                         new SimpleStringProperty(cellData.getValue().getCategory()));
             }
@@ -216,7 +216,7 @@ public class BudgetHandler {
                         new SimpleStringProperty(String.format("%.1f %%", cellData.getValue().getUsagePercentage())));
             }
 
-            budgetTable.setRowFactory(tv -> new TableRow<Budget>() {
+            budgetTable.setRowFactory(tv -> new TableRow<>() {
                 @Override
                 protected void updateItem(Budget budget, boolean empty) {
                     super.updateItem(budget, empty);

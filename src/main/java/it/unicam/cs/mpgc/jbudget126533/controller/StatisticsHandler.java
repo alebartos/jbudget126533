@@ -74,7 +74,7 @@ public class StatisticsHandler {
      */
     public void initializeChoiceBoxes() {
         choiceForRange.getItems().addAll(MovementType.values());
-        choiceForRange.getItems().add(0, null);
+        choiceForRange.getItems().addFirst(null);
         choiceForRange.setValue(null);
 
         choiceTypeForEachTag.getItems().addAll(MovementType.values());
@@ -94,7 +94,7 @@ public class StatisticsHandler {
             MovementType type = choiceForRange.getValue();
 
             if (startDate == null) {
-                showAlert(Alert.AlertType.ERROR, "Errore", "Seleziona una data di inizio!");
+                showAlert("Seleziona una data di inizio!");
                 return;
             }
 
@@ -132,7 +132,7 @@ public class StatisticsHandler {
             balanceForRange.setText(details.toString());
 
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Errore", "Si è verificato un errore nel calcolo: " + e.getMessage());
+            showAlert("Si è verificato un errore nel calcolo: " + e.getMessage());
         }
     }
 
@@ -148,7 +148,7 @@ public class StatisticsHandler {
             LocalDate endDate = dateEndForTrend.getValue();
 
             if (startDate == null) {
-                showAlert(Alert.AlertType.ERROR, "Errore", "Seleziona una data di inizio!");
+                showAlert("Seleziona una data di inizio!");
                 return;
             }
 
@@ -163,8 +163,8 @@ public class StatisticsHandler {
             double totalTrend = realTrend + scheduledTrend + amortizationTrend;
             String trend = totalTrend > 0 ? "📈 Positivo" : "📉 Negativo";
 
-            int realCount = countRealTransactions(null, startDate, endDate);
-            int scheduledCount = countScheduledTransactions(null, startDate, endDate);
+            int realCount = countRealTransactions(startDate, endDate);
+            int scheduledCount = countScheduledTransactions(startDate, endDate);
             int amortizationCount = ledger.countAmortizationPaymentsForPeriod(startDate, endDate);
 
             // Visualizzazione compatta per spazio limitato
@@ -191,7 +191,7 @@ public class StatisticsHandler {
             balanceTrend.setText(details.toString());
 
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Errore", "Si è verificato un errore nel calcolo: " + e.getMessage());
+            showAlert("Si è verificato un errore nel calcolo: " + e.getMessage());
         }
     }
 
@@ -209,7 +209,7 @@ public class StatisticsHandler {
         amountColumn.setCellValueFactory(cellData ->
                 new SimpleDoubleProperty(cellData.getValue().getValue()).asObject());
 
-        amountColumn.setCellFactory(column -> new TableCell<Map.Entry<String, Double>, Double>() {
+        amountColumn.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(Double amount, boolean empty) {
                 super.updateItem(amount, empty);
@@ -236,9 +236,14 @@ public class StatisticsHandler {
     /**
      * Conta le transazioni reali nel periodo.
      */
-    private int countRealTransactions(MovementType type, LocalDate startDate, LocalDate endDate) {
+    private int countRealTransactions(LocalDate startDate, LocalDate endDate) {
         return (int) ledger.getTransaction().stream()
-                .filter(t -> type == null || t.getType().equals(type))
+                .filter(t -> {
+                    if (null != null) {
+                        t.getType();
+                    }
+                    return true;
+                })
                 .filter(t -> !t.getDate().isBefore(startDate) && !t.getDate().isAfter(endDate))
                 .count();
     }
@@ -246,10 +251,10 @@ public class StatisticsHandler {
     /**
      * Conta le transazioni programmate nel periodo.
      */
-    private int countScheduledTransactions(MovementType type, LocalDate startDate, LocalDate endDate) {
+    private int countScheduledTransactions(LocalDate startDate, LocalDate endDate) {
         try {
             return (int) ledger.getScheduledTransactions().stream()
-                    .filter(st -> (type == null || st.getType().equals(type)) && st.isActive())
+                    .filter(ScheduledTransaction::isActive)
                     .filter(st -> st.getNextExecutionDate() != null &&
                             !st.getNextExecutionDate().isBefore(startDate) &&
                             !st.getNextExecutionDate().isAfter(endDate))
@@ -278,7 +283,7 @@ public class StatisticsHandler {
             tagTable.setItems(items);
 
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile generare la tabella: " + e.getMessage());
+            showAlert("Impossibile generare la tabella: " + e.getMessage());
         }
     }
 
@@ -300,13 +305,11 @@ public class StatisticsHandler {
     /**
      * Mostra un alert grafico.
      *
-     * @param type    tipo di alert
-     * @param title   titolo
      * @param message messaggio
      */
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Errore");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();

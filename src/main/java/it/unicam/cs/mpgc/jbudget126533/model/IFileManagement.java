@@ -17,7 +17,7 @@ public interface IFileManagement {
     /**
      * Legge tutte le transazioni memorizzate nel file di persistenza.
      */
-    ArrayList<ITransaction> read() throws IOException;
+    ArrayList<ITransaction> read();
 
     /**
      * Scrive un oggetto generico in un file specifico.

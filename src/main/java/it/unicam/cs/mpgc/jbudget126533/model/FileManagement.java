@@ -43,18 +43,8 @@ public class FileManagement implements IFileManagement {
 
         gson = new GsonBuilder()
                 .registerTypeAdapter(ITag.class, new ITagTypeAdapter())
-                .registerTypeAdapter(LocalDate.class, new JsonSerializer<LocalDate>() {
-                    @Override
-                    public JsonElement serialize(LocalDate src, Type typeOfSrc, JsonSerializationContext context) {
-                        return new JsonPrimitive(src.toString());
-                    }
-                })
-                .registerTypeAdapter(LocalDate.class, new JsonDeserializer<LocalDate>() {
-                    @Override
-                    public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                        return LocalDate.parse(json.getAsString());
-                    }
-                })
+                .registerTypeAdapter(LocalDate.class, (JsonSerializer<LocalDate>) (src, typeOfSrc, context) -> new JsonPrimitive(src.toString()))
+                .registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (json, typeOfT, context) -> LocalDate.parse(json.getAsString()))
                 .setPrettyPrinting()
                 .create();
     }
@@ -85,7 +75,7 @@ public class FileManagement implements IFileManagement {
     }
 
     @Override
-    public ArrayList<ITransaction> read() throws IOException {
+    public ArrayList<ITransaction> read() {
         ArrayList<ITransaction> transactions = new ArrayList<>();
 
         try {
@@ -150,37 +140,17 @@ public class FileManagement implements IFileManagement {
 
     @Override
     public <T> T readObject(String fileName, Class<T> type) {
-        try {
-            // Usa il percorso completo
-            String fullPath = FilePaths.getFullPath(fileName);
-            File file = new File(fullPath);
-            if (!file.exists()) {
-                return null;
-            }
-
-            // Legge il file saltando il timestamp
-            String content = TimestampManager.readFileWithoutTimestamp(fullPath);
-            if (content.trim().isEmpty()) {
-                return null;
-            }
-
-            return gson.fromJson(content, type);
-
-        } catch (IOException e) {
-            System.err.println("Errore di lettura oggetto: " + e.getMessage());
-            e.printStackTrace();
-            return null;
-        } catch (JsonSyntaxException e) {
-            System.err.println("Errore nel parsing JSON dell'oggetto: " + e.getMessage());
-            writeObject(fileName, Collections.emptyList());
-            return null;
-        }
+        return readObjectInternal(fileName, type);
     }
 
     @Override
     public <T> T readObject(String fileName, Type type) {
+        return readObjectInternal(fileName, type);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> T readObjectInternal(String fileName, Type type) {
         try {
-            // Usa il percorso completo
             String fullPath = FilePaths.getFullPath(fileName);
             File file = new File(fullPath);
             if (!file.exists()) {
@@ -205,6 +175,7 @@ public class FileManagement implements IFileManagement {
             return null;
         }
     }
+
 
     private void recreateFile() {
         try {

@@ -186,7 +186,7 @@ public class TransactionHandler {
         try {
             if (transactionTable.getColumns().size() > 0) {
                 TableColumn<ITransaction, String> typeColumn = (TableColumn<ITransaction, String>)
-                        transactionTable.getColumns().get(0);
+                        transactionTable.getColumns().getFirst();
                 typeColumn.setCellValueFactory(cellData ->
                         new SimpleStringProperty(cellData.getValue().getType().toString()));
             }
@@ -204,7 +204,7 @@ public class TransactionHandler {
                 moneyColumn.setCellValueFactory(cellData ->
                         new SimpleStringProperty(String.format("%.2f €", cellData.getValue().getMoney())));
 
-                moneyColumn.setCellFactory(column -> new TableCell<ITransaction, String>() {
+                moneyColumn.setCellFactory(column -> new TableCell<>() {
                     @Override
                     protected void updateItem(String amountText, boolean empty) {
                         super.updateItem(amountText, empty);

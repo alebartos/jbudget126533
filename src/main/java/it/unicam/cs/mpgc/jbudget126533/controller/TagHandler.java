@@ -84,7 +84,7 @@ public class TagHandler {
 
         if (availableTagsListView != null) {
             availableTagsListView.setItems(FXCollections.observableArrayList(availableTags.values()));
-            availableTagsListView.setCellFactory(lv -> new ListCell<ITag>() {
+            availableTagsListView.setCellFactory(lv -> new ListCell<>() {
                 @Override
                 protected void updateItem(ITag tag, boolean empty) {
                     super.updateItem(tag, empty);
@@ -96,7 +96,7 @@ public class TagHandler {
         if (selectedTagsListView != null) {
             ObservableList<ITag> selectedTags = FXCollections.observableArrayList(TagManager.getSelectedTagsList());
             selectedTagsListView.setItems(selectedTags);
-            selectedTagsListView.setCellFactory(lv -> new ListCell<ITag>() {
+            selectedTagsListView.setCellFactory(lv -> new ListCell<>() {
                 @Override
                 protected void updateItem(ITag tag, boolean empty) {
                     super.updateItem(tag, empty);

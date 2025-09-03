@@ -9,6 +9,9 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Gestisce le scadenze (Deadline) nell'applicazione.
@@ -30,6 +33,7 @@ public class DeadlineHandler {
     private final Label overdueDeadlinesLabel;
     private final Label dueTodayDeadlinesLabel;
     private final Label futureDeadlinesLabel;
+    private final IFileManagement fileManagement;
 
     private final ObservableList<Deadline> deadlinesObservableList = FXCollections.observableArrayList();
     private final FilteredList<Deadline> filteredDeadlines;
@@ -56,6 +60,7 @@ public class DeadlineHandler {
         this.overdueDeadlinesLabel = overdueDeadlinesLabel;
         this.dueTodayDeadlinesLabel = dueTodayDeadlinesLabel;
         this.futureDeadlinesLabel = futureDeadlinesLabel;
+        this.fileManagement = new FileManagement();
 
         this.filteredDeadlines = new FilteredList<>(deadlinesObservableList);
         configureDeadlinesTable();
@@ -68,7 +73,7 @@ public class DeadlineHandler {
      */
     private void initializeFilter() {
         deadlineFilterType.getItems().addAll(DeadlineType.values());
-        deadlineFilterType.getItems().add(0, null);
+        deadlineFilterType.getItems().addFirst(null);
         deadlineFilterType.setValue(null);
 
         deadlineFilterType.valueProperty().addListener((obs, oldVal, newVal) -> {
@@ -98,7 +103,7 @@ public class DeadlineHandler {
      */
     public void refreshDeadlines(ActionEvent event) {
         loadDeadlines();
-        showAlert(Alert.AlertType.INFORMATION, "Aggiornamento", "Scadenze aggiornate!");
+        showAlert("Aggiornamento", "Scadenze aggiornate!");
     }
 
     /**
@@ -109,9 +114,191 @@ public class DeadlineHandler {
     public void processSelectedDeadline(ActionEvent event) {
         Deadline selected = deadlinesTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
-            selected.setPaid(true);
-            deadlinesTable.refresh();
-            showAlert(Alert.AlertType.INFORMATION, "Successo", "Scadenza processata!");
+            try {
+                // 1. Per le rate di ammortamento, marca la rata come pagata
+                if (selected.getDeadlineType() == DeadlineType.AMORTIZATION_INSTALLMENT) {
+                    processAmortizationDeadline(selected);
+                }
+                // 2. Per le transazioni programmate, esegui la transazione
+                else if (selected.getDeadlineType() == DeadlineType.SCHEDULED_TRANSACTION) {
+                    processScheduledTransactionDeadline(selected);
+                }
+
+                // 3. Aggiorna l'interfaccia
+                deadlinesTable.refresh();
+                updateDeadlineCounters();
+                refreshDeadlines(null);
+
+                showAlert("Successo", "Scadenza processata!");
+
+            } catch (Exception e) {
+                showAlert("Errore", "Impossibile processare la scadenza: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Crea una transazione a partire da una scadenza.
+     */
+    /**
+     * Processa una scadenza di ammortamento (marca la rata come pagata).
+     */
+    /**
+     * Processa una scadenza di ammortamento (versione alternativa più robusta).
+     */
+    private void processAmortizationDeadline(Deadline deadline) {
+        try {
+            String description = deadline.getDescription();
+            System.out.println("Processing: " + description);
+
+            // Cerca il numero della rata nella descrizione (es: "Rata 12 - Mutuo Casa")
+            if (description.startsWith("Rata ")) {
+                String[] descParts = description.split(" ");
+                if (descParts.length >= 2) {
+                    try {
+                        // Estrai il numero dalla descrizione "Rata X - Descrizione"
+                        String numberStr = descParts[1];
+                        if (numberStr.contains("-")) {
+                            numberStr = numberStr.split("-")[0];
+                        }
+                        int installmentNumber = Integer.parseInt(numberStr.trim());
+
+                        // Cerca il piano per descrizione
+                        for (AmortizationPlan plan : ledger.getAmortizationPlans()) {
+                            for (Installment installment : plan.getInstallments()) {
+                                if (installment.getNumber() == installmentNumber &&
+                                        description.contains(plan.getDescription())) {
+
+                                    installment.setPaid(true);
+                                    createTransactionFromAmortization(installment, plan);
+                                    ledger.saveAmortizationPlans();
+
+                                    System.out.println("Rata " + installmentNumber + " processata");
+                                    return;
+                                }
+                            }
+                        }
+
+                    } catch (NumberFormatException e) {
+                        System.err.println("Impossibile estrarre numero rata da: " + description);
+                    }
+                }
+            }
+
+            System.err.println("Impossibile processare la scadenza: " + description);
+
+        } catch (Exception e) {
+            System.err.println("Errore nel processamento rata ammortamento: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Crea una transazione da una rata di ammortamento.
+     */
+    private void createTransactionFromAmortization(Installment installment, AmortizationPlan plan) {
+        try {
+            ITransaction transaction = new Transaction(
+                    MovementType.SPESA,
+                    "Rata " + installment.getNumber() + " - " + plan.getDescription(),
+                    -installment.getTotalAmount(), // Importo negativo (spesa)
+                    LocalDate.now(),
+                    plan.getTags()
+            );
+
+            ledger.addTransaction(transaction);
+            ledger.write(transaction);
+
+            System.out.println("Transazione creata: " + transaction.getUser() + " - " + transaction.getMoney() + "€");
+
+        } catch (Exception e) {
+            System.err.println("Errore nella creazione transazione ammortamento: " + e.getMessage());
+            throw e;
+        }
+    }
+
+    /**
+     * Processa una scadenza di transazione programmata.
+     */
+    private void processScheduledTransactionDeadline(Deadline deadline) {
+        try {
+            // Trova la transazione programmata corrispondente
+            // (implementazione semplificata - dovresti avere un modo per identificarla)
+            List<ScheduledTransaction> scheduledTransactions = ledger.getScheduledTransactions();
+
+            for (ScheduledTransaction st : scheduledTransactions) {
+                if (st.getDescription().equals(deadline.getDescription()) &&
+                        st.getNextExecutionDate().equals(deadline.getDueDate())) {
+
+                    // Esegui la transazione programmata
+                    ITransaction transaction = st.execute();
+                    if (transaction != null) {
+                        ledger.addTransaction(transaction);
+                        ledger.write(transaction);
+                        System.out.println("Transazione programmata eseguita: " + transaction.getUser());
+                    }
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Errore nel processamento transazione programmata: " + e.getMessage());
+            throw e;
+        }
+    }
+
+    /**
+     * Ottiene i tag appropriati per una scadenza.
+     */
+    private List<ITag> getTagsForDeadline(Deadline deadline) {
+        List<ITag> tags = new ArrayList<>();
+
+        try {
+            // Per rate di ammortamento
+            if (deadline.getDeadlineType() == DeadlineType.AMORTIZATION_INSTALLMENT) {
+                // Cerca il tag "Mutui" o "Prestiti"
+                ITag loanTag = TagManager.getTag("Mutui");
+                if (loanTag == null) {
+                    loanTag = TagManager.getTag("Prestiti");
+                }
+                if (loanTag != null) {
+                    tags.add(loanTag);
+                }
+            }
+            // Per transazioni programmate
+            else if (deadline.getDeadlineType() == DeadlineType.SCHEDULED_TRANSACTION) {
+                // Usa tag generici in base al tipo
+                if (deadline.getType() == MovementType.SPESA) {
+                    ITag expenseTag = TagManager.getTag("Spese Fisse");
+                    if (expenseTag != null) tags.add(expenseTag);
+                } else {
+                    ITag incomeTag = TagManager.getTag("Entrate");
+                    if (incomeTag != null) tags.add(incomeTag);
+                }
+            }
+
+        } catch (Exception e) {
+            System.err.println("Errore nell'ottenimento tag: " + e.getMessage());
+        }
+
+        return tags;
+    }
+
+    /**
+     * Salva lo stato aggiornato delle scadenze.
+     */
+    private void saveDeadlines() {
+        try {
+            // Ottieni tutte le scadenze
+            List<Deadline> allDeadlines = new ArrayList<>(deadlinesObservableList);
+
+            // Salva nel file
+            fileManagement.writeObject("deadlines.json", allDeadlines);
+
+            System.out.println("Scadenze salvate: " + allDeadlines.size() + " elementi");
+
+        } catch (Exception e) {
+            System.err.println("Errore nel salvataggio scadenze: " + e.getMessage());
         }
     }
 
@@ -156,7 +343,7 @@ public class DeadlineHandler {
         try {
             if (deadlinesTable.getColumns().size() > 0) {
                 TableColumn<Deadline, String> descColumn = (TableColumn<Deadline, String>)
-                        deadlinesTable.getColumns().get(0);
+                        deadlinesTable.getColumns().getFirst();
                 descColumn.setCellValueFactory(cellData ->
                         new SimpleStringProperty(cellData.getValue().getDescription()));
             }
@@ -197,7 +384,7 @@ public class DeadlineHandler {
                 });
             }
 
-            deadlinesTable.setRowFactory(tv -> new TableRow<Deadline>() {
+            deadlinesTable.setRowFactory(tv -> new TableRow<>() {
                 @Override
                 protected void updateItem(Deadline deadline, boolean empty) {
                     super.updateItem(deadline, empty);
@@ -225,12 +412,11 @@ public class DeadlineHandler {
     /**
      * Mostra un messaggio di alert informativo, di errore o conferma.
      *
-     * @param type    tipo di alert (INFO, WARNING, ERROR, CONFIRMATION)
      * @param title   titolo della finestra di alert
      * @param message messaggio da mostrare
      */
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);

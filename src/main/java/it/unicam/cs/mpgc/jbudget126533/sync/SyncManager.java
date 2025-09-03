@@ -207,11 +207,7 @@ public class SyncManager {
      */
     private void syncTransactions(List<ITransaction> remoteTransactions, ConflictResolutionStrategy strategy) {
         List<ITransaction> localTransactions;
-        try {
-            localTransactions = fileManagement.read();
-        } catch (IOException e) {
-            localTransactions = new ArrayList<>();
-        }
+        localTransactions = fileManagement.read();
 
         Map<String, ITransaction> localMap = createTransactionMap(localTransactions);
         Map<String, ITransaction> remoteMap = createTransactionMap(remoteTransactions);

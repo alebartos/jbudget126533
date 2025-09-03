@@ -1,4 +1,4 @@
-module it.unicam.cs.mpgc.jbudget126533 {
+module it.unicam.cs.mpgc.jbudget {
     requires javafx.controls;
     requires javafx.fxml;
     requires com.google.gson;

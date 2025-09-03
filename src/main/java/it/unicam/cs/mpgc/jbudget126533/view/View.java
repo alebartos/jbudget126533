@@ -17,10 +17,8 @@ public interface View {
      * Per le implementazioni console, può gestire input dell'utente e stampare output.
      * Per le implementazioni GUI, viene tipicamente invocato all'avvio dell'applicazione.
      *
-     * @throws IOException se si verifica un errore di input/output durante l'apertura della vista
-     * @throws InvalidInputException se l'utente fornisce input non valido
      */
-    void open() throws IOException, InvalidInputException;
+    void open();
 
     /**
      * Metodo per chiudere la vista.

@@ -1,6 +1,7 @@
 package it.unicam.cs.mpgc.jbudget126533.controller;
 
 import it.unicam.cs.mpgc.jbudget126533.model.*;
+import it.unicam.cs.mpgc.jbudget126533.util.FormValidator;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -83,10 +84,7 @@ public class ScheduledTransactionHandler {
     public void addScheduledTransaction(ActionEvent event) {
         try {
             String description = scheduledDescField.getText().trim();
-            if (description.isEmpty()) {
-                showAlert(Alert.AlertType.ERROR, "Errore", "Inserisci una descrizione!");
-                return;
-            }
+            if (!FormValidator.validateDescription(description, msg -> showAlert(Alert.AlertType.ERROR, "Errore", msg))) return;
 
             double amount = Double.parseDouble(scheduledAmountField.getText());
             MovementType type = scheduledType.getValue();
@@ -95,15 +93,8 @@ public class ScheduledTransactionHandler {
             LocalDate endDate = scheduledEndDate.getValue();
 
             List<ITag> selectedTags = new ArrayList<>(scheduledTagsListView.getSelectionModel().getSelectedItems());
-            if (selectedTags.isEmpty()) {
-                showAlert(Alert.AlertType.WARNING, "Attenzione", "Seleziona almeno un tag!");
-                return;
-            }
-
-            if (startDate == null) {
-                showAlert(Alert.AlertType.ERROR, "Errore", "Seleziona una data di inizio!");
-                return;
-            }
+            if (!FormValidator.validateTags(selectedTags, msg -> showAlert(Alert.AlertType.WARNING, "Attenzione", msg))) return;
+            if (!FormValidator.validateStartDate(startDate, msg -> showAlert(Alert.AlertType.ERROR, "Errore", msg))) return;
 
             ScheduledTransaction transaction = new ScheduledTransaction(
                     description, amount, type, selectedTags, recurrence, startDate, endDate
@@ -119,6 +110,7 @@ public class ScheduledTransactionHandler {
             showAlert(Alert.AlertType.ERROR, "Errore", "Importo non valido!");
         }
     }
+
 
     /**
      * Rimuove la transazione programmata selezionata nella tabella.
@@ -182,7 +174,7 @@ public class ScheduledTransactionHandler {
         try {
             if (scheduledTable.getColumns().size() > 0) {
                 TableColumn<ScheduledTransaction, String> descColumn = (TableColumn<ScheduledTransaction, String>)
-                        scheduledTable.getColumns().get(0);
+                        scheduledTable.getColumns().getFirst();
                 descColumn.setCellValueFactory(cellData ->
                         new SimpleStringProperty(cellData.getValue().getDescription()));
             }
@@ -215,7 +207,7 @@ public class ScheduledTransactionHandler {
                         new SimpleStringProperty(cellData.getValue().getNextExecutionDate().toString()));
             }
 
-            scheduledTable.setRowFactory(tv -> new TableRow<ScheduledTransaction>() {
+            scheduledTable.setRowFactory(tv -> new TableRow<>() {
                 @Override
                 protected void updateItem(ScheduledTransaction transaction, boolean empty) {
                     super.updateItem(transaction, empty);

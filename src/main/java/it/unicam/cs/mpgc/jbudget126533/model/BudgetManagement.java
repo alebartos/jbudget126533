@@ -315,13 +315,13 @@ public class BudgetManagement implements IBudgetManagement {
     /** Calcola la prossima data di una transazione programmata in base alla ricorrenza */
     private LocalDate calculateNextDate(LocalDate currentDate, RecurrenceType recurrence) {
         try {
-            switch (recurrence) {
-                case GIORNALIERO: return currentDate.plusDays(1);
-                case SETTIMANALE: return currentDate.plusWeeks(1);
-                case MENSILE: return currentDate.plusMonths(1);
-                case ANNUALE: return currentDate.plusYears(1);
-                default: return currentDate;
-            }
+            return switch (recurrence) {
+                case GIORNALIERO -> currentDate.plusDays(1);
+                case SETTIMANALE -> currentDate.plusWeeks(1);
+                case MENSILE -> currentDate.plusMonths(1);
+                case ANNUALE -> currentDate.plusYears(1);
+                default -> currentDate;
+            };
         } catch (Exception e) {
             // In caso di errore (es. data impossibile), ritorna la data corrente
             System.err.println("Errore nel calcolo della prossima data: " + e.getMessage());
