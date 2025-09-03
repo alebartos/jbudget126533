@@ -192,7 +192,7 @@ public class TagHandler {
     /**
      * Elimina il tag selezionato dai tag disponibili.
      * <p>
-     * Nota: la gestione completa della rimozione in transazioni non è implementata.
+     *
      *
      * @param event evento associato all'azione
      */
