@@ -2,6 +2,7 @@ package it.unicam.cs.mpgc.jbudget126533.controller;
 
 import it.unicam.cs.mpgc.jbudget126533.model.Budget;
 import it.unicam.cs.mpgc.jbudget126533.model.ITag;
+import it.unicam.cs.mpgc.jbudget126533.util.AlertManager;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -69,7 +70,7 @@ public class BudgetHandler {
         try {
             ITag selectedTag = budgetTagsListView.getSelectionModel().getSelectedItem();
             if (selectedTag == null) {
-                showAlert(Alert.AlertType.ERROR, "Errore", "Seleziona un tag dalla lista!");
+                AlertManager.showErrorAlert("Seleziona un tag dalla lista!");
                 return;
             }
 
@@ -78,7 +79,7 @@ public class BudgetHandler {
             LocalDate endDate = budgetEndDate.getValue();
 
             if (startDate == null || endDate == null) {
-                showAlert(Alert.AlertType.ERROR, "Errore", "Seleziona le date!");
+                AlertManager.showErrorAlert("Seleziona le date!");
                 return;
             }
 
@@ -86,11 +87,10 @@ public class BudgetHandler {
             updateBudgetTable();
             clearBudgetFields();
 
-            showAlert(Alert.AlertType.INFORMATION, "Successo",
-                    "Budget impostato per: " + selectedTag.getName());
+            AlertManager.showInfoAlert("Budget impostato per: " + selectedTag.getName());
 
         } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Errore", "Importo non valido!");
+            AlertManager.showErrorAlert("Importo non valido!");
         }
     }
 
@@ -123,7 +123,7 @@ public class BudgetHandler {
      */
     public void cleanupBudgets(ActionEvent event) {
         updateBudgetTable();
-        showAlert(Alert.AlertType.INFORMATION, "Pulizia", "Budget scaduti rimossi!");
+        AlertManager.showInfoAlert("Budget scaduti rimossi!");
     }
 
     /**
@@ -142,10 +142,10 @@ public class BudgetHandler {
             Optional<ButtonType> result = confirmation.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 budgetTable.getItems().remove(selectedBudget);
-                showAlert(Alert.AlertType.INFORMATION, "Successo", "Budget eliminato!");
+                AlertManager.showInfoAlert("Budget Eliminato!");
             }
         } else {
-            showAlert(Alert.AlertType.WARNING, "Attenzione", "Seleziona un budget da eliminare!");
+            AlertManager.showWarningAlert("Seleziona un budget da Eliminare!");
         }
     }
 
@@ -162,7 +162,7 @@ public class BudgetHandler {
                         .append("/").append(String.format("%.2f€", budget.getAllocatedAmount()))
                         .append("\n");
             }
-            showAlert(Alert.AlertType.WARNING, "Attenzione", message.toString());
+            AlertManager.showWarningAlert("Attenzione", message.toString());
         }
     }
 
@@ -237,20 +237,5 @@ public class BudgetHandler {
         } catch (Exception e) {
             System.err.println("Errore nella configurazione della tabella budget: " + e.getMessage());
         }
-    }
-
-    /**
-     * Mostra un messaggio di alert informativo, di errore o conferma.
-     *
-     * @param type    tipo di alert (INFO, WARNING, ERROR, CONFIRMATION)
-     * @param title   titolo della finestra di alert
-     * @param message messaggio da mostrare
-     */
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

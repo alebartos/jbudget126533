@@ -1,6 +1,7 @@
 package it.unicam.cs.mpgc.jbudget126533.controller;
 
 import it.unicam.cs.mpgc.jbudget126533.model.*;
+import it.unicam.cs.mpgc.jbudget126533.util.AlertManager;
 import it.unicam.cs.mpgc.jbudget126533.util.FormValidator;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -82,7 +83,10 @@ public class ScheduledTransactionHandler {
     public void addScheduledTransaction(ActionEvent event) {
         try {
             String description = scheduledDescField.getText().trim();
-            if (!FormValidator.validateDescription(description, msg -> showAlert(Alert.AlertType.ERROR, "Errore", msg))) return;
+            if (description.isEmpty()) {
+                AlertManager.showErrorAlert("Inserisci una descrizione!");
+                return;
+            }
 
             double amount = Double.parseDouble(scheduledAmountField.getText());
             MovementType type = scheduledType.getValue();
@@ -91,8 +95,8 @@ public class ScheduledTransactionHandler {
             LocalDate endDate = scheduledEndDate.getValue();
 
             List<ITag> selectedTags = new ArrayList<>(scheduledTagsListView.getSelectionModel().getSelectedItems());
-            if (!FormValidator.validateTags(selectedTags, msg -> showAlert(Alert.AlertType.WARNING, "Attenzione", msg))) return;
-            if (!FormValidator.validateStartDate(startDate, msg -> showAlert(Alert.AlertType.ERROR, "Errore", msg))) return;
+            if (!FormValidator.validateTags(selectedTags, msg -> AlertManager.showWarningAlert("Attenzione", msg))) return;
+            if (!FormValidator.validateStartDate(startDate, msg -> AlertManager.showErrorAlert("Errore", msg))) return;
 
             ScheduledTransaction transaction = new ScheduledTransaction(
                     description, amount, type, selectedTags, recurrence, startDate, endDate
@@ -102,10 +106,10 @@ public class ScheduledTransactionHandler {
             updateScheduledTable();
             clearScheduledFields();
 
-            showAlert(Alert.AlertType.INFORMATION, "Successo", "Transazione programmata aggiunta!");
+            AlertManager.showInfoAlert("Transazione programmata aggiunta!");
 
         } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Errore", "Importo non valido!");
+            AlertManager.showErrorAlert("Importo non valido!");
         }
     }
 
@@ -123,10 +127,10 @@ public class ScheduledTransactionHandler {
             if (index != -1) {
                 ledger.removeScheduledTransaction(index);
                 updateScheduledTable();
-                showAlert(Alert.AlertType.INFORMATION, "Successo", "Transazione programmata rimossa!");
+                AlertManager.showInfoAlert("Transazione programmata rimossa!");
             }
         } else {
-            showAlert(Alert.AlertType.WARNING, "Attenzione", "Seleziona una transazione da rimuovere!");
+            AlertManager.showWarningAlert("Seleziona una transazione da rimuovere!");
         }
     }
 
@@ -225,20 +229,5 @@ public class ScheduledTransactionHandler {
         } catch (Exception e) {
             System.err.println("Errore nella configurazione della tabella scheduled: " + e.getMessage());
         }
-    }
-
-    /**
-     * Mostra un alert grafico.
-     *
-     * @param type    tipo di alert
-     * @param title   titolo
-     * @param message messaggio
-     */
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

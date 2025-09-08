@@ -2,6 +2,7 @@ package it.unicam.cs.mpgc.jbudget126533.controller;
 
 import it.unicam.cs.mpgc.jbudget126533.model.Person;
 import it.unicam.cs.mpgc.jbudget126533.model.PersonManager;
+import it.unicam.cs.mpgc.jbudget126533.util.AlertManager;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
@@ -112,12 +113,12 @@ public class PersonHandler {
     public void addPerson(ActionEvent event) {
         String name = personNameField.getText().trim();
         if (name.isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Errore", "Inserisci un nome!");
+            AlertManager.showErrorAlert("Inserisci un nome!");
             return;
         }
 
         if (PersonManager.getPerson(name) != null) {
-            showAlert(Alert.AlertType.ERROR, "Errore", "Una persona con questo nome esiste già!");
+            AlertManager.showErrorAlert("Una persona con questo nome esiste già!");
             return;
         }
 
@@ -157,9 +158,9 @@ public class PersonHandler {
                         onPersonListChanged.run();
                     }
 
-                    showAlert(Alert.AlertType.INFORMATION, "Successo", "Persona eliminata con successo!");
+                    AlertManager.showInfoAlert("Persona eliminata con successo!");
                 } else {
-                    showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile eliminare la persona!");
+                    AlertManager.showErrorAlert("Impossibile eliminare la persona !");
                 }
             }
         });
@@ -179,20 +180,5 @@ public class PersonHandler {
         personNameField.clear();
         personEmailField.clear();
         personPhoneField.clear();
-    }
-
-    /**
-     * Mostra una finestra di alert/modal con il tipo specificato, titolo e messaggio.
-     *
-     * @param type il tipo di alert (es. errore, informazione, conferma)
-     * @param title il titolo della finestra di alert
-     * @param message il messaggio da mostrare all'utente
-     */
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

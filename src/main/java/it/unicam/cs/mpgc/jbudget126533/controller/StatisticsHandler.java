@@ -1,6 +1,7 @@
 package it.unicam.cs.mpgc.jbudget126533.controller;
 
 import it.unicam.cs.mpgc.jbudget126533.model.*;
+import it.unicam.cs.mpgc.jbudget126533.util.AlertManager;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -94,7 +95,7 @@ public class StatisticsHandler {
             MovementType type = choiceForRange.getValue();
 
             if (startDate == null) {
-                showAlert("Seleziona una data di inizio!");
+                AlertManager.showErrorAlert("Seleziona una data di inizio!");
                 return;
             }
 
@@ -117,7 +118,7 @@ public class StatisticsHandler {
             balanceForRange.setText(details.toString());
 
         } catch (Exception e) {
-            showAlert("Si è verificato un errore nel calcolo: " + e.getMessage());
+            AlertManager.showErrorAlert("Si è verificato un errore nel calcolo: " + e.getMessage());
         }
     }
 
@@ -155,7 +156,7 @@ public class StatisticsHandler {
             LocalDate endDate = dateEndForTrend.getValue();
 
             if (startDate == null) {
-                showAlert("Seleziona una data di inizio!");
+                AlertManager.showErrorAlert("Seleziona una data di inizio!");
                 return;
             }
 
@@ -198,7 +199,7 @@ public class StatisticsHandler {
             balanceTrend.setText(details.toString());
 
         } catch (Exception e) {
-            showAlert("Si è verificato un errore nel calcolo: " + e.getMessage());
+            AlertManager.showErrorAlert("Si è verificato un errore nel calcolo: " + e.getMessage());
         }
     }
 
@@ -285,7 +286,7 @@ public class StatisticsHandler {
             tagTable.setItems(items);
 
         } catch (Exception e) {
-            showAlert("Impossibile generare la tabella: " + e.getMessage());
+            AlertManager.showErrorAlert("Impossibile generare la tabella: " + e.getMessage());
         }
     }
 
@@ -300,20 +301,5 @@ public class StatisticsHandler {
             System.err.println("Errore nel calcolo ammortamenti: " + e.getMessage());
             return 0;
         }
-    }
-
-
-
-    /**
-     * Mostra un alert grafico.
-     *
-     * @param message messaggio
-     */
-    private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Errore");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

@@ -1,6 +1,7 @@
 package it.unicam.cs.mpgc.jbudget126533.controller;
 
 import it.unicam.cs.mpgc.jbudget126533.model.*;
+import it.unicam.cs.mpgc.jbudget126533.util.AlertManager;
 import it.unicam.cs.mpgc.jbudget126533.util.FormValidator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -96,7 +97,7 @@ public class AmortizationHandler {
     public void createAmortizationPlan(ActionEvent event) {
         try {
             String description = amortDescription.getText().trim();
-            if (!FormValidator.validateDescription(description, msg -> showAlert(Alert.AlertType.ERROR, "Errore", msg))) return;
+            if (description.isEmpty()) {AlertManager.showErrorAlert("Inserisci una descrizione!"); return;}
 
             double principal = Double.parseDouble(amortPrincipal.getText());
             double interestRate = Double.parseDouble(amortInterestRate.getText());
@@ -104,20 +105,20 @@ public class AmortizationHandler {
             LocalDate startDate = amortStartDate.getValue();
 
             List<ITag> selectedTags = new ArrayList<>(amortTags.getSelectionModel().getSelectedItems());
-            if (!FormValidator.validateTags(selectedTags, msg -> showAlert(Alert.AlertType.WARNING, "Attenzione", msg))) return;
-            if (!FormValidator.validateStartDate(startDate, msg -> showAlert(Alert.AlertType.ERROR, "Errore", msg))) return;
+            if (!FormValidator.validateTags(selectedTags, msg -> AlertManager.showWarningAlert( "Attenzione", msg))) return;
+            if (!FormValidator.validateStartDate(startDate, msg -> AlertManager.showErrorAlert("Errore", msg))) return;
 
             ledger.createAmortizationPlan(description, principal, interestRate, installments, startDate, selectedTags);
             ledger.saveAmortizationPlans();
             loadAmortizationPlans();
             clearAmortizationFields();
 
-            showAlert(Alert.AlertType.INFORMATION, "Successo", "Piano di ammortamento creato e salvato!");
+            AlertManager.showInfoAlert("Piano di ammortamento creato e salvato!");
 
-        } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Errore", "Dati numerici non validi!");
+        }catch (NumberFormatException e) {
+            AlertManager.showErrorAlert("Dati numerici non validi!");
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Errore", "Si è verificato un errore: " + e.getMessage());
+            AlertManager.showErrorAlert("Si è verificato un errore: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -158,13 +159,13 @@ public class AmortizationHandler {
                 if (success) {
                     loadAmortizationPlans();
                     amortTable.getItems().clear();
-                    showAlert(Alert.AlertType.INFORMATION, "Successo", "Piano di ammortamento eliminato!");
+                    AlertManager.showInfoAlert("Piano di ammortamento eliminato!");
                 } else {
-                    showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile eliminare il piano!");
+                    AlertManager.showErrorAlert("Impossibile eliminare il piano!");
                 }
             }
         } else {
-            showAlert(Alert.AlertType.WARNING, "Attenzione", "Seleziona un piano da eliminare!");
+            AlertManager.showWarningAlert("Seleziona un piano da eliminare!");
         }
     }
 
@@ -177,13 +178,13 @@ public class AmortizationHandler {
     public void processDueInstallments(ActionEvent event) {
         try {
             ledger.processAmortizationDueDates();
-            showAlert(Alert.AlertType.INFORMATION, "Successo", "Rate scadute processate!");
+            AlertManager.showInfoAlert("Rate scadute processate!");
 
             // Aggiorna la visualizzazione
             loadAmortizationPlans();
 
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Errore", "Errore nel processamento: " + e.getMessage());
+            AlertManager.showErrorAlert("Errore nel processamento: " + e.getMessage());
         }
     }
 
@@ -299,18 +300,4 @@ public class AmortizationHandler {
         }
     }
 
-    /**
-     * Mostra un messaggio di alert informativo, di errore o conferma.
-     *
-     * @param type    tipo di alert (INFO, WARNING, ERROR, CONFIRMATION)
-     * @param title   titolo della finestra di alert
-     * @param message messaggio da mostrare
-     */
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 }

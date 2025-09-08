@@ -3,6 +3,7 @@ package it.unicam.cs.mpgc.jbudget126533.controller;
 import it.unicam.cs.mpgc.jbudget126533.model.ITag;
 import it.unicam.cs.mpgc.jbudget126533.model.Tag;
 import it.unicam.cs.mpgc.jbudget126533.model.TagManager;
+import it.unicam.cs.mpgc.jbudget126533.util.AlertManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -141,7 +142,7 @@ public class TagHandler {
         String tagName = newTagTextField.getText().trim();
         if (!tagName.isEmpty()) {
             if (availableTags.containsKey(tagName)) {
-                showAlert(Alert.AlertType.WARNING, "Attenzione", "Il tag esiste già!");
+                AlertManager.showWarningAlert("Il tag esiste già!");
                 return;
             }
 
@@ -157,7 +158,7 @@ public class TagHandler {
             newTagTextField.clear();
             initializeTagManagement();
 
-            showAlert(Alert.AlertType.INFORMATION, "Successo", "Tag creato con successo!");
+            AlertManager.showInfoAlert("Tag creato con successo!");
         }
     }
 
@@ -199,7 +200,7 @@ public class TagHandler {
     public void deleteSelectedTag(ActionEvent event) {
         ITag selected = availableTagsListView.getSelectionModel().getSelectedItem();
         if (selected != null) {
-            showAlert(Alert.AlertType.WARNING, "Attenzione",
+            AlertManager.showWarningAlert( "Attenzione",
                     "Funzionalità non implementata completamente");
         }
     }
@@ -214,7 +215,7 @@ public class TagHandler {
         availableTags.clear();
         availableTags.putAll(TagManager.getAllTags());
         initializeTagManagement();
-        showAlert(Alert.AlertType.INFORMATION, "Aggiornamento", "Tutti i tag sono stati ricaricati!");
+        AlertManager.showInfoAlert("Tutti i tag sono stati ricaricati!");
     }
 
     /**
@@ -223,8 +224,7 @@ public class TagHandler {
      * @param event evento associato all'azione
      */
     public void exportTags(ActionEvent event) {
-        showAlert(Alert.AlertType.INFORMATION, "Esportazione",
-                "I tag sono stati salvati automaticamente in: " + TagManager.ALL_TAGS_FILE_PATH);
+        AlertManager.showInfoAlert("I tag sono stati salvati automaticamente in: " + TagManager.ALL_TAGS_FILE_PATH);
     }
 
     /**
@@ -242,8 +242,7 @@ public class TagHandler {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             TagManager.loadAllTags();
             refreshAllTags(null);
-            showAlert(Alert.AlertType.INFORMATION, "Importazione",
-                    "Tag importati con successo da: " + TagManager.ALL_TAGS_FILE_PATH);
+            AlertManager.showInfoAlert("Tag importati con successo da: " + TagManager.ALL_TAGS_FILE_PATH);
         }
     }
 
@@ -278,18 +277,4 @@ public class TagHandler {
         }
     }
 
-    /**
-     * Mostra un alert grafico.
-     *
-     * @param type    tipo di alert
-     * @param title   titolo dell'alert
-     * @param message messaggio dell'alert
-     */
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 }

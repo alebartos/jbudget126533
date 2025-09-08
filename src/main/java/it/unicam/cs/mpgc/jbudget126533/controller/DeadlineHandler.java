@@ -1,6 +1,7 @@
 package it.unicam.cs.mpgc.jbudget126533.controller;
 
 import it.unicam.cs.mpgc.jbudget126533.model.*;
+import it.unicam.cs.mpgc.jbudget126533.util.AlertManager;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -104,7 +105,8 @@ public class DeadlineHandler {
      */
     public void refreshDeadlines(ActionEvent event) {
         loadDeadlines();
-        showAlert("Aggiornamento", "Scadenze aggiornate!");
+        AlertManager.showInfoAlert( "Scadenze aggiornate!");
+
     }
 
     /**
@@ -129,10 +131,10 @@ public class DeadlineHandler {
                 deadlinesTable.refresh();
                 updateDeadlineCounters();
 
-                showAlert("Successo", "Scadenza processata!");
+                AlertManager.showInfoAlert( "Scadenza processata!");
 
             } catch (Exception e) {
-                showAlert("Errore", "Impossibile processare la scadenza: " + e.getMessage());
+                AlertManager.showErrorAlert("Impossibile processare la scadenza: " + e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -387,17 +389,4 @@ public class DeadlineHandler {
         }
     }
 
-    /**
-     * Mostra un messaggio di alert informativo, di errore o conferma.
-     *
-     * @param title   titolo della finestra di alert
-     * @param message messaggio da mostrare
-     */
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 }

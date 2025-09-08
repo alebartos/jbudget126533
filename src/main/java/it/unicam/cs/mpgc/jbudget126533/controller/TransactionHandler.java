@@ -1,6 +1,7 @@
 package it.unicam.cs.mpgc.jbudget126533.controller;
 
 import it.unicam.cs.mpgc.jbudget126533.model.*;
+import it.unicam.cs.mpgc.jbudget126533.util.AlertManager;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -71,7 +72,7 @@ public class TransactionHandler {
             try {
                 Person selectedPerson = personChoiceBox.getValue();
                 if (selectedPerson == null) {
-                    showAlert(Alert.AlertType.ERROR, "Errore", "Seleziona una persona!");
+                    AlertManager.showErrorAlert("Seleziona una persona");
                     return;
                 }
                 String moneyText = moneyTransaction.getText();
@@ -89,7 +90,7 @@ public class TransactionHandler {
                 }
 
                 if (selectedTags.isEmpty()) {
-                    showAlert(Alert.AlertType.WARNING, "Attenzione", "Seleziona almeno un tag dalla lista!");
+                    AlertManager.showErrorAlert("Seleziona un Tag dalla lista!");
                     return;
                 }
 
@@ -109,12 +110,12 @@ public class TransactionHandler {
                 clearInput();
                 transactionTagsListView.getSelectionModel().clearSelection();
 
-                showAlert(Alert.AlertType.INFORMATION, "Successo", "Transazione aggiunta con successo!");
+                AlertManager.showInfoAlert("Transazione aggiunta con successo!");
 
             } catch (NumberFormatException e) {
-                showAlert(Alert.AlertType.ERROR, "Errore", "Formato importo non valido!");
+                AlertManager.showErrorAlert("Formato importo non valido!");
             } catch (Exception e) {
-                showAlert(Alert.AlertType.ERROR, "Errore", "Si è verificato un errore: " + e.getMessage());
+                AlertManager.showErrorAlert("Si è verificato un errore: " + e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -127,18 +128,18 @@ public class TransactionHandler {
      */
     private boolean controlError() {
         if (typeTransaction.getValue() == null) {
-            showAlert(Alert.AlertType.WARNING, "Errore", "Seleziona un tipo di transazione!");
+            AlertManager.showWarningAlert("Seleziona un tipo di transazione!");
             return false;
         }
 
         String moneyText = moneyTransaction.getText();
         if (!moneyText.matches("[\\-\\+]?[0-9]*(\\.[0-9]+)?")) {
-            showAlert(Alert.AlertType.ERROR, "Errore", "Inserisci un importo valido!");
+            AlertManager.showErrorAlert("Inserisci un importo valido!");
             return false;
         }
 
         if (personChoiceBox.getValue() == null) {
-            showAlert(Alert.AlertType.WARNING, "Attenzione", "Seleziona una persona!");
+            AlertManager.showWarningAlert("Seleziona una persona!");
             return false;
         }
 
@@ -274,20 +275,5 @@ public class TransactionHandler {
                 return PersonManager.getPerson(string);
             }
         });
-    }
-
-    /**
-     * Mostra un alert grafico.
-     *
-     * @param type    tipo di alert
-     * @param title   titolo dell'alert
-     * @param message messaggio dell'alert
-     */
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }
