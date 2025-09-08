@@ -122,7 +122,17 @@ public class GUIController implements Initializable {
     @FXML private Label dueTodayDeadlinesLabel;
     @FXML private Label futureDeadlinesLabel;
 
+    //Componenti Persone
+    @FXML private Tab personTab;
+    @FXML private TableView<Person> personTable;
+    @FXML private TextField personNameField;
+    @FXML private TextField personEmailField;
+    @FXML private TextField personPhoneField;
+    @FXML private ListView<ITag> personTagsListView;
+    @FXML private ChoiceBox<Person> personChoiceBox;
+
     private final Ledger ledger;
+    private PersonHandler personHandler;
 
     /**
      * Costruttore del controller principale.
@@ -147,7 +157,7 @@ public class GUIController implements Initializable {
             ledger.read();
 
             // Inizializza i gestori
-            transactionHandler = new TransactionHandler(ledger, typeTransaction, userTransaction,
+            transactionHandler = new TransactionHandler(ledger, typeTransaction, personChoiceBox,
                     moneyTransaction, dateTransaction, transactionTable, transactionTagsListView, balance);
 
             tagHandler = new TagHandler(availableTagsListView, selectedTagsListView,
@@ -173,15 +183,26 @@ public class GUIController implements Initializable {
                     dateEndForRange, choiceForRange, balanceTrend, dateStartForTrend,
                     dateEndForTrend, tagTable, choiceTypeForEachTag);
 
+            personHandler = new PersonHandler(personTable, personNameField, personEmailField, personPhoneField);
+
+
             // Configura componenti UI
             initializeUIComponents();
 
             // Carica dati
+            personHandler.initializePersonManagement();
             loadInitialData();
             ledger.updateBudgets();
 
             // Carica immagine
             loadImage();
+
+            personHandler.setOnPersonListChanged(() -> {
+                // Aggiorna la ChoiceBox nelle transazioni
+                if (transactionHandler != null) {
+                    transactionHandler.refreshPersonList();
+                }
+            });
 
         } catch (Exception e) {
             System.err.println("Errore grave nell'inizializzazione: " + e.getMessage());
@@ -589,6 +610,20 @@ public class GUIController implements Initializable {
         tabPane.getSelectionModel().select(6);
         transactionHandler.loadTransactionTable();
     }
+
+    // ==================== METODI PERSON ====================
+    @FXML
+    public void addPerson(ActionEvent event) {
+        personHandler.addPerson(event);
+    }
+
+
+    @FXML
+    public void showPersonManager(ActionEvent event) {
+        tabPane.getSelectionModel().select(personTab);
+        personHandler.initializePersonManagement();
+    }
+
 
     // ==================== METODI SYNC ====================
     @FXML

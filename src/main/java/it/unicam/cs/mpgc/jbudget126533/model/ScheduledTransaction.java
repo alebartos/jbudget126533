@@ -118,13 +118,16 @@ public class ScheduledTransaction {
             transactionAmount = Math.abs(amount); // Forza positivo per i guadagni
         }
 
+        Person transactionPerson = new Person("Transazione Programmata");
+
         Transaction transaction = new Transaction(
                 type,
-                description,
+                transactionPerson,
                 transactionAmount,
                 nextExecutionDate,
                 tags
         );
+
 
         calculateNextExecutionDate();
 

@@ -173,9 +173,11 @@ public class AmortizationManager {
     // ==================== METODI PRIVATI ====================
 
     private ITransaction createTransactionFromInstallment(Installment installment, AmortizationPlan plan) {
+        Person systemPerson = new Person("Ammortamento");
+
         return new Transaction(
                 MovementType.SPESA,
-                "Rata " + installment.getNumber() + " - " + plan.getDescription(),
+                systemPerson,
                 -installment.getTotalAmount(),
                 installment.getDueDate(),
                 plan.getTags()

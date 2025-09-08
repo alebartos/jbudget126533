@@ -186,9 +186,11 @@ public class DeadlineHandler {
      */
     private void createTransactionFromAmortization(Installment installment, AmortizationPlan plan) {
         try {
+            Person systemPerson = new Person("Ammortamento");
+
             ITransaction transaction = new Transaction(
                     MovementType.SPESA,
-                    "Rata " + installment.getNumber() + " - " + plan.getDescription(),
+                    systemPerson,
                     -installment.getTotalAmount(), // Importo negativo (spesa)
                     LocalDate.now(),
                     plan.getTags()

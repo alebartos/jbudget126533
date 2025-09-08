@@ -32,7 +32,7 @@ public class GUIView extends Application implements View {
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Menu.fxml")));
         primaryStage.setTitle("JBudget");
-        primaryStage.setScene(new Scene(root, 1100, 750));
+        primaryStage.setScene(new Scene(root, 1150, 750));
         primaryStage.resizableProperty().setValue(true);
         primaryStage.show();
     }

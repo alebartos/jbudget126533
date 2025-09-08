@@ -84,7 +84,7 @@ public class ConsoleView implements View {
             MovementType type = scanner.nextLine().equals("1") ? MovementType.GUADAGNO : MovementType.SPESA;
 
             System.out.println("User: ");
-            String user = scanner.nextLine().toUpperCase();
+            String userName = scanner.nextLine().toUpperCase();
 
             System.out.println("Amount: ");
             double amount = Double.parseDouble(scanner.nextLine());
@@ -94,10 +94,13 @@ public class ConsoleView implements View {
             String dateInput = scanner.nextLine();
             LocalDate date = dateInput.isEmpty() ? LocalDate.now() : LocalDate.parse(dateInput);
 
+            // Crea una persona temporanea
+            Person person = new Person(userName);
+
             // Selezione tag multipli
             List<ITag> selectedTags = selectMultipleTags();
 
-            ITransaction transaction = new Transaction(type, user, amount, date, selectedTags);
+            ITransaction transaction = new Transaction(type, person, amount, date, selectedTags);
             this.ledger.write(transaction);
             this.ledger.addTransaction(transaction);
 

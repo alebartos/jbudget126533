@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
+import javafx.util.StringConverter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class TransactionHandler {
 
     private final Ledger ledger;
     private final ChoiceBox<MovementType> typeTransaction;
-    private final TextField userTransaction;
+    private final ChoiceBox<Person> personChoiceBox;
     private final TextField moneyTransaction;
     private final DatePicker dateTransaction;
     private final TableView<ITransaction> transactionTable;
@@ -38,7 +39,6 @@ public class TransactionHandler {
      *
      * @param ledger                ledger contenente le transazioni
      * @param typeTransaction       ChoiceBox per selezionare il tipo di transazione
-     * @param userTransaction       TextField per inserire l'utente
      * @param moneyTransaction      TextField per inserire l'importo
      * @param dateTransaction       DatePicker per selezionare la data
      * @param transactionTable      TableView per visualizzare le transazioni
@@ -46,12 +46,12 @@ public class TransactionHandler {
      * @param balanceLabel          Label per visualizzare il saldo
      */
     public TransactionHandler(Ledger ledger, ChoiceBox<MovementType> typeTransaction,
-                              TextField userTransaction, TextField moneyTransaction,
+                              ChoiceBox<Person> personChoiceBox, TextField moneyTransaction,
                               DatePicker dateTransaction, TableView<ITransaction> transactionTable,
                               ListView<ITag> transactionTagsListView, Label balanceLabel) {
         this.ledger = ledger;
         this.typeTransaction = typeTransaction;
-        this.userTransaction = userTransaction;
+        this.personChoiceBox = personChoiceBox;
         this.moneyTransaction = moneyTransaction;
         this.dateTransaction = dateTransaction;
         this.transactionTable = transactionTable;
@@ -62,14 +62,6 @@ public class TransactionHandler {
     }
 
     /**
-     * Inizializza le ChoiceBox con i tipi di transazione disponibili.
-     */
-    public void initializeChoiceBoxes() {
-        typeTransaction.getItems().addAll(MovementType.values());
-        typeTransaction.setValue(MovementType.SPESA);
-    }
-
-    /**
      * Aggiunge una nuova transazione al ledger.
      *
      * @param actionEvent evento dell'interfaccia grafica
@@ -77,6 +69,11 @@ public class TransactionHandler {
     public void addTransaction(ActionEvent actionEvent) {
         if (controlError()) {
             try {
+                Person selectedPerson = personChoiceBox.getValue();
+                if (selectedPerson == null) {
+                    showAlert(Alert.AlertType.ERROR, "Errore", "Seleziona una persona!");
+                    return;
+                }
                 String moneyText = moneyTransaction.getText();
 
                 // Corregge il segno in base al tipo
@@ -98,7 +95,7 @@ public class TransactionHandler {
 
                 ITransaction transaction = new Transaction(
                         typeTransaction.getValue(),
-                        userTransaction.getText().toUpperCase(),
+                        selectedPerson,
                         Double.parseDouble(moneyText),
                         dateTransaction.getValue() != null ? dateTransaction.getValue() : LocalDate.now(),
                         selectedTags
@@ -140,8 +137,8 @@ public class TransactionHandler {
             return false;
         }
 
-        if (userTransaction.getText().trim().isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Attenzione", "Inserisci un nome utente!");
+        if (personChoiceBox.getValue() == null) {
+            showAlert(Alert.AlertType.WARNING, "Attenzione", "Seleziona una persona!");
             return false;
         }
 
@@ -152,7 +149,7 @@ public class TransactionHandler {
      * Pulisce i campi di input dopo l'inserimento di una transazione.
      */
     private void clearInput() {
-        userTransaction.clear();
+        personChoiceBox.setValue(null);
         moneyTransaction.clear();
         dateTransaction.setValue(LocalDate.now());
         typeTransaction.setValue(MovementType.SPESA);
@@ -240,6 +237,43 @@ public class TransactionHandler {
         } catch (Exception e) {
             System.err.println("Errore nella configurazione della tabella transazioni: " + e.getMessage());
         }
+    }
+
+    public void refreshPersonList() {
+        if (personChoiceBox != null) {
+            // Salva la selezione corrente
+            Person selectedPerson = personChoiceBox.getValue();
+
+            // Aggiorna la lista
+            personChoiceBox.setItems(FXCollections.observableArrayList(PersonManager.getAllPersons()));
+
+            // Ripristina la selezione se ancora presente
+            if (selectedPerson != null && PersonManager.getPerson(selectedPerson.getName()) != null) {
+                personChoiceBox.setValue(selectedPerson);
+            } else {
+                personChoiceBox.setValue(null);
+            }
+        }
+    }
+
+    public void initializeChoiceBoxes() {
+        typeTransaction.getItems().addAll(MovementType.values());
+        typeTransaction.setValue(MovementType.SPESA);
+
+        // Inizializza la ChoiceBox delle persone
+        refreshPersonList(); // Usa il nuovo metodo
+
+        personChoiceBox.setConverter(new StringConverter<Person>() {
+            @Override
+            public String toString(Person person) {
+                return person != null ? person.getName() : "Seleziona persona";
+            }
+
+            @Override
+            public Person fromString(String string) {
+                return PersonManager.getPerson(string);
+            }
+        });
     }
 
     /**

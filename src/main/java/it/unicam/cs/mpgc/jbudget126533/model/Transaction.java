@@ -16,6 +16,7 @@ public class Transaction implements ITransaction {
     private double money;
     private LocalDate date;
     private List<ITag> tags;
+    private Person person;
 
     /** Costruttore vuoto (utile per Gson o serializzazione/deserializzazione) */
     public Transaction() {
@@ -26,14 +27,15 @@ public class Transaction implements ITransaction {
      * Costruttore con lista di tag multipli.
      *
      * @param type Tipo di movimento
-     * @param user Nome utente
+     * @param person Nome utente
      * @param money Importo
      * @param date Data della transazione
      * @param tags Lista di tag
      */
-    public Transaction(MovementType type, String user, double money, LocalDate date, List<ITag> tags) {
+    public Transaction(MovementType type, Person person, double money, LocalDate date, List<ITag> tags) {
         this.type = type;
-        this.user = user;
+        this.person = person;
+        this.user = person != null ? person.getName() : "";
         this.money = money;
         this.date = date;
         this.tags = new ArrayList<>(tags);
@@ -65,6 +67,12 @@ public class Transaction implements ITransaction {
     public List<ITag> getTags() { return new ArrayList<>(tags); }
     @Override
     public void setTags(List<ITag> tags) { this.tags = new ArrayList<>(tags); }
+
+    public Person getPerson() { return person; }
+    public void setPerson(Person person) {
+        this.person = person;
+        this.user = person != null ? person.getName() : "";
+    }
 
     @Override
     public void addTag(ITag tag) { if (tag != null) tags.add(tag); }
