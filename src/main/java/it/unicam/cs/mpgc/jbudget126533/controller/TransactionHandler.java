@@ -263,7 +263,7 @@ public class TransactionHandler {
         // Inizializza la ChoiceBox delle persone
         refreshPersonList(); // Usa il nuovo metodo
 
-        personChoiceBox.setConverter(new StringConverter<Person>() {
+        personChoiceBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(Person person) {
                 return person != null ? person.getName() : "Seleziona persona";

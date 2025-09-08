@@ -51,8 +51,8 @@ public class PersonHandler {
      * per ogni riga della tabella.
      */
     private void configurePersonTable() {
-        if (personTable.getColumns().size() > 0) {
-            TableColumn<Person, String> nameColumn = (TableColumn<Person, String>) personTable.getColumns().get(0);
+        if (!personTable.getColumns().isEmpty()) {
+            TableColumn<Person, String> nameColumn = (TableColumn<Person, String>) personTable.getColumns().getFirst();
             nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         }
 
@@ -69,7 +69,7 @@ public class PersonHandler {
         // Colonna azioni con bottone Elimina
         if (personTable.getColumns().size() > 3) {
             TableColumn<Person, Void> actionsColumn = (TableColumn<Person, Void>) personTable.getColumns().get(3);
-            actionsColumn.setCellFactory(param -> new TableCell<Person, Void>() {
+            actionsColumn.setCellFactory(param -> new TableCell<>() {
                 private final Button deleteButton = new Button("Elimina");
 
                 {

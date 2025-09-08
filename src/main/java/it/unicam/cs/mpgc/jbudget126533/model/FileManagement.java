@@ -148,7 +148,6 @@ public class FileManagement implements IFileManagement {
         return readObjectInternal(fileName, type);
     }
 
-    @SuppressWarnings("unchecked")
     private <T> T readObjectInternal(String fileName, Type type) {
         try {
             String fullPath = FilePaths.getFullPath(fileName);

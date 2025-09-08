@@ -245,9 +245,7 @@ public class StatisticsHandler {
      */
     private int countRealTransactions(LocalDate startDate, LocalDate endDate) {
         return (int) ledger.getTransaction().stream()
-                .filter(t -> {
-                    return true;
-                })
+                .filter(t -> true)
                 .filter(t -> !t.getDate().isBefore(startDate) && !t.getDate().isAfter(endDate))
                 .count();
     }
