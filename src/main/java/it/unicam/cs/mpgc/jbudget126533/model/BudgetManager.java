@@ -10,7 +10,7 @@ import java.util.*;
 /**
  * Manager dei budget che utilizza IFileManagement per la persistenza.
  */
-public class BudgetManager {
+public class BudgetManager extends BaseManager<Budget> {
 
     /** Mappa dei budget per categoria */
     private final Map<String, Budget> budgets = new HashMap<>();
@@ -18,8 +18,7 @@ public class BudgetManager {
     /** Gestore delle transazioni */
     private final IBudgetManagement budgetManagement;
 
-    /** Gestore della persistenza */
-    private final IFileManagement fileManagement;
+    private final Ledger ledger;
 
     /**
      * Costruttore del BudgetManager.
@@ -30,13 +29,32 @@ public class BudgetManager {
      */
 
     public BudgetManager(IBudgetManagement budgetManagement, Ledger ledger, IFileManagement fileManagement) {
+        super(fileManagement, FilePaths.getFileNameOnly(FilePaths.BUDGET_FILE));
         this.budgetManagement = budgetManagement;
-        /** Ledger delle transazioni */
-        this.fileManagement = fileManagement;
-        loadBudgets();
+        this.ledger = ledger;
+        loadItems();
         cleanupExpiredBudgets();
         updateAllBudgets();
     }
+
+    @Override
+    protected void loadItems() {
+        try {
+            Type type = new TypeToken<List<BudgetData>>() {}.getType();
+            List<BudgetData> loadedData = fileManagement.readObject(fileName, type);
+
+            if (loadedData != null) {
+                managedItems.clear();
+                for (BudgetData data : loadedData) {
+                    managedItems.put(data.category, data.toBudget());
+                }
+                updateAllBudgets();
+            }
+        } catch (Exception e) {
+            System.err.println("Errore nel caricamento dei budget: " + e.getMessage());
+        }
+    }
+
 
     /**
      * Classe interna per facilitare la serializzazione/deserializzazione dei budget.
@@ -80,8 +98,7 @@ public class BudgetManager {
     public void setBudget(String category, double amount, LocalDate startDate, LocalDate endDate) {
         Budget budget = new Budget(category, amount, startDate, endDate);
         updateBudgetSpentAmount(category);
-        budgets.put(category, budget);
-        saveBudgets();
+        addItem(category, budget);
     }
 
     /**
@@ -92,7 +109,7 @@ public class BudgetManager {
     public void onNewTransactionAdded(ITransaction transaction) {
         if (transaction.getType() == MovementType.SPESA) {
             updateAllBudgets();
-            saveBudgets();
+            saveItems();
         }
     }
 
@@ -102,7 +119,7 @@ public class BudgetManager {
      * @param category categoria del budget da aggiornare
      */
     public void updateBudgetSpentAmount(String category) {
-        Budget budget = budgets.get(category);
+        Budget budget = managedItems.get(category);
         if (budget != null) {
             double spent = budgetManagement.balanceForTag(
                     MovementType.SPESA,
@@ -119,10 +136,10 @@ public class BudgetManager {
      * Salva i dati aggiornati su file.
      */
     public void updateAllBudgets() {
-        for (String category : budgets.keySet()) {
+        for (String category : managedItems.keySet()) {
             updateBudgetSpentAmount(category);
         }
-        saveBudgets();
+        saveItems();
     }
 
     /**
@@ -132,7 +149,7 @@ public class BudgetManager {
      * @return oggetto {@link Budget} corrispondente, o null se non esiste
      */
     public Budget getBudget(String category) {
-        return budgets.get(category);
+        return managedItems.get(category);
     }
 
     /**
@@ -141,7 +158,7 @@ public class BudgetManager {
      * @return mappa dei budget
      */
     public Map<String, Budget> getAllBudgets() {
-        return new HashMap<>(budgets);
+        return new HashMap<>(managedItems);
     }
 
     /**
@@ -150,8 +167,7 @@ public class BudgetManager {
      * @param category nome della categoria
      */
     public void removeBudget(String category) {
-        budgets.remove(category);
-        saveBudgets();
+        removeItem(category);
     }
 
     /**
@@ -161,7 +177,7 @@ public class BudgetManager {
      */
     public List<Budget> getExceededBudgets() {
         List<Budget> exceeded = new ArrayList<>();
-        for (Budget budget : budgets.values()) {
+        for (Budget budget : managedItems.values()) {
             if (budget.isExceeded()) {
                 exceeded.add(budget);
             }
@@ -172,48 +188,12 @@ public class BudgetManager {
     // ==================== PERSISTENZA ====================
 
     /**
-     * Salva i budget attuali usando IFileManagement.
-     */
-    private void saveBudgets() {
-        try {
-            List<BudgetData> budgetDataList = new ArrayList<>();
-            for (Budget budget : budgets.values()) {
-                budgetDataList.add(new BudgetData(budget));
-            }
-
-            fileManagement.writeObject(FilePaths.getFileNameOnly(FilePaths.BUDGET_FILE), budgetDataList);
-        } catch (Exception e) {
-            System.err.println("Errore nel salvataggio dei budget: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Carica i budget salvati usando IFileManagement.
-     * Aggiorna gli importi spesi all'avvio.
-     */
-    private void loadBudgets() {
-        try {
-            Type type = new TypeToken<List<BudgetData>>() {}.getType();
-            List<BudgetData> loadedData = fileManagement.readObject(
-                    FilePaths.getFileNameOnly(FilePaths.BUDGET_FILE), type);
-
-            if (loadedData != null) {
-                budgets.clear();
-                for (BudgetData data : loadedData) {
-                    budgets.put(data.category, data.toBudget());
-                }
-                updateAllBudgets();
-            }
-        } catch (Exception e) {
-            System.err.println("Errore nel caricamento dei budget: " + e.getMessage());
-        }
-    }
-
-    /**
      * Rimuove i budget scaduti (la cui data di fine è passata) e salva le modifiche.
      */
     public void cleanupExpiredBudgets() {
-        budgets.entrySet().removeIf(entry -> entry.getValue().getEndDate().isBefore(LocalDate.now()));
-        saveBudgets();
+        managedItems.entrySet().removeIf(entry -> entry.getValue().getEndDate().isBefore(LocalDate.now()));
+        saveItems();
     }
+
+
 }

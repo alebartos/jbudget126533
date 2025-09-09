@@ -1,4 +1,4 @@
-// TIMESTAMP: 2025-09-03 04:28:44
+// TIMESTAMP: 2025-09-09 15:55:59
 [
   {
     "type": "GUADAGNO",
@@ -209,5 +209,43 @@
         "parentName": "Alimentari"
       }
     ]
+  },
+  {
+    "type": "SPESA",
+    "user": "Ammortamento",
+    "money": -5266.767086385551,
+    "date": "2025-09-09",
+    "tags": [
+      {
+        "name": "Mutuo",
+        "color": "#000000",
+        "description": "",
+        "parentName": "Abitazione"
+      }
+    ],
+    "person": {
+      "name": "Ammortamento",
+      "defaultTags": []
+    }
+  },
+  {
+    "type": "SPESA",
+    "user": "Alessandro",
+    "money": -150.0,
+    "date": "2025-09-09",
+    "tags": [
+      {
+        "name": "Carburante",
+        "color": "#000000",
+        "description": "",
+        "parentName": "Trasporti"
+      }
+    ],
+    "person": {
+      "name": "Alessandro",
+      "email": "alessandro.bartolini@studenti.unicam.it",
+      "phone": "3247734976",
+      "defaultTags": []
+    }
   }
 ]

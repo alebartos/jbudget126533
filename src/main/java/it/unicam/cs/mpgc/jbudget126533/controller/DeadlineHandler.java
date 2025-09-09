@@ -24,20 +24,18 @@ import java.util.Optional;
  *     <li>Visualizzare le scadenze in una tabella con formattazione e colorazione condizionale</li>
  * </ul>
  */
-public class DeadlineHandler {
+public class DeadlineHandler extends BaseHandler<Deadline> {
 
-    private final Ledger ledger;
     private final TableView<Deadline> deadlinesTable;
     private final ChoiceBox<DeadlineType> deadlineFilterType;
     private final Label totalDeadlinesLabel;
     private final Label overdueDeadlinesLabel;
     private final Label dueTodayDeadlinesLabel;
     private final Label futureDeadlinesLabel;
+    private final TableView<ScheduledTransaction> scheduledTable;
 
     private final ObservableList<Deadline> deadlinesObservableList = FXCollections.observableArrayList();
     private final FilteredList<Deadline> filteredDeadlines;
-    private final TableView<ScheduledTransaction> scheduledTable;
-
     /**
      * Costruttore della classe.
      *
@@ -54,7 +52,7 @@ public class DeadlineHandler {
                            Label totalDeadlinesLabel, Label overdueDeadlinesLabel,
                            Label dueTodayDeadlinesLabel, Label futureDeadlinesLabel,
                            TableView<ScheduledTransaction> scheduledTable) {
-        this.ledger = ledger;
+        super(ledger);
         this.deadlinesTable = deadlinesTable;
         this.deadlineFilterType = deadlineFilterType;
         this.totalDeadlinesLabel = totalDeadlinesLabel;
@@ -62,7 +60,6 @@ public class DeadlineHandler {
         this.dueTodayDeadlinesLabel = dueTodayDeadlinesLabel;
         this.futureDeadlinesLabel = futureDeadlinesLabel;
         this.scheduledTable = scheduledTable;
-        IFileManagement fileManagement = new FileManagement();
 
         this.filteredDeadlines = new FilteredList<>(deadlinesObservableList);
         configureDeadlinesTable();
@@ -105,9 +102,9 @@ public class DeadlineHandler {
      */
     public void refreshDeadlines(ActionEvent event) {
         loadDeadlines();
-        AlertManager.showInfoAlert( "Scadenze aggiornate!");
-
+        AlertManager.showInfoAlert("Scadenze aggiornate!");
     }
+
 
     /**
      * Processa la scadenza selezionata segnandola come pagata.
@@ -115,28 +112,24 @@ public class DeadlineHandler {
      * @param event evento di azione
      */
     public void processSelectedDeadline(ActionEvent event) {
-        Deadline selected = deadlinesTable.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            try {
-                // 1. Per le rate di ammortamento, marca la rata come pagata
-                if (selected.getDeadlineType() == DeadlineType.AMORTIZATION_INSTALLMENT) {
-                    processAmortizationDeadline(selected);
-                }
-                // 2. Per le transazioni programmate, esegui la transazione
-                else if (selected.getDeadlineType() == DeadlineType.SCHEDULED_TRANSACTION) {
-                    processScheduledTransactionDeadline(selected);
-                }
+        executeOnSelectedItem(deadlinesTable, this::processDeadline, null);
+    }
 
-                // 3. Aggiorna l'interfaccia
-                deadlinesTable.refresh();
-                updateDeadlineCounters();
-
-                AlertManager.showInfoAlert( "Scadenza processata!");
-
-            } catch (Exception e) {
-                AlertManager.showErrorAlert("Impossibile processare la scadenza: " + e.getMessage());
-                e.printStackTrace();
+    private void processDeadline(Deadline deadline) {
+        try {
+            if (deadline.getDeadlineType() == DeadlineType.AMORTIZATION_INSTALLMENT) {
+                processAmortizationDeadline(deadline);
+            } else if (deadline.getDeadlineType() == DeadlineType.SCHEDULED_TRANSACTION) {
+                processScheduledTransactionDeadline(deadline);
             }
+
+            deadlinesTable.refresh();
+            updateDeadlineCounters();
+            AlertManager.showInfoAlert("Scadenza processata!");
+
+        } catch (Exception e) {
+            AlertManager.showErrorAlert("Impossibile processare la scadenza: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -145,43 +138,55 @@ public class DeadlineHandler {
      */
     private void processAmortizationDeadline(Deadline deadline) {
         try {
-            // Trova la rata corrispondente nel piano di ammortamento
+            // sourceId ha la forma: <planId>_<numeroRata>
             String sourceId = deadline.getSourceId();
-            if (sourceId != null && sourceId.contains("_")) {
-                String[] parts = sourceId.split("_");
-                String planId = parts[0];
-                int installmentNumber = Integer.parseInt(parts[1]);
+            if (sourceId != null) {
+                int lastUnderscoreIndex = sourceId.lastIndexOf('_');
+                if (lastUnderscoreIndex > 0 && lastUnderscoreIndex < sourceId.length() - 1) {
+                    String planId = sourceId.substring(0, lastUnderscoreIndex);
+                    String installmentNumberStr = sourceId.substring(lastUnderscoreIndex + 1);
+                    int installmentNumber = Integer.parseInt(installmentNumberStr);
 
-                // Trova il piano di ammortamento
-                Optional<AmortizationPlan> planOptional = ledger.getAmortizationPlans().stream()
-                        .filter(p -> p.getId().equals(planId))
-                        .findFirst();
+                    // Trova il piano di ammortamento
+                    Optional<AmortizationPlan> planOptional = ledger.getAmortizationPlans().stream()
+                            .filter(p -> p.getId().equals(planId))
+                            .findFirst();
 
-                if (planOptional.isPresent()) {
-                    AmortizationPlan plan = planOptional.get();
+                    if (planOptional.isPresent()) {
+                        AmortizationPlan plan = planOptional.get();
 
-                    // Trova la rata e marcala come pagata
-                    for (Installment installment : plan.getInstallments()) {
-                        if (installment.getNumber() == installmentNumber) {
-                            installment.setPaid(true);
+                        // Trova la rata e marcala come pagata
+                        for (Installment installment : plan.getInstallments()) {
+                            if (installment.getNumber() == installmentNumber) {
+                                installment.setPaid(true);
 
-                            // Crea la transazione corrispondente
-                            createTransactionFromAmortization(installment, plan);
+                                // Crea la transazione corrispondente
+                                createTransactionFromAmortization(installment, plan);
 
-                            // Salva i cambiamenti nei piani di ammortamento
-                            ledger.saveAmortizationPlans();
+                                // Salva i cambiamenti nei piani di ammortamento
+                                ledger.saveAmortizationPlans();
 
-                            System.out.println("Rata " + installmentNumber + " del piano " + plan.getDescription() + " marcata come pagata");
-                            break;
+                                System.out.println("Rata " + installmentNumber + " del piano " + plan.getDescription() + " marcata come pagata");
+                                break;
+                            }
                         }
+                    } else {
+                        System.err.println("Piano ammortamento con ID " + planId + " non trovato.");
                     }
+                } else {
+                    System.err.println("Formato sourceId non valido: " + sourceId);
                 }
             }
+        } catch (NumberFormatException e) {
+            System.err.println("Errore di formato numero rata in sourceId: " + deadline.getSourceId());
+            e.printStackTrace();
+            throw e;
         } catch (Exception e) {
             System.err.println("Errore nel processamento rata ammortamento: " + e.getMessage());
             throw e;
         }
     }
+
 
     /**
      * Crea una transazione da una rata di ammortamento.
@@ -389,4 +394,10 @@ public class DeadlineHandler {
         }
     }
 
+    @Override
+    public void refreshTable() {
+        loadDeadlines();
+    }
+    @Override
+    protected void clearInputFields() {}
 }

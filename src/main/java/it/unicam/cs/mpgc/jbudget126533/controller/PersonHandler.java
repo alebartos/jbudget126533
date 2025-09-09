@@ -13,7 +13,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
  * Fornisce metodi per inizializzare la tabella delle persone, aggiungere nuove persone,
  * eliminare persone esistenti, e aggiornare la visualizzazione.
  */
-public class PersonHandler {
+public class PersonHandler extends BaseHandler<Person> {
+
     private final TableView<Person> personTable;
     private final TextField personNameField;
     private final TextField personEmailField;
@@ -30,6 +31,7 @@ public class PersonHandler {
      */
     public PersonHandler(TableView<Person> personTable, TextField personNameField,
                          TextField personEmailField, TextField personPhoneField) {
+        super(null);
         this.personTable = personTable;
         this.personNameField = personNameField;
         this.personEmailField = personEmailField;
@@ -40,11 +42,8 @@ public class PersonHandler {
      * Inizializza la gestione della persona configurando la tabella e caricando i dati.
      */
     public void initializePersonManagement() {
-        // Configura la tabella delle persone
         configurePersonTable();
-
-        // Carica le persone
-        loadPersonsTable();
+        refreshTable();
     }
 
     /**
@@ -102,7 +101,6 @@ public class PersonHandler {
     public void setOnPersonListChanged(Runnable callback) {
         this.onPersonListChanged = callback;
     }
-
     /**
      * Aggiunge una nuova persona basandosi sui dati inseriti nei campi di testo.
      * Se il nome è vuoto o già presente, mostra un messaggio di errore.
@@ -127,14 +125,14 @@ public class PersonHandler {
                 personPhoneField.getText().trim());
 
         PersonManager.addPerson(person);
-        loadPersonsTable();
-        clearPersonFields();
-
+        refreshTable();
+        clearInputFields();
 
         if (onPersonListChanged != null) {
             onPersonListChanged.run();
         }
     }
+
 
     /**
      * Elimina una persona dalla lista dopo conferma da parte dell'utente.
@@ -143,40 +141,33 @@ public class PersonHandler {
      * @param person la persona da eliminare
      */
     private void deletePerson(Person person) {
-        Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmation.setTitle("Conferma eliminazione");
-        confirmation.setHeaderText("Eliminare la persona '" + person.getName() + "'?");
-        confirmation.setContentText("Questa operazione non può essere annullata.");
+        boolean confirmed = showConfirmationAlert(
+                "Conferma eliminazione",
+                "Eliminare la persona '" + person.getName() + "'?",
+                "Questa operazione non può essere annullata."
+        );
 
-        confirmation.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                boolean removed = PersonManager.removePerson(person.getName());
-                if (removed) {
-                    loadPersonsTable();
-
-                    if (onPersonListChanged != null) {
-                        onPersonListChanged.run();
-                    }
-
-                    AlertManager.showInfoAlert("Persona eliminata con successo!");
-                } else {
-                    AlertManager.showErrorAlert("Impossibile eliminare la persona !");
+        if (confirmed) {
+            boolean removed = PersonManager.removePerson(person.getName());
+            if (removed) {
+                refreshTable();
+                if (onPersonListChanged != null) {
+                    onPersonListChanged.run();
                 }
+                AlertManager.showInfoAlert("Persona eliminata con successo!");
+            } else {
+                AlertManager.showErrorAlert("Impossibile eliminare la persona!");
             }
-        });
+        }
     }
 
-    /**
-     * Carica la lista aggiornata delle persone nella tabella.
-     */
-    private void loadPersonsTable() {
+    @Override
+    public void refreshTable() {
         personTable.setItems(FXCollections.observableArrayList(PersonManager.getAllPersons()));
     }
 
-    /**
-     * Pulisce i campi di input per nome, email e telefono della persona.
-     */
-    private void clearPersonFields() {
+    @Override
+    protected void clearInputFields() {
         personNameField.clear();
         personEmailField.clear();
         personPhoneField.clear();

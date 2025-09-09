@@ -24,9 +24,8 @@ import java.util.stream.Collectors;
  *     <li>Gestione dei tag associati alle transazioni</li>
  * </ul>
  */
-public class TransactionHandler {
+public class TransactionHandler extends BaseHandler<ITransaction> {
 
-    private final Ledger ledger;
     private final ChoiceBox<MovementType> typeTransaction;
     private final ChoiceBox<Person> personChoiceBox;
     private final TextField moneyTransaction;
@@ -50,7 +49,7 @@ public class TransactionHandler {
                               ChoiceBox<Person> personChoiceBox, TextField moneyTransaction,
                               DatePicker dateTransaction, TableView<ITransaction> transactionTable,
                               ListView<ITag> transactionTagsListView, Label balanceLabel) {
-        this.ledger = ledger;
+        super(ledger);
         this.typeTransaction = typeTransaction;
         this.personChoiceBox = personChoiceBox;
         this.moneyTransaction = moneyTransaction;
@@ -75,9 +74,8 @@ public class TransactionHandler {
                     AlertManager.showErrorAlert("Seleziona una persona");
                     return;
                 }
-                String moneyText = moneyTransaction.getText();
 
-                // Corregge il segno in base al tipo
+                String moneyText = moneyTransaction.getText();
                 if (typeTransaction.getValue().equals(MovementType.SPESA) && !moneyText.startsWith("-")) {
                     moneyText = "-" + moneyText;
                 } else if (typeTransaction.getValue().equals(MovementType.GUADAGNO) && moneyText.startsWith("-")) {
@@ -106,8 +104,8 @@ public class TransactionHandler {
                 ledger.addTransaction(transaction);
 
                 updateBalance();
-                loadTransactionTable();
-                clearInput();
+                refreshTable();
+                clearInputFields();
                 transactionTagsListView.getSelectionModel().clearSelection();
 
                 AlertManager.showInfoAlert("Transazione aggiunta con successo!");
@@ -144,19 +142,6 @@ public class TransactionHandler {
         }
 
         return true;
-    }
-
-    /**
-     * Pulisce i campi di input dopo l'inserimento di una transazione.
-     */
-    private void clearInput() {
-        personChoiceBox.setValue(null);
-        moneyTransaction.clear();
-        dateTransaction.setValue(LocalDate.now());
-        typeTransaction.setValue(MovementType.SPESA);
-        if (transactionTagsListView != null) {
-            transactionTagsListView.getSelectionModel().clearSelection();
-        }
     }
 
     /**
@@ -234,6 +219,32 @@ public class TransactionHandler {
                     return new SimpleStringProperty(tags);
                 });
             }
+            if (transactionTable.getColumns().size() > 5) {
+                TableColumn<ITransaction, Void> actionsColumn = (TableColumn<ITransaction, Void>)
+                        transactionTable.getColumns().get(5);
+
+                actionsColumn.setCellFactory(param -> new TableCell<ITransaction, Void>() {
+                    private final Button deleteButton = new Button("Elimina");
+
+                    {
+                        deleteButton.setOnAction(event -> {
+                            ITransaction transaction = getTableView().getItems().get(getIndex());
+                            deleteTransaction(transaction);
+                        });
+                        deleteButton.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 12px;");
+                    }
+
+                    @Override
+                    protected void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(deleteButton);
+                        }
+                    }
+                });
+            }
 
         } catch (Exception e) {
             System.err.println("Errore nella configurazione della tabella transazioni: " + e.getMessage());
@@ -242,13 +253,8 @@ public class TransactionHandler {
 
     public void refreshPersonList() {
         if (personChoiceBox != null) {
-            // Salva la selezione corrente
             Person selectedPerson = personChoiceBox.getValue();
-
-            // Aggiorna la lista
             personChoiceBox.setItems(FXCollections.observableArrayList(PersonManager.getAllPersons()));
-
-            // Ripristina la selezione se ancora presente
             if (selectedPerson != null && PersonManager.getPerson(selectedPerson.getName()) != null) {
                 personChoiceBox.setValue(selectedPerson);
             } else {
@@ -260,9 +266,7 @@ public class TransactionHandler {
     public void initializeChoiceBoxes() {
         typeTransaction.getItems().addAll(MovementType.values());
         typeTransaction.setValue(MovementType.SPESA);
-
-        // Inizializza la ChoiceBox delle persone
-        refreshPersonList(); // Usa il nuovo metodo
+        refreshPersonList();
 
         personChoiceBox.setConverter(new StringConverter<>() {
             @Override
@@ -275,5 +279,80 @@ public class TransactionHandler {
                 return PersonManager.getPerson(string);
             }
         });
+    }
+
+    public void deleteSelectedTransaction() {
+        executeOnSelectedItem(transactionTable, this::deleteTransaction, "Seleziona una transazione da eliminare!");
+    }
+
+    private void deleteTransaction(ITransaction transaction) {
+        boolean confirm = showConfirmationAlert(
+                "Conferma eliminazione",
+                "Eliminare la transazione?",
+                "Transazione: " + transaction.getUser() + "\nImporto: " + transaction.getMoney() + "€"
+        );
+
+        if (confirm) {
+            boolean removed = removeTransaction(transaction);
+            if (removed) {
+                AlertManager.showInfoAlert("Transazione eliminata con successo!");
+                refreshTable();
+                updateBalance();
+            } else {
+                AlertManager.showErrorAlert("Impossibile eliminare la transazione!");
+            }
+        }
+    }
+
+    private boolean removeTransaction(ITransaction transaction) {
+        try {
+            ArrayList<ITransaction> transactions = ledger.getTransaction();
+            boolean removed = transactions.removeIf(t ->
+                    t.getUser().equals(transaction.getUser()) &&
+                            t.getMoney() == transaction.getMoney() &&
+                            t.getDate().equals(transaction.getDate()) &&
+                            t.getType() == transaction.getType()
+            );
+
+            if (removed) {
+                ledger.setList(transactions);
+                rewriteTransactionFile(transactions);
+                return true;
+            }
+            return false;
+
+        } catch (Exception e) {
+            AlertManager.showErrorAlert("Errore durante l'eliminazione: " + e.getMessage());
+            return false;
+        }
+    }
+
+    private void rewriteTransactionFile(ArrayList<ITransaction> transactions) {
+        try {
+            IFileManagement fileManagement = new FileManagement();
+            fileManagement.writeObject("Movement.json", transactions);
+            System.out.println("File transazioni aggiornato con " + transactions.size() + " transazioni");
+        } catch (Exception e) {
+            System.err.println("Errore nel riscrivere il file: " + e.getMessage());
+            throw new RuntimeException("Errore nel salvataggio delle transazioni", e);
+        }
+    }
+
+    @Override
+    public void refreshTable() {
+        if (transactionTable != null) {
+            refreshTable(transactionTable, ledger.getTransaction());
+        }
+    }
+
+    @Override
+    protected void clearInputFields() {
+        personChoiceBox.setValue(null);
+        moneyTransaction.clear();
+        dateTransaction.setValue(LocalDate.now());
+        typeTransaction.setValue(MovementType.SPESA);
+        if (transactionTagsListView != null) {
+            transactionTagsListView.getSelectionModel().clearSelection();
+        }
     }
 }

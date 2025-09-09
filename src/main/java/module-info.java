@@ -2,7 +2,6 @@ module it.unicam.cs.mpgc.jbudget {
     requires javafx.controls;
     requires javafx.fxml;
     requires com.google.gson;
-    requires it.unicam.cs.mpgc.jbudget;
 
     opens it.unicam.cs.mpgc.jbudget126533 to javafx.graphics;
     opens it.unicam.cs.mpgc.jbudget126533.controller to javafx.fxml;

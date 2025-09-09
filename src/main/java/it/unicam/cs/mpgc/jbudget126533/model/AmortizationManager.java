@@ -14,18 +14,7 @@ import java.util.*;
  * utilizzando un oggetto {@link IFileManagement} per leggere e scrivere su file JSON.
  * Include anche metodi per processare rate scadute, calcolare rate future e gestire eliminazioni.
  */
-public class AmortizationManager {
-
-    /** Mappa dei piani di ammortamento attivi, identificati da un ID univoco. */
-    private final Map<String, AmortizationPlan> amortizationPlans = new HashMap<>();
-
-    /** Gestore della persistenza su file. */
-    private final IFileManagement fileManagement;
-
-// --Commented out by Inspection START (03/09/25, 04:37):
-//    /** Nome del file JSON utilizzato per salvare i piani di ammortamento. */
-//    private static final String AMORTIZATION_FILE = FilePaths.AMORTIZATION_FILE;
-// --Commented out by Inspection STOP (03/09/25, 04:37)
+public class AmortizationManager extends BaseManager<AmortizationPlan> {
 
     /**
      * Costruttore di default.
@@ -33,8 +22,8 @@ public class AmortizationManager {
      * Inizializza {@link IFileManagement} e carica automaticamente i piani di ammortamento salvati.
      */
     public AmortizationManager() {
-        this.fileManagement = new FileManagement();
-        loadAmortizationPlans();
+        super(new FileManagement(), FilePaths.getFileNameOnly(FilePaths.AMORTIZATION_FILE));
+        loadItems();
     }
 
     /**
@@ -45,9 +34,33 @@ public class AmortizationManager {
      * @param fileManagement gestore dei file da utilizzare
      */
     public AmortizationManager(IFileManagement fileManagement) {
-        this.fileManagement = fileManagement;
-        loadAmortizationPlans();
+        super(fileManagement, FilePaths.getFileNameOnly(FilePaths.AMORTIZATION_FILE));
+        loadItems();
     }
+    @Override
+    protected void loadItems() {
+        try {
+            Type type = new TypeToken<List<AmortizationPlan>>() {}.getType();
+            List<AmortizationPlan> loadedPlans = fileManagement.readObject(fileName, type);
+
+            if (loadedPlans != null) {
+                managedItems.clear();
+                for (AmortizationPlan plan : loadedPlans) {
+                    System.out.println("Caricato piano: " + plan.getDescription() + " con " +
+                            plan.getInstallments().size() + " rate");
+                    managedItems.put(plan.getId(), plan);
+                }
+                System.out.println("Piani di ammortamento caricati: " + managedItems.size());
+            } else {
+                System.out.println("Nessun piano di ammortamento trovato, inizializzo vuoto");
+            }
+        } catch (Exception e) {
+            System.err.println("Errore caricamento piani ammortamento: " + e.getMessage());
+            e.printStackTrace();
+            saveItems(); // Crea file vuoto se non esiste
+        }
+    }
+
 
     /**
      * Crea un nuovo piano di ammortamento e lo salva.
@@ -66,9 +79,20 @@ public class AmortizationManager {
         String id = "AMORT_" + System.currentTimeMillis() + "_" + UUID.randomUUID().toString().substring(0, 8);
         AmortizationPlan plan = new AmortizationPlan(id, description, principalAmount, annualInterestRate,
                 numberOfInstallments, startDate, tags);
-        amortizationPlans.put(id, plan);
-        saveAmortizationPlans();
+        addItem(id, plan);
         return plan;
+    }
+
+    public boolean deleteAmortizationPlan(String planId) {
+        return removeItem(planId);
+    }
+
+    public boolean deleteAmortizationPlan(AmortizationPlan plan) {
+        return deleteAmortizationPlan(plan.getId());
+    }
+
+    public List<AmortizationPlan> getAmortizationPlans() {
+        return new ArrayList<>(managedItems.values());
     }
 
     /**
@@ -83,7 +107,7 @@ public class AmortizationManager {
         LocalDate today = LocalDate.now();
         boolean changes = false;
 
-        for (AmortizationPlan plan : amortizationPlans.values()) {
+        for (AmortizationPlan plan : managedItems.values()) {
             for (Installment installment : plan.getInstallments()) {
                 if (!installment.isPaid() && installment.isDue()) {
                     ITransaction transaction = createTransactionFromInstallment(installment, plan);
@@ -100,7 +124,7 @@ public class AmortizationManager {
         }
 
         if (changes) {
-            saveAmortizationPlans();
+            saveItems();
         }
     }
 
@@ -114,7 +138,7 @@ public class AmortizationManager {
     public double calculateFutureInstallments(LocalDate startDate, LocalDate endDate) {
         double total = 0;
 
-        for (AmortizationPlan plan : amortizationPlans.values()) {
+        for (AmortizationPlan plan : managedItems.values()) {
             for (Installment installment : plan.getInstallments()) {
                 LocalDate dueDate = installment.getDueDate();
                 if (!installment.isPaid() &&
@@ -129,35 +153,10 @@ public class AmortizationManager {
     }
 
     /**
-     * Restituisce una lista di tutti i piani di ammortamento presenti.
-     *
-     * @return lista dei piani di ammortamento
-     */
-    public List<AmortizationPlan> getAmortizationPlans() {
-        return new ArrayList<>(amortizationPlans.values());
-    }
-
-    /**
      * Salva tutti i piani di ammortamento usando {@link IFileManagement}.
      */
     public void save() {
-        saveAmortizationPlans();
-    }
-
-    /**
-     * Elimina un piano di ammortamento dato il suo ID.
-     *
-     * @param planId ID del piano da eliminare
-     * @return true se il piano è stato eliminato, false altrimenti
-     */
-    public boolean deleteAmortizationPlan(String planId) {
-        if (amortizationPlans.containsKey(planId)) {
-            amortizationPlans.remove(planId);
-            saveAmortizationPlans();
-            System.out.println("Piano eliminato: " + planId);
-            return true;
-        }
-        return false;
+        saveItems();
     }
 
     /**
@@ -166,9 +165,6 @@ public class AmortizationManager {
      * @param plan piano da eliminare
      * @return true se il piano è stato eliminato, false altrimenti
      */
-    public boolean deleteAmortizationPlan(AmortizationPlan plan) {
-        return deleteAmortizationPlan(plan.getId());
-    }
 
     // ==================== METODI PRIVATI ====================
 
@@ -182,39 +178,5 @@ public class AmortizationManager {
                 installment.getDueDate(),
                 plan.getTags()
         );
-    }
-
-    private void saveAmortizationPlans() {
-        try {
-            List<AmortizationPlan> plansToSave = new ArrayList<>(amortizationPlans.values());
-            fileManagement.writeObject(FilePaths.getFileNameOnly(FilePaths.AMORTIZATION_FILE), plansToSave);
-            System.out.println("Piani di ammortamento salvati: " + plansToSave.size());
-        } catch (Exception e) {
-            System.err.println("Errore salvataggio piani ammortamento: " + e.getMessage());
-        }
-    }
-
-    private void loadAmortizationPlans() {
-        try {
-            Type type = new TypeToken<List<AmortizationPlan>>() {}.getType();
-            List<AmortizationPlan> loadedPlans = fileManagement.readObject(
-                    FilePaths.getFileNameOnly(FilePaths.AMORTIZATION_FILE), type);
-
-            if (loadedPlans != null) {
-                amortizationPlans.clear();
-                for (AmortizationPlan plan : loadedPlans) {
-                    System.out.println("Caricato piano: " + plan.getDescription() + " con " +
-                            plan.getInstallments().size() + " rate");
-                    amortizationPlans.put(plan.getId(), plan);
-                }
-                System.out.println("Piani di ammortamento caricati: " + amortizationPlans.size());
-            } else {
-                System.out.println("Nessun piano di ammortamento trovato, inizializzo vuoto");
-            }
-        } catch (Exception e) {
-            System.err.println("Errore caricamento piani ammortamento: " + e.getMessage());
-            e.printStackTrace();
-            saveAmortizationPlans(); // Crea file vuoto se non esiste
-        }
     }
 }

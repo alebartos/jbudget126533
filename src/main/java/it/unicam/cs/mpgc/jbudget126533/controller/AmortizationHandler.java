@@ -26,9 +26,8 @@ import java.util.Optional;
  * </ul>
  * Questa classe è strettamente legata all'interfaccia JavaFX.
  */
-public class AmortizationHandler {
+public class AmortizationHandler extends BaseHandler<AmortizationPlan> {
 
-    private final Ledger ledger;
     private final TextField amortDescription;
     private final TextField amortPrincipal;
     private final TextField amortInterestRate;
@@ -57,7 +56,7 @@ public class AmortizationHandler {
                                TextField amortInterestRate, TextField amortInstallments,
                                DatePicker amortStartDate, ListView<ITag> amortTags,
                                TableView<Installment> amortTable, TableView<AmortizationPlan> amortizationPlansTable) {
-        this.ledger = ledger;
+        super(ledger);
         this.amortDescription = amortDescription;
         this.amortPrincipal = amortPrincipal;
         this.amortInterestRate = amortInterestRate;
@@ -97,7 +96,10 @@ public class AmortizationHandler {
     public void createAmortizationPlan(ActionEvent event) {
         try {
             String description = amortDescription.getText().trim();
-            if (description.isEmpty()) {AlertManager.showErrorAlert("Inserisci una descrizione!"); return;}
+            if (description.isEmpty()) {
+                AlertManager.showErrorAlert("Inserisci una descrizione!");
+                return;
+            }
 
             double principal = Double.parseDouble(amortPrincipal.getText());
             double interestRate = Double.parseDouble(amortInterestRate.getText());
@@ -105,23 +107,24 @@ public class AmortizationHandler {
             LocalDate startDate = amortStartDate.getValue();
 
             List<ITag> selectedTags = new ArrayList<>(amortTags.getSelectionModel().getSelectedItems());
-            if (!FormValidator.validateTags(selectedTags, msg -> AlertManager.showWarningAlert( "Attenzione", msg))) return;
+            if (!FormValidator.validateTags(selectedTags, msg -> AlertManager.showWarningAlert("Attenzione", msg))) return;
             if (!FormValidator.validateStartDate(startDate, msg -> AlertManager.showErrorAlert("Errore", msg))) return;
 
             ledger.createAmortizationPlan(description, principal, interestRate, installments, startDate, selectedTags);
             ledger.saveAmortizationPlans();
-            loadAmortizationPlans();
-            clearAmortizationFields();
+            refreshTable();
+            clearInputFields();
 
             AlertManager.showInfoAlert("Piano di ammortamento creato e salvato!");
 
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             AlertManager.showErrorAlert("Dati numerici non validi!");
         } catch (Exception e) {
             AlertManager.showErrorAlert("Si è verificato un errore: " + e.getMessage());
             e.printStackTrace();
         }
     }
+
 
 
     /**
@@ -146,28 +149,28 @@ public class AmortizationHandler {
      * @param event evento di azione (es. click su bottone)
      */
     public void deleteSelectedAmortizationPlan(ActionEvent event) {
-        AmortizationPlan selected = amortizationPlansTable.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
-            confirmation.setTitle("Conferma eliminazione");
-            confirmation.setHeaderText("Eliminare il piano di ammortamento '" + selected.getDescription() + "'?");
-            confirmation.setContentText("Questa operazione non può essere annullata.");
+        executeOnSelectedItem(amortizationPlansTable, this::deletePlan, "Seleziona un piano da eliminare!");
+    }
 
-            Optional<ButtonType> result = confirmation.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.OK) {
-                boolean success = ledger.deleteAmortizationPlan(selected);
-                if (success) {
-                    loadAmortizationPlans();
-                    amortTable.getItems().clear();
-                    AlertManager.showInfoAlert("Piano di ammortamento eliminato!");
-                } else {
-                    AlertManager.showErrorAlert("Impossibile eliminare il piano!");
-                }
+    private void deletePlan(AmortizationPlan plan) {
+        boolean confirmed = showConfirmationAlert(
+                "Conferma eliminazione",
+                "Eliminare il piano di ammortamento '" + plan.getDescription() + "'?",
+                "Questa operazione non può essere annullata."
+        );
+
+        if (confirmed) {
+            boolean success = ledger.deleteAmortizationPlan(plan);
+            if (success) {
+                refreshTable();
+                amortTable.getItems().clear();
+                AlertManager.showInfoAlert("Piano di ammortamento eliminato!");
+            } else {
+                AlertManager.showErrorAlert("Impossibile eliminare il piano!");
             }
-        } else {
-            AlertManager.showWarningAlert("Seleziona un piano da eliminare!");
         }
     }
+
 
     /**
      * Processa tutte le rate scadute registrandole come dovute
@@ -179,15 +182,17 @@ public class AmortizationHandler {
         try {
             ledger.processAmortizationDueDates();
             AlertManager.showInfoAlert("Rate scadute processate!");
-
-            // Aggiorna la visualizzazione
-            loadAmortizationPlans();
-
+            refreshTable();
         } catch (Exception e) {
             AlertManager.showErrorAlert("Errore nel processamento: " + e.getMessage());
         }
     }
-
+    @Override
+    public void refreshTable() {
+        if (amortizationPlansTable != null && ledger != null) {
+            refreshTable(amortizationPlansTable, ledger.getAmortizationPlans());
+        }
+    }
     /**
      * Carica tutti i piani di ammortamento dal ledger e li mostra nella tabella.
      */
@@ -209,6 +214,7 @@ public class AmortizationHandler {
             amortTable.setItems(FXCollections.observableArrayList(plan.getInstallments()));
         }
     }
+
 
     /**
      * Pulisce tutti i campi di input del form di creazione piano.
@@ -298,6 +304,16 @@ public class AmortizationHandler {
         } catch (Exception e) {
             System.err.println("Errore nella configurazione della tabella ammortamento: " + e.getMessage());
         }
+    }
+
+    @Override
+    protected void clearInputFields() {
+        amortDescription.clear();
+        amortPrincipal.clear();
+        amortInterestRate.clear();
+        amortInstallments.clear();
+        amortStartDate.setValue(null);
+        amortTags.getSelectionModel().clearSelection();
     }
 
 }

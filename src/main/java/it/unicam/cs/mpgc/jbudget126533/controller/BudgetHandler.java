@@ -10,8 +10,8 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Gestisce le operazioni relative ai budget assegnati alle categorie/tag.
@@ -25,9 +25,8 @@ import java.util.Optional;
  * </ul>
  * Questa classe è strettamente legata all'interfaccia JavaFX.
  */
-public class BudgetHandler {
+public class BudgetHandler extends BaseHandler<Budget> {
 
-    private final Ledger ledger;
     private final ListView<ITag> budgetTagsListView;
     private final TextField budgetAmountField;
     private final DatePicker budgetStartDate;
@@ -49,7 +48,7 @@ public class BudgetHandler {
     public BudgetHandler(Ledger ledger, ListView<ITag> budgetTagsListView,
                          TextField budgetAmountField, DatePicker budgetStartDate,
                          DatePicker budgetEndDate, TableView<Budget> budgetTable) {
-        this.ledger = ledger;
+        super(ledger);
         this.budgetTagsListView = budgetTagsListView;
         this.budgetAmountField = budgetAmountField;
         this.budgetStartDate = budgetStartDate;
@@ -84,8 +83,8 @@ public class BudgetHandler {
             }
 
             ledger.setBudget(selectedTag.getName(), amount, startDate, endDate);
-            updateBudgetTable();
-            clearBudgetFields();
+            refreshTable();
+            clearInputFields();
 
             AlertManager.showInfoAlert("Budget impostato per: " + selectedTag.getName());
 
@@ -101,7 +100,7 @@ public class BudgetHandler {
      */
     public void updateBudgets(ActionEvent event) {
         ledger.updateBudgets();
-        updateBudgetTable();
+        refreshTable();
         checkBudgetAlerts();
     }
 
@@ -117,35 +116,24 @@ public class BudgetHandler {
     }
 
     /**
-     * Aggiorna la tabella dei budget e mostra un messaggio di pulizia dei budget scaduti.
-     *
-     * @param event evento di azione
-     */
-    public void cleanupBudgets(ActionEvent event) {
-        updateBudgetTable();
-        AlertManager.showInfoAlert("Budget scaduti rimossi!");
-    }
-
-    /**
      * Rimuove il budget selezionato dalla tabella previa conferma dell'utente.
      *
      * @param event evento di azione
      */
     public void removeBudget(ActionEvent event) {
-        Budget selectedBudget = budgetTable.getSelectionModel().getSelectedItem();
-        if (selectedBudget != null) {
-            Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
-            confirmation.setTitle("Conferma eliminazione");
-            confirmation.setHeaderText("Eliminare il budget per '" + selectedBudget.getCategory() + "'?");
-            confirmation.setContentText("Questa operazione non può essere annullata.");
+        executeOnSelectedItem(budgetTable, this::deleteBudget, "Seleziona un budget da Eliminare!");
+    }
 
-            Optional<ButtonType> result = confirmation.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.OK) {
-                budgetTable.getItems().remove(selectedBudget);
-                AlertManager.showInfoAlert("Budget Eliminato!");
-            }
-        } else {
-            AlertManager.showWarningAlert("Seleziona un budget da Eliminare!");
+    private void deleteBudget(Budget budget) {
+        boolean confirmed = showConfirmationAlert(
+                "Conferma eliminazione",
+                "Eliminare il budget per '" + budget.getCategory() + "'?",
+                "Questa operazione non può essere annullata."
+        );
+
+        if (confirmed) {
+            budgetTable.getItems().remove(budget);
+            AlertManager.showInfoAlert("Budget Eliminato!");
         }
     }
 
@@ -164,15 +152,6 @@ public class BudgetHandler {
             }
             AlertManager.showWarningAlert("Attenzione", message.toString());
         }
-    }
-
-    /**
-     * Pulisce tutti i campi di input del form di inserimento budget.
-     */
-    private void clearBudgetFields() {
-        budgetAmountField.clear();
-        budgetStartDate.setValue(null);
-        budgetEndDate.setValue(null);
     }
 
     /**
@@ -236,6 +215,20 @@ public class BudgetHandler {
 
         } catch (Exception e) {
             System.err.println("Errore nella configurazione della tabella budget: " + e.getMessage());
+        }
+    }
+
+    @Override
+    protected void clearInputFields() {
+        budgetAmountField.clear();
+        budgetStartDate.setValue(null);
+        budgetEndDate.setValue(null);
+    }
+
+    @Override
+    public void refreshTable() {
+        if (budgetTable != null && ledger != null) {
+            refreshTable(budgetTable, new ArrayList<>(ledger.getAllBudgets().values()));
         }
     }
 }

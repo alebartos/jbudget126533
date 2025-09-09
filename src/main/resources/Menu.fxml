@@ -83,50 +83,79 @@
                 <!-- FORM NUOVA TRANSAZIONE -->
                 <GridPane hgap="10" vgap="10" style="-fx-background-color: #ecf0f1; -fx-background-radius: 10; -fx-padding: 15;">
                     <columnConstraints>
-                        <ColumnConstraints percentWidth="30" />
-                        <ColumnConstraints percentWidth="70" />
+                        <ColumnConstraints percentWidth="25" />
+                        <ColumnConstraints percentWidth="50" />
+                        <ColumnConstraints percentWidth="25" />
                     </columnConstraints>
 
+                    <!-- Riga 1: Tipo Transazione -->
                     <Label text="Tipo:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
                     <ChoiceBox fx:id="typeTransaction" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+                    <HBox GridPane.rowIndex="0" GridPane.columnIndex="2" />
 
-                    <Label text="Utente:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-                    <ChoiceBox fx:id="personChoiceBox" GridPane.rowIndex="1" GridPane.columnIndex="1">
-                        <tooltip>
-                            <Tooltip text="Seleziona una persona esistente o aggiungine una nuova dalla gestione persone"/>
-                        </tooltip>
-                    </ChoiceBox>
+                    <!-- Riga 2: Persona -->
+                    <Label text="Persona:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                    <HBox spacing="5" GridPane.rowIndex="1" GridPane.columnIndex="1">
+                        <ChoiceBox fx:id="personChoiceBox" HBox.hgrow="ALWAYS">
+                            <tooltip>
+                                <Tooltip text="Seleziona una persona"/>
+                            </tooltip>
+                        </ChoiceBox>
+                        <Button text="👥" onAction="#showPersonManager"
+                                style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-min-width: 40px;">
+                            <tooltip>
+                                <Tooltip text="Gestisci persone"/>
+                            </tooltip>
+                        </Button>
+                    </HBox>
+                    <HBox GridPane.rowIndex="1" GridPane.columnIndex="2" />
 
-                    <!-- Aggiungi un pulsante per gestire le persone -->
-                    <Button text="👥 Gestisci Persone" onAction="#showPersonManager" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-
+                    <!-- Riga 3: Importo -->
                     <Label text="Importo:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
                     <TextField fx:id="moneyTransaction" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+                    <HBox GridPane.rowIndex="2" GridPane.columnIndex="2" />
 
+                    <!-- Riga 4: Data -->
                     <Label text="Data:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
                     <DatePicker fx:id="dateTransaction" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+                    <HBox GridPane.rowIndex="3" GridPane.columnIndex="2" />
 
-                    <Label text="Seleziona Tag:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+                    <!-- Riga 5: Tag -->
+                    <Label text="Tag:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
                     <ListView fx:id="transactionTagsListView" GridPane.rowIndex="4" GridPane.columnIndex="1"
                               prefHeight="100" prefWidth="200" />
+                    <VBox GridPane.rowIndex="4" GridPane.columnIndex="2" spacing="5">
+                        <Label text="Tag selezionati nella tab 'Gestione Tag'"
+                               style="-fx-text-fill: #666; -fx-font-size: 11px; -fx-wrap-text: true; -fx-max-width: 120px;"/>
+                    </VBox>
 
-                    <!-- Aggiungi un messaggio informativo -->
-                    <Label text="                                                                       I tag disponibili qui sono quelli selezionati nella tab 'Gestione Tag'"
-                           GridPane.columnIndex="1" GridPane.rowIndex="5"
-                           style="-fx-text-fill: #666; -fx-font-size: 11px; -fx-font-style: italic;" />
-
-                    <Button text="Aggiungi Transazione" onAction="#addTransaction" GridPane.columnIndex="1" GridPane.rowIndex="5"
-                            style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-background-radius: 5;" />
+                    <!-- Riga 6: Pulsanti -->
+                    <HBox GridPane.rowIndex="5" GridPane.columnIndex="0" />
+                    <HBox spacing="10" GridPane.rowIndex="5" GridPane.columnIndex="1" alignment="CENTER">
+                        <Button text="Aggiungi" onAction="#addTransaction"
+                                style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-min-width: 100px;">
+                            <tooltip>
+                                <Tooltip text="Aggiungi nuova transazione"/>
+                            </tooltip>
+                        </Button>
+                        <Button text="Elimina" onAction="#deleteSelectedTransaction"
+                                style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-min-width: 100px;">
+                            <tooltip>
+                                <Tooltip text="Elimina transazione selezionata"/>
+                            </tooltip>
+                        </Button>
+                    </HBox>
+                    <HBox GridPane.rowIndex="5" GridPane.columnIndex="2" />
                 </GridPane>
 
                 <!-- TABella TRANSAZIONI -->
                 <TableView fx:id="transactionTable" prefHeight="300">
                     <columns>
-                        <TableColumn fx:id="typeColumnTransactionTable" text="Tipo" />
-                        <TableColumn fx:id="userColumnTransactionTable" text="Utente" />
-                        <TableColumn fx:id="moneyColumnTransactionTable" text="Importo" />
-                        <TableColumn fx:id="dateColumnTransactionTable" text="Data" />
-                        <TableColumn fx:id="tagColumnTransactionTable" text="Tag" />
+                        <TableColumn fx:id="typeColumn" text="Tipo" minWidth="80" />
+                        <TableColumn fx:id="userColumn" text="Utente" minWidth="120" />
+                        <TableColumn fx:id="moneyColumn" text="Importo" minWidth="100" />
+                        <TableColumn fx:id="dateColumn" text="Data" minWidth="100" />
+                        <TableColumn fx:id="tagsColumn" text="Tag" minWidth="200" />
                     </columns>
                 </TableView>
             </VBox>

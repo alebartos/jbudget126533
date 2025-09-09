@@ -1,6 +1,7 @@
 package it.unicam.cs.mpgc.jbudget126533.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 /**
  * Rappresenta una singola rata di un piano di ammortamento.
@@ -17,18 +18,20 @@ import java.time.LocalDate;
  * </ul>
  * </p>
  */
-public class Installment {
+public class Installment extends Movement {
     private int number;
-    private LocalDate dueDate;
     private double principalAmount;
     private double interestAmount;
-    private double totalAmount;
     private boolean paid;
+    private String planId;
 
     /**
-     * Costruttore vuoto richiesto per la deserializzazione con Gson.
+     * Costruttore vuoto.
      */
-    public Installment() {}
+    public Installment() {
+        super();
+        super.setType(MovementType.SPESA); // Le rate sono sempre spese
+    }
 
     /**
      * Costruttore completo.
@@ -45,12 +48,12 @@ public class Installment {
     public Installment(int number, LocalDate dueDate, double principalAmount,
                        double interestAmount, double totalAmount,
                        double remainingBalance, boolean paid, String planId) {
+        super(MovementType.SPESA, new Person("Sistema"), totalAmount, dueDate, new ArrayList<>());
         this.number = number;
-        this.dueDate = dueDate;
         this.principalAmount = principalAmount;
         this.interestAmount = interestAmount;
-        this.totalAmount = totalAmount;
         this.paid = paid;
+        this.planId = planId;
     }
 
     // ==================== GETTERS ====================
@@ -59,13 +62,13 @@ public class Installment {
     public int getNumber() { return number; }
 
     /** @return data di scadenza della rata */
-    public LocalDate getDueDate() { return dueDate; }
+    public LocalDate getDueDate() { return getDate(); }
 
     /** @return quota interessi della rata */
     public double getInterestAmount() { return interestAmount; }
 
     /** @return importo totale della rata */
-    public double getTotalAmount() { return totalAmount; }
+    public double getTotalAmount() { return getMoney(); }
 
     /** @return true se la rata è già stata pagata */
     public boolean isPaid() { return paid; }
@@ -76,7 +79,7 @@ public class Installment {
      * @return true se la rata è dovuta, false altrimenti
      */
     public boolean isDue() {
-        return (LocalDate.now().isAfter(dueDate) || LocalDate.now().isEqual(dueDate)) && !paid;
+        return (LocalDate.now().isAfter(getDate()) || LocalDate.now().isEqual(getDate())) && !paid;
     }
 
     // ==================== SETTERS ====================
@@ -86,6 +89,6 @@ public class Installment {
     @Override
     public String toString() {
         return String.format("Rata %d: %.2f€ (C: %.2f€, I: %.2f€) - Scadenza: %s",
-                number, totalAmount, principalAmount, interestAmount, dueDate);
+                number, getMoney(), principalAmount, interestAmount, getDate());
     }
 }

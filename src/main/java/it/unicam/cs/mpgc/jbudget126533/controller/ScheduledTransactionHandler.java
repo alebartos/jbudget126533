@@ -18,9 +18,8 @@ import java.util.List;
  * Fornisce metodi per aggiungere, rimuovere e verificare transazioni programmate, oltre
  * alla gestione della tabella e dei campi di input.
  */
-public class ScheduledTransactionHandler {
+public class ScheduledTransactionHandler extends BaseHandler<ScheduledTransaction> {
 
-    private final Ledger ledger;
     private final TextField scheduledDescField;
     private final TextField scheduledAmountField;
     private final ChoiceBox<MovementType> scheduledType;
@@ -51,7 +50,7 @@ public class ScheduledTransactionHandler {
                                        ChoiceBox<RecurrenceType> scheduledRecurrence,
                                        DatePicker scheduledStartDate, DatePicker scheduledEndDate,
                                        TableView<ScheduledTransaction> scheduledTable) {
-        this.ledger = ledger;
+        super(ledger);
         this.scheduledDescField = scheduledDescField;
         this.scheduledAmountField = scheduledAmountField;
         this.scheduledType = scheduledType;
@@ -103,8 +102,8 @@ public class ScheduledTransactionHandler {
             );
 
             ledger.addScheduledTransaction(transaction);
-            updateScheduledTable();
-            clearScheduledFields();
+            refreshTable();
+            clearInputFields();
 
             AlertManager.showInfoAlert("Transazione programmata aggiunta!");
 
@@ -120,17 +119,16 @@ public class ScheduledTransactionHandler {
      * @param event evento scatenante
      */
     public void removeScheduledTransaction(ActionEvent event) {
-        ScheduledTransaction selected = scheduledTable.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            List<ScheduledTransaction> transactions = ledger.getScheduledTransactions();
-            int index = transactions.indexOf(selected);
-            if (index != -1) {
-                ledger.removeScheduledTransaction(index);
-                updateScheduledTable();
-                AlertManager.showInfoAlert("Transazione programmata rimossa!");
-            }
-        } else {
-            AlertManager.showWarningAlert("Seleziona una transazione da rimuovere!");
+        executeOnSelectedItem(scheduledTable, this::deleteScheduledTransaction, "Seleziona una transazione da rimuovere!");
+    }
+
+    private void deleteScheduledTransaction(ScheduledTransaction transaction) {
+        List<ScheduledTransaction> transactions = ledger.getScheduledTransactions();
+        int index = transactions.indexOf(transaction);
+        if (index != -1) {
+            ledger.removeScheduledTransaction(index);
+            refreshTable();
+            AlertManager.showInfoAlert("Transazione programmata rimossa!");
         }
     }
 
@@ -141,7 +139,7 @@ public class ScheduledTransactionHandler {
      */
     public void checkScheduledTransactions(ActionEvent event) {
         ledger.checkScheduledTransactions();
-        updateScheduledTable();
+        refreshTable();
     }
 
     /**
@@ -153,19 +151,6 @@ public class ScheduledTransactionHandler {
             scheduledObservableList.addAll(ledger.getScheduledTransactions());
             scheduledTable.refresh();
         }
-    }
-
-    /**
-     * Pulisce tutti i campi di input.
-     */
-    private void clearScheduledFields() {
-        scheduledDescField.clear();
-        scheduledAmountField.clear();
-        scheduledType.setValue(MovementType.SPESA);
-        scheduledRecurrence.setValue(RecurrenceType.MENSILE);
-        scheduledStartDate.setValue(null);
-        scheduledEndDate.setValue(null);
-        scheduledTagsListView.getSelectionModel().clearSelection();
     }
 
     /**
@@ -229,5 +214,23 @@ public class ScheduledTransactionHandler {
         } catch (Exception e) {
             System.err.println("Errore nella configurazione della tabella scheduled: " + e.getMessage());
         }
+    }
+
+    @Override
+    public void refreshTable() {
+        if (scheduledTable != null && ledger != null) {
+            refreshTable(scheduledTable, ledger.getScheduledTransactions());
+        }
+    }
+
+    @Override
+    protected void clearInputFields() {
+        scheduledDescField.clear();
+        scheduledAmountField.clear();
+        scheduledType.setValue(MovementType.SPESA);
+        scheduledRecurrence.setValue(RecurrenceType.MENSILE);
+        scheduledStartDate.setValue(null);
+        scheduledEndDate.setValue(null);
+        scheduledTagsListView.getSelectionModel().clearSelection();
     }
 }

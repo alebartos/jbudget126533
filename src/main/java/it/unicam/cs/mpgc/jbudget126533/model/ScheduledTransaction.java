@@ -11,18 +11,15 @@ import java.util.stream.Collectors;
  * una lista di tag per la categorizzazione, una data di inizio, una data di fine e una ricorrenza.
  * </p>
  */
-public class ScheduledTransaction {
-
+public class ScheduledTransaction extends Movement {
     private final String description;
-    private final double amount;
-    private final MovementType type;
-    private transient List<ITag> tags; // Non serializzare direttamente
-    private final List<String> tagNames; // Serializza solo i nomi
-    private final RecurrenceType recurrence;
-    private final LocalDate startDate;
+    private RecurrenceType recurrence;
+    private LocalDate startDate;
     private LocalDate nextExecutionDate;
-    private final LocalDate endDate;
+    private LocalDate endDate;
     private boolean active;
+    private transient List<ITag> tags; // Non serializzare direttamente
+    private final List<String> tagNames;
 
     /**
      * Costruisce una transazione programmata.
@@ -38,16 +35,14 @@ public class ScheduledTransaction {
     public ScheduledTransaction(String description, double amount, MovementType type,
                                 List<ITag> tags, RecurrenceType recurrence,
                                 LocalDate startDate, LocalDate endDate) {
-        this.description = description;
-        this.amount = amount;
-        this.type = type;
-        this.tags = new ArrayList<>(tags);
-        this.tagNames = tags.stream().map(ITag::getName).collect(Collectors.toList());
+        super(type, new Person("Sistema"), amount, startDate, tags);
         this.recurrence = recurrence;
+        this.description = description;
         this.startDate = startDate;
         this.nextExecutionDate = startDate;
         this.endDate = endDate;
         this.active = true;
+        this.tagNames = tags.stream().map(ITag::getName).collect(Collectors.toList());
     }
 
     /**
@@ -69,8 +64,7 @@ public class ScheduledTransaction {
     // ==================== GETTERS ====================
 
     public String getDescription() { return description; }
-    public double getAmount() { return amount; }
-    public MovementType getType() { return type; }
+    public double getAmount() { return getMoney(); }
     public RecurrenceType getRecurrence() { return recurrence; }
     public LocalDate getStartDate() { return startDate; }
     public LocalDate getNextExecutionDate() { return nextExecutionDate; }
@@ -111,23 +105,22 @@ public class ScheduledTransaction {
         }
 
         // Gestisce correttamente il segno per le spese
-        double transactionAmount = amount;
-        if (type == MovementType.SPESA) {
-            transactionAmount = -Math.abs(amount); // Forza negativo per le spese
-        } else if (type == MovementType.GUADAGNO) {
-            transactionAmount = Math.abs(amount); // Forza positivo per i guadagni
+        double transactionAmount = getMoney();
+        if (getType() == MovementType.SPESA) {
+            transactionAmount = -Math.abs(getMoney()); // Forza negativo per le spese
+        } else if (getType() == MovementType.GUADAGNO) {
+            transactionAmount = Math.abs(getMoney()); // Forza positivo per i guadagni
         }
 
         Person transactionPerson = new Person("Transazione Programmata");
 
         Transaction transaction = new Transaction(
-                type,
+                getType(),
                 transactionPerson,
                 transactionAmount,
                 nextExecutionDate,
-                tags
+                getTags()
         );
-
 
         calculateNextExecutionDate();
 

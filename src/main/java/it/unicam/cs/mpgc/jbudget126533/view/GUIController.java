@@ -64,6 +64,7 @@ public class GUIController implements Initializable {
     // --- COMPONENTI TRANSAZIONI ---
     @FXML private ChoiceBox<MovementType> typeTransaction;
     @FXML private TextField userTransaction;
+    @FXML private Button deleteTransactionButton;
     @FXML private TextField moneyTransaction;
     @FXML private DatePicker dateTransaction;
     @FXML private TableView<ITransaction> transactionTable;
@@ -350,13 +351,18 @@ public class GUIController implements Initializable {
     // ==================== DELEGA AI GESTORI SPECIALIZZATI ====================
 
     /**
-     * Delega l'aggiunta di una nuova transazione al TransactionHandler.
+     * Delega l'aggiunta/rimozione di una nuova transazione al TransactionHandler.
      *
      * @param actionEvent L'evento di azione che ha triggerato questo metodo
      */
     @FXML
     public void addTransaction(ActionEvent actionEvent) {
         transactionHandler.addTransaction(actionEvent);
+    }
+
+    @FXML
+    public void deleteSelectedTransaction(ActionEvent event) {
+        transactionHandler.deleteSelectedTransaction();
     }
 
     /**
@@ -620,7 +626,7 @@ public class GUIController implements Initializable {
 
     @FXML
     public void showPersonManager(ActionEvent event) {
-        tabPane.getSelectionModel().select(personTab);
+        tabPane.getSelectionModel().select(8);
         personHandler.initializePersonManagement();
     }
 

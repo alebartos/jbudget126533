@@ -18,24 +18,37 @@ import java.util.Map;
  * alla loro data di esecuzione.
  * </p>
  */
-public class ScheduledTransactionManager {
-
-    private final List<ScheduledTransaction> scheduledTransactions = new ArrayList<>();
+public class ScheduledTransactionManager extends BaseManager<ScheduledTransaction> {
     private final Ledger ledger;
-    private final IFileManagement fileManagement;
-
-    /** Percorso del file JSON per la persistenza delle transazioni programmate */
-    private static final String SCHEDULED_FILE = FilePaths.SCHEDULED_FILE;
-
     /**
      * Costruisce un nuovo gestore di transazioni programmate.
      *
      * @param ledger Riferimento al ledger principale per registrare le transazioni eseguite
      */
     public ScheduledTransactionManager(Ledger ledger, IFileManagement fileManagement) {
+        super(fileManagement, FilePaths.getFileNameOnly(FilePaths.SCHEDULED_FILE));
         this.ledger = ledger;
-        this.fileManagement = fileManagement;
-        loadScheduledTransactions();
+        loadItems();
+    }
+
+    @Override
+    protected void loadItems() {
+        try {
+            Type type = new TypeToken<List<ScheduledTransaction>>() {}.getType();
+            List<ScheduledTransaction> loaded = fileManagement.readObject(fileName, type);
+
+            if (loaded != null) {
+                managedItems.clear();
+                for (ScheduledTransaction transaction : loaded) {
+                    String id = "SCHED_" + transaction.hashCode();
+                    managedItems.put(id, transaction);
+                }
+                rebuildTagsInScheduledTransactions();
+            }
+        } catch (Exception e) {
+            System.err.println("Errore nel caricamento transazioni programmate: " + e.getMessage());
+            managedItems.clear();
+        }
     }
 
     /**
@@ -44,8 +57,8 @@ public class ScheduledTransactionManager {
      * @param transaction La transazione da aggiungere
      */
     public void addScheduledTransaction(ScheduledTransaction transaction) {
-        scheduledTransactions.add(transaction);
-        saveScheduledTransactions();
+        String id = "SCHED_" + transaction.hashCode();
+        addItem(id, transaction);
     }
 
     /**
@@ -54,9 +67,9 @@ public class ScheduledTransactionManager {
      * @param index Indice della transazione da rimuovere
      */
     public void removeScheduledTransaction(int index) {
-        if (index >= 0 && index < scheduledTransactions.size()) {
-            scheduledTransactions.remove(index);
-            saveScheduledTransactions();
+        if (index >= 0 && index < managedItems.size()) {
+            String id = new ArrayList<>(managedItems.keySet()).get(index);
+            removeItem(id);
         }
     }
 
@@ -66,7 +79,7 @@ public class ScheduledTransactionManager {
      * @return Lista di transazioni programmate
      */
     public List<ScheduledTransaction> getScheduledTransactions() {
-        return new ArrayList<>(scheduledTransactions);
+        return new ArrayList<>(managedItems.values());
     }
 
     /**
@@ -79,11 +92,11 @@ public class ScheduledTransactionManager {
         boolean executed = false;
         LocalDate today = LocalDate.now();
 
-        for (ScheduledTransaction scheduled : scheduledTransactions) {
+        for (ScheduledTransaction scheduled : managedItems.values()) {
             if (scheduled.isActive() && !scheduled.getNextExecutionDate().isAfter(today)) {
                 ITransaction transaction = scheduled.execute();
                 if (transaction != null) {
-                    ledger.addTransaction(transaction); // Notifica automaticamente il BudgetManager
+                    ledger.addTransaction(transaction);
                     ledger.write(transaction);
                     executed = true;
                     System.out.println("Eseguita transazione programmata: " + scheduled.getDescription());
@@ -92,44 +105,12 @@ public class ScheduledTransactionManager {
         }
 
         if (executed) {
-            saveScheduledTransactions();
+            saveItems();
         }
     }
 
-    // ==================== PERSISTENZA ====================
-
-    /**
-     * Salva tutte le transazioni programmate su file JSON.
-     */
     public void saveScheduledTransactions() {
-        try {
-            fileManagement.writeObject(FilePaths.getFileNameOnly(FilePaths.SCHEDULED_FILE), scheduledTransactions);
-        } catch (Exception e) {
-            System.err.println("Errore nel salvataggio transazioni programmate: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Carica le transazioni programmate dal file JSON.
-     * <p>
-     * In caso di errore di lettura, la lista interna viene azzerata.
-     * </p>
-     */
-    private void loadScheduledTransactions() {
-        try {
-            Type type = new TypeToken<List<ScheduledTransaction>>() {}.getType();
-            List<ScheduledTransaction> loaded = fileManagement.readObject(
-                    FilePaths.getFileNameOnly(FilePaths.SCHEDULED_FILE), type);
-
-            if (loaded != null) {
-                scheduledTransactions.clear();
-                scheduledTransactions.addAll(loaded);
-                rebuildTagsInScheduledTransactions();
-            }
-        } catch (Exception e) {
-            System.err.println("Errore nel caricamento transazioni programmate: " + e.getMessage());
-            scheduledTransactions.clear();
-        }
+        saveItems();
     }
 
     /**
@@ -137,7 +118,7 @@ public class ScheduledTransactionManager {
      */
     private void rebuildTagsInScheduledTransactions() {
         Map<String, ITag> allTags = TagManager.getAllTagsMap();
-        for (ScheduledTransaction transaction : scheduledTransactions) {
+        for (ScheduledTransaction transaction : managedItems.values()) {
             transaction.rebuildTags(allTags);
         }
     }
