@@ -11,15 +11,22 @@ import java.util.stream.Collectors;
  * una lista di tag per la categorizzazione, una data di inizio, una data di fine e una ricorrenza.
  * </p>
  */
-public class ScheduledTransaction extends Movement {
+public class ScheduledTransaction extends Transaction {
     private final String description;
     private RecurrenceType recurrence;
     private LocalDate startDate;
     private LocalDate nextExecutionDate;
     private LocalDate endDate;
     private boolean active;
-    private transient List<ITag> tags; // Non serializzare direttamente
-    private final List<String> tagNames;
+    private List<String> tagNames;
+
+
+    public ScheduledTransaction() {
+        super();
+        this.active = true;
+        this.description = "";
+        this.tagNames = new ArrayList<>();
+    }
 
     /**
      * Costruisce una transazione programmata.
@@ -37,8 +44,8 @@ public class ScheduledTransaction extends Movement {
                                 LocalDate startDate, LocalDate endDate) {
         super(type, new Person("Sistema"), amount, startDate, tags);
         this.recurrence = recurrence;
-        this.description = description;
         this.startDate = startDate;
+        this.description = description;
         this.nextExecutionDate = startDate;
         this.endDate = endDate;
         this.active = true;

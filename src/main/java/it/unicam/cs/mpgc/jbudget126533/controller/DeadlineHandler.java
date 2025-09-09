@@ -188,6 +188,7 @@ public class DeadlineHandler extends BaseHandler<Deadline> {
     }
 
 
+
     /**
      * Crea una transazione da una rata di ammortamento.
      */

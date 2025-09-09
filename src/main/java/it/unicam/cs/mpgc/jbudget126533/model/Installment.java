@@ -18,20 +18,18 @@ import java.util.ArrayList;
  * </ul>
  * </p>
  */
-public class Installment extends Movement {
+public class Installment extends Transaction {
     private int number;
     private double principalAmount;
     private double interestAmount;
     private boolean paid;
     private String planId;
 
-    /**
-     * Costruttore vuoto.
-     */
     public Installment() {
         super();
-        super.setType(MovementType.SPESA); // Le rate sono sempre spese
+        super.setType(MovementType.SPESA);
     }
+
 
     /**
      * Costruttore completo.
@@ -62,33 +60,35 @@ public class Installment extends Movement {
     public int getNumber() { return number; }
 
     /** @return data di scadenza della rata */
-    public LocalDate getDueDate() { return getDate(); }
+    public LocalDate getDueDate() { return super.getDate(); }
 
     /** @return quota interessi della rata */
     public double getInterestAmount() { return interestAmount; }
 
     /** @return importo totale della rata */
-    public double getTotalAmount() { return getMoney(); }
+    public double getTotalAmount() { return super.getMoney(); }
 
     /** @return true se la rata è già stata pagata */
     public boolean isPaid() { return paid; }
 
+    public String getPlanId() { return planId; }
     /**
      * Verifica se la rata è scaduta o in scadenza oggi e non ancora pagata.
      *
      * @return true se la rata è dovuta, false altrimenti
      */
     public boolean isDue() {
-        return (LocalDate.now().isAfter(getDate()) || LocalDate.now().isEqual(getDate())) && !paid;
+        return (LocalDate.now().isAfter(getDueDate()) || LocalDate.now().isEqual(getDueDate())) && !paid;
     }
 
     // ==================== SETTERS ====================
 
     public void setPaid(boolean paid) { this.paid = paid; }
 
+
     @Override
     public String toString() {
         return String.format("Rata %d: %.2f€ (C: %.2f€, I: %.2f€) - Scadenza: %s",
-                number, getMoney(), principalAmount, interestAmount, getDate());
+                number, getTotalAmount(), principalAmount, interestAmount, getDueDate());
     }
 }

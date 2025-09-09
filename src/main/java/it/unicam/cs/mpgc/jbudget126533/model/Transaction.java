@@ -11,9 +11,8 @@ import java.util.stream.Collectors;
  */
 public class Transaction extends Movement {
 
-    /** Costruttore vuoto  */
     public Transaction() {
-        super();
+        this.tags = new ArrayList<>();
     }
 
     /**
