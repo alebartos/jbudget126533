@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Classe astratta base per tutti i movimenti finanziari.
+ * Classe astratta base per tutti i movimenti
  * Fornisce implementazioni di base per le proprietà comuni a tutte le transazioni.
  */
 public abstract class Movement implements ITransaction {

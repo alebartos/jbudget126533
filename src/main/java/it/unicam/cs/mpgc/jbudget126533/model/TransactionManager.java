@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  * Gestisce le transazioni, i bilanci e le analisi per categorie e date.
  * Integra transazioni reali, transazioni programmate e piani di ammortamento.
  */
-public class BudgetManagement implements IBudgetManagement {
+public class TransactionManager implements IBudgetManagement {
 
     /** Lista delle transazioni già avvenute */
     private ArrayList<ITransaction> transactionsList;
@@ -36,7 +36,7 @@ public class BudgetManagement implements IBudgetManagement {
      * Costruttore vuoto.
      * Inizializza la lista delle transazioni.
      */
-    public BudgetManagement() {
+    public TransactionManager() {
         this.transactionsList = new ArrayList<>();
     }
 

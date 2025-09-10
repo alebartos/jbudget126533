@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  *     <li>Importazione ed esportazione dei tag</li>
  * </ul>
  */
-public class TagHandler {
+public class TagHandler extends BaseHandler<ITag>  {
 
     private final ListView<ITag> availableTagsListView;
     private final ListView<ITag> selectedTagsListView;
@@ -52,6 +52,7 @@ public class TagHandler {
                       TextField newTagTextField, TreeView<ITag> tagHierarchyTreeView,
                       ListView<ITag> transactionTagsListView, ListView<ITag> budgetTagsListView,
                       ListView<ITag> scheduledTagsListView, ListView<ITag> amortTags) {
+        super(null);
         this.availableTagsListView = availableTagsListView;
         this.selectedTagsListView = selectedTagsListView;
         this.newTagTextField = newTagTextField;
@@ -277,4 +278,13 @@ public class TagHandler {
         }
     }
 
+    @Override
+    protected void clearInputFields() {
+        newTagTextField.clear();
+    }
+
+    @Override
+    public void refreshTable() {
+        // Non necessario per TagHandler - usa i metodi specifici
+    }
 }

@@ -7,8 +7,7 @@ import java.lang.reflect.Type;
  * Adapter personalizzato per la (de)serializzazione degli oggetti {@link ITag}
  * tramite la libreria Gson.
  * <p>
- * Questo adapter converte un tag in JSON e viceversa, gestendo correttamente
- * i riferimenti gerarchici (parent-child) senza generare loop infiniti.
+ * Questo adapter converte un tag in JSON e viceversa
  * </p>
  *
  * <h2>Esempio di serializzazione</h2>

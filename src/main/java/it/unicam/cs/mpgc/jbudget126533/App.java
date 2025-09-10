@@ -1,7 +1,7 @@
 package it.unicam.cs.mpgc.jbudget126533;
 
 import it.unicam.cs.mpgc.jbudget126533.controller.Ledger;
-import it.unicam.cs.mpgc.jbudget126533.model.BudgetManagement;
+import it.unicam.cs.mpgc.jbudget126533.model.TransactionManager;
 import it.unicam.cs.mpgc.jbudget126533.util.FileSystemUtils;
 import it.unicam.cs.mpgc.jbudget126533.view.ConsoleView;
 import it.unicam.cs.mpgc.jbudget126533.view.GUIView;
@@ -48,9 +48,9 @@ public class App {
             FileSystemUtils.createBackup();
 
             if (args.length == 0) {
-                new App(new ConsoleView(new Ledger(new BudgetManagement()))).startGUI();
+                new App(new ConsoleView(new Ledger(new TransactionManager()))).startGUI();
             } else {
-                new App(new ConsoleView(new Ledger(new BudgetManagement()))).startConsole();
+                new App(new ConsoleView(new Ledger(new TransactionManager()))).startConsole();
             }
         } catch (Exception e) {
             e.printStackTrace();

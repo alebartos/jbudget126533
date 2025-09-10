@@ -141,7 +141,7 @@ public class GUIController implements Initializable {
      */
     public GUIController() {
         TagManager.loadAllTags();
-        ledger = new Ledger(new BudgetManagement());
+        ledger = new Ledger(new TransactionManager());
     }
 
     /**

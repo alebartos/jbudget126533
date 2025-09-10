@@ -24,9 +24,8 @@ import java.util.stream.Collectors;
  *     <li>Visualizzare il bilancio aggregato per tag</li>
  * </ul>
  */
-public class StatisticsHandler {
+public class StatisticsHandler extends BaseHandler<Map.Entry<String, Double>> {
 
-    private final Ledger ledger;
     private final Label balanceForRange;
     private final DatePicker dateStartForRange;
     private final DatePicker dateEndForRange;
@@ -56,7 +55,7 @@ public class StatisticsHandler {
                              Label balanceTrend, DatePicker dateStartForTrend, DatePicker dateEndForTrend,
                              TableView<Map.Entry<String, Double>> tagTable,
                              ChoiceBox<MovementType> choiceTypeForEachTag) {
-        this.ledger = ledger;
+        super(ledger);
         this.balanceForRange = balanceForRange;
         this.dateStartForRange = dateStartForRange;
         this.dateEndForRange = dateEndForRange;
@@ -103,18 +102,15 @@ public class StatisticsHandler {
                 endDate = LocalDate.now();
             }
 
-            // Calcola i componenti separatamente
             double realTransactions = calculateRealTransactions(type, startDate, endDate);
             double scheduledTransactions = ledger.calculateScheduledTransactionsForPeriod(type, startDate, endDate);
             double amortizationPayments = 0;
 
-            // Solo per le spese includi gli ammortamenti
             if (type == null || type == MovementType.SPESA) {
                 amortizationPayments = calculateAmortizationPayments(startDate, endDate);
             }
 
             StringBuilder details = getStringBuilder(realTransactions, scheduledTransactions, amortizationPayments);
-
             balanceForRange.setText(details.toString());
 
         } catch (Exception e) {
@@ -175,25 +171,19 @@ public class StatisticsHandler {
             int scheduledCount = countScheduledTransactions(startDate, endDate);
             int amortizationCount = ledger.countAmortizationPaymentsForPeriod(startDate, endDate);
 
-            // Visualizzazione compatta per spazio limitato
             StringBuilder details = new StringBuilder();
             details.append(String.format("%s: %.2f €\n", trend, totalTrend));
 
-            // Aggiungi icone e conteggi compatti
             if (realCount > 0 || scheduledCount > 0 || amortizationCount > 0) {
-
                 if (realCount > 0) {
                     details.append(String.format("Reali: %.2f € (%d transazioni)\n", realTrend, realCount));
                 }
-
                 if (scheduledCount > 0) {
-                    if (realCount > 0) details.append(String.format("Programmati: %.2f € (%d transazioni)\n", scheduledTrend, scheduledCount));
+                    details.append(String.format("Programmati: %.2f € (%d transazioni)\n", scheduledTrend, scheduledCount));
                 }
-
                 if (amortizationCount > 0) {
-                    if (realCount > 0 || scheduledCount > 0)  details.append(String.format("Ammortamenti: %.2f € (%d rate)", amortizationTrend, amortizationCount));
+                    details.append(String.format("Ammortamenti: %.2f € (%d rate)", amortizationTrend, amortizationCount));
                 }
-
             }
 
             balanceTrend.setText(details.toString());
@@ -282,8 +272,7 @@ public class StatisticsHandler {
                     .sorted((e1, e2) -> Double.compare(Math.abs(e2.getValue()), Math.abs(e1.getValue())))
                     .collect(Collectors.toList());
 
-            ObservableList<Map.Entry<String, Double>> items = FXCollections.observableArrayList(sortedEntries);
-            tagTable.setItems(items);
+            refreshTable(tagTable, sortedEntries);
 
         } catch (Exception e) {
             AlertManager.showErrorAlert("Impossibile generare la tabella: " + e.getMessage());
@@ -301,5 +290,15 @@ public class StatisticsHandler {
             System.err.println("Errore nel calcolo ammortamenti: " + e.getMessage());
             return 0;
         }
+    }
+
+    @Override
+    public void refreshTable() {
+        // Usato internamente da showTypeTagTable
+    }
+
+    @Override
+    protected void clearInputFields() {
+        // StatisticsHandler non ha campi di input da pulire
     }
 }

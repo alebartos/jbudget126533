@@ -47,13 +47,13 @@ public class SyncManager {
             // Carica tutti i dati
             syncPackage.setTransactions(fileManagement.read());
             syncPackage.setBudgets(new ArrayList<>(new BudgetManager(
-                    new BudgetManagement(),
-                    new Ledger(new BudgetManagement()),
+                    new TransactionManager(),
+                    new Ledger(new TransactionManager()),
                     fileManagement
             ).getAllBudgets().values()));
 
             syncPackage.setScheduledTransactions(new ScheduledTransactionManager(
-                    new Ledger(new BudgetManagement()),
+                    new Ledger(new TransactionManager()),
                     fileManagement
             ).getScheduledTransactions());
 
@@ -233,7 +233,7 @@ public class SyncManager {
      * @param strategy strategia di risoluzione dei conflitti
      */
     private void syncBudgets(List<Budget> remoteBudgets, ConflictResolutionStrategy strategy) {
-        BudgetManager budgetManager = new BudgetManager(new BudgetManagement(), new Ledger(new BudgetManagement()), fileManagement);
+        BudgetManager budgetManager = new BudgetManager(new TransactionManager(), new Ledger(new TransactionManager()), fileManagement);
         Map<String, Budget> localBudgets = budgetManager.getAllBudgets();
         Map<String, Budget> remoteBudgetMap = remoteBudgets.stream()
                 .collect(Collectors.toMap(Budget::getCategory, b -> b));
@@ -262,7 +262,7 @@ public class SyncManager {
      * @param strategy strategia di risoluzione dei conflitti
      */
     private void syncScheduledTransactions(List<ScheduledTransaction> remoteTransactions, ConflictResolutionStrategy strategy) {
-        ScheduledTransactionManager stManager = new ScheduledTransactionManager(new Ledger(new BudgetManagement()), fileManagement);
+        ScheduledTransactionManager stManager = new ScheduledTransactionManager(new Ledger(new TransactionManager()), fileManagement);
         List<ScheduledTransaction> localTransactions = stManager.getScheduledTransactions();
 
         Map<String, ScheduledTransaction> localMap = localTransactions.stream()
