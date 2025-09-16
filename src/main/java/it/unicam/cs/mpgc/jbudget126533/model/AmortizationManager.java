@@ -1,6 +1,5 @@
 package it.unicam.cs.mpgc.jbudget126533.model;
 
-import it.unicam.cs.mpgc.jbudget126533.controller.Ledger;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;

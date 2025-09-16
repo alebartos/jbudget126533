@@ -2,7 +2,7 @@ package it.unicam.cs.mpgc.jbudget126533.view;
 
 import it.unicam.cs.mpgc.jbudget126533.model.*;
 import it.unicam.cs.mpgc.jbudget126533.util.InvalidInputException;
-import it.unicam.cs.mpgc.jbudget126533.controller.Ledger;
+import it.unicam.cs.mpgc.jbudget126533.model.Ledger;
 import it.unicam.cs.mpgc.jbudget126533.util.Pair;
 
 import java.time.LocalDate;

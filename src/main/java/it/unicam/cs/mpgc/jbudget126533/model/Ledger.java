@@ -1,6 +1,5 @@
-package it.unicam.cs.mpgc.jbudget126533.controller;
+package it.unicam.cs.mpgc.jbudget126533.model;
 
-import it.unicam.cs.mpgc.jbudget126533.model.*;
 import it.unicam.cs.mpgc.jbudget126533.util.Pair;
 
 import java.time.LocalDate;

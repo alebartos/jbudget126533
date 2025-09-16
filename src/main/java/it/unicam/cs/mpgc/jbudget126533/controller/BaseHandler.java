@@ -1,5 +1,6 @@
 package it.unicam.cs.mpgc.jbudget126533.controller;
 
+import it.unicam.cs.mpgc.jbudget126533.model.Ledger;
 import it.unicam.cs.mpgc.jbudget126533.util.AlertManager;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;

@@ -3,9 +3,9 @@ module it.unicam.cs.mpgc.jbudget {
     requires javafx.fxml;
     requires com.google.gson;
 
+
     opens it.unicam.cs.mpgc.jbudget126533 to javafx.graphics;
     opens it.unicam.cs.mpgc.jbudget126533.controller to javafx.fxml;
-    opens it.unicam.cs.mpgc.jbudget126533.model to com.google.gson;
     opens it.unicam.cs.mpgc.jbudget126533.view to javafx.fxml;
 
     exports it.unicam.cs.mpgc.jbudget126533;
@@ -14,4 +14,5 @@ module it.unicam.cs.mpgc.jbudget {
     exports it.unicam.cs.mpgc.jbudget126533.view;
     exports it.unicam.cs.mpgc.jbudget126533.util;
     opens it.unicam.cs.mpgc.jbudget126533.util to com.google.gson;
+    opens it.unicam.cs.mpgc.jbudget126533.model to com.google.gson, javafx.fxml;
 }

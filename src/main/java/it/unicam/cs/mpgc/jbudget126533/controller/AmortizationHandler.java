@@ -12,7 +12,6 @@ import javafx.beans.property.SimpleStringProperty;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Gestisce le operazioni relative alla creazione, gestione e visualizzazione dei

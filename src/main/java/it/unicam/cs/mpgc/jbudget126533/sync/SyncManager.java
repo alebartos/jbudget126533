@@ -3,7 +3,7 @@ package it.unicam.cs.mpgc.jbudget126533.sync;
 import it.unicam.cs.mpgc.jbudget126533.model.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import it.unicam.cs.mpgc.jbudget126533.controller.Ledger;
+import it.unicam.cs.mpgc.jbudget126533.model.Ledger;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;

@@ -312,13 +312,13 @@ public class DeadlineHandler extends BaseHandler<Deadline> {
         }
 
         if (totalDeadlinesLabel != null)
-            totalDeadlinesLabel.setText("Totale Scadenze: " + total);
+            totalDeadlinesLabel.setText(""+total);
         if (overdueDeadlinesLabel != null)
-            overdueDeadlinesLabel.setText("Scadute: " + overdue);
+            overdueDeadlinesLabel.setText("" + overdue);
         if (dueTodayDeadlinesLabel != null)
-            dueTodayDeadlinesLabel.setText("Oggi: " + dueToday);
+            dueTodayDeadlinesLabel.setText("" + dueToday);
         if (futureDeadlinesLabel != null)
-            futureDeadlinesLabel.setText("Future: " + future);
+            futureDeadlinesLabel.setText("" + future);
     }
 
 

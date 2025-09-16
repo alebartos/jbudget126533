@@ -2,6 +2,7 @@ package it.unicam.cs.mpgc.jbudget126533.controller;
 
 import it.unicam.cs.mpgc.jbudget126533.model.Budget;
 import it.unicam.cs.mpgc.jbudget126533.model.ITag;
+import it.unicam.cs.mpgc.jbudget126533.model.Ledger;
 import it.unicam.cs.mpgc.jbudget126533.util.AlertManager;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;

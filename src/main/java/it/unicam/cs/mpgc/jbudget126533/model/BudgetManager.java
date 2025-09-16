@@ -1,7 +1,6 @@
 package it.unicam.cs.mpgc.jbudget126533.model;
 
 import com.google.gson.reflect.TypeToken;
-import it.unicam.cs.mpgc.jbudget126533.controller.Ledger;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;

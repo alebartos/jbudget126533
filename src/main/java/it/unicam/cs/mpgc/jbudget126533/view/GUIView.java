@@ -30,7 +30,8 @@ public class GUIView extends Application implements View {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Menu.fxml")));
+        ApplicationContext.init();
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/MainMenu.fxml")));
         primaryStage.setTitle("JBudget");
         primaryStage.setScene(new Scene(root, 1150, 750));
         primaryStage.resizableProperty().setValue(true);
