@@ -1,15 +1,29 @@
-// TIMESTAMP: 2025-09-03 04:28:44
+// TIMESTAMP: 2025-09-16 10:32:17
 [
   {
     "description": "Spotify",
-    "amount": 15.0,
-    "type": "SPESA",
+    "recurrence": "MENSILE",
+    "startDate": "2025-09-16",
+    "nextExecutionDate": "2025-10-16",
+    "active": true,
     "tagNames": [
       "Supermercato"
     ],
-    "recurrence": "MENSILE",
-    "startDate": "2025-09-02",
-    "nextExecutionDate": "2025-10-02",
-    "active": true
+    "type": "SPESA",
+    "user": "Sistema",
+    "money": 15.0,
+    "date": "2025-09-16",
+    "tags": [
+      {
+        "name": "Supermercato",
+        "color": "#000000",
+        "description": "",
+        "parentName": "Alimentari"
+      }
+    ],
+    "person": {
+      "name": "Sistema",
+      "defaultTags": []
+    }
   }
 ]

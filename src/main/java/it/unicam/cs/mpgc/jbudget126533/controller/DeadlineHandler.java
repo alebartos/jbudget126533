@@ -96,13 +96,12 @@ public class DeadlineHandler extends BaseHandler<Deadline> {
     }
 
     /**
-     * Aggiorna le scadenze richiamando {@link #loadDeadlines()} e mostra un messaggio informativo.
+     * Aggiorna le scadenze richiamando {@link #loadDeadlines()}.
      *
      * @param event evento di azione
      */
     public void refreshDeadlines(ActionEvent event) {
         loadDeadlines();
-        AlertManager.showInfoAlert("Scadenze aggiornate!");
     }
 
 

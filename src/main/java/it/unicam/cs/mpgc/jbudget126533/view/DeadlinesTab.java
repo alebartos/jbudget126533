@@ -5,6 +5,7 @@ import it.unicam.cs.mpgc.jbudget126533.model.Ledger;
 import it.unicam.cs.mpgc.jbudget126533.model.Deadline;
 import it.unicam.cs.mpgc.jbudget126533.model.DeadlineType;
 import it.unicam.cs.mpgc.jbudget126533.model.ScheduledTransaction;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -40,14 +41,15 @@ public class DeadlinesTab implements Initializable {
         ApplicationContext.registerController("deadlines", this);
     }
 
-    @FXML public void refreshDeadlines(javafx.event.ActionEvent e) {
+    @FXML public void refreshDeadlines(ActionEvent e) {
         handler.refreshDeadlines(e);
         updateUpcomingCount();
     }
 
-    @FXML public void processSelectedDeadline(javafx.event.ActionEvent e) {
+    @FXML public void processSelectedDeadline(ActionEvent e) {
         handler.processSelectedDeadline(e);
         updateUpcomingCount();
+        refreshDeadlines(null);
     }
 
     private void updateUpcomingCount() {

@@ -63,8 +63,8 @@
     <!-- INFO APPLICAZIONE -->
     <VBox spacing="10" style="-fx-background-color: #ecf0f1; -fx-background-radius: 10; -fx-padding: 15;">
         <Label text="Informazioni" style="-fx-font-weight: bold;"/>
-        <Label text="JBudget - Gestione Budget Personale v1.0"/>
-        <Label text="Sviluppato da: [Alessandro Bartolini]"/>
+        <Label text="JBudget - Gestione Budget Personale v4.1"/>
+        <Label text="Sviluppato da: Alessandro Bartolini"/>
         <Label text="Licenza: UNICAM #TODO"/>
     </VBox>
 </VBox>
