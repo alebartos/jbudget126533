@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unicam.cs.mpgc.jbudget126533.view.AmortizationTab" stylesheets="@styles.css">
+    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+    <Label text="Piano di Ammortamento Francese" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+    <!-- CREAZIONE NUOVO PIANO -->
+    <Label text="Crea Nuovo Piano di Ammortamento" style="-fx-font-weight: bold;"/>
+
+    <Label text="Seleziona i tag dalle categorie selezionate nella tab 'Gestione Tag'"
+           style="-fx-text-fill: #27ae60; -fx-font-weight: bold; -fx-padding: 5px;"/>
+
+    <!-- Form di input -->
+    <GridPane hgap="10" vgap="10">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="30"/>
+            <ColumnConstraints percentWidth="70"/>
+        </columnConstraints>
+
+        <Label text="Descrizione:" GridPane.rowIndex="0"/>
+        <TextField fx:id="amortDescription" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Importo Prestito:" GridPane.rowIndex="1"/>
+        <TextField fx:id="amortPrincipal" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Tasso Interesse %:" GridPane.rowIndex="2"/>
+        <TextField fx:id="amortInterestRate" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <Label text="Numero Rate:" GridPane.rowIndex="3"/>
+        <TextField fx:id="amortInstallments" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <Label text="Data Inizio:" GridPane.rowIndex="4"/>
+        <DatePicker fx:id="amortStartDate" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+        <Label text="Tag:" GridPane.rowIndex="5"/>
+        <ListView fx:id="amortTags" GridPane.rowIndex="5" GridPane.columnIndex="1" prefHeight="100"/>
+
+        <Button text="Genera Piano" onAction="#createAmortizationPlan"
+                GridPane.columnIndex="1" GridPane.rowIndex="6"
+                style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
+    </GridPane>
+
+    <HBox spacing="20" alignment="TOP_LEFT">
+        <!-- TABELLA PIANI ATTIVI -->
+        <VBox spacing="10" HBox.hgrow="ALWAYS">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Piani di Ammortamento Attivi" style="-fx-font-weight: bold;"/>
+                <Button text="🔄 Aggiorna" onAction="#refreshAmortizationTable"
+                        style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
+                <Button text="🗑️ Elimina" onAction="#deleteSelectedAmortizationPlan"
+                        style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
+            </HBox>
+
+            <TableView fx:id="amortizationPlansTable" prefHeight="200" prefWidth="300">
+                <columns>
+                    <TableColumn fx:id="amortPlanNameColumn" text="Descrizione" minWidth="150"/>
+                    <TableColumn fx:id="amortPlanAmountColumn" text="Importo" minWidth="100"/>
+                    <TableColumn fx:id="amortPlanRateColumn" text="Tasso %" minWidth="80"/>
+                    <TableColumn fx:id="amortPlanInstallmentsColumn" text="Rate" minWidth="60"/>
+                    <TableColumn fx:id="amortPlanStartDateColumn" text="Data Inizio" minWidth="100"/>
+                </columns>
+            </TableView>
+        </VBox>
+
+        <!-- TABELLA DETTAGLIO RATE -->
+        <VBox spacing="10" HBox.hgrow="ALWAYS">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Dettaglio Rate del Piano Selezionato" style="-fx-font-weight: bold;"/>
+                <Button text="" style="-fx-background-color: #ffffff; -fx-text-fill: white;"/>
+            </HBox>
+            <TableView fx:id="amortTable" prefHeight="200" prefWidth="400">
+                <columns>
+                    <TableColumn text="N°" minWidth="40"/>
+                    <TableColumn text="Scadenza" minWidth="100"/>
+                    <TableColumn text="Rata Totale" minWidth="100"/>
+                    <TableColumn text="Quota Capitale" minWidth="100"/>
+                    <TableColumn text="Quota Interessi" minWidth="100"/>
+                    <TableColumn text="Debito Residuo" minWidth="100"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </HBox>
+</VBox>

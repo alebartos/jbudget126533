@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unicam.cs.mpgc.jbudget126533.view.MainTabController" stylesheets="@styles.css">
+    <tabs>
+        <Tab text="Dashboard">
+            <fx:include source="DashboardTab.fxml"/>
+        </Tab>
+        <Tab text="Transazioni">
+            <fx:include source="TransactionsTab.fxml"/>
+        </Tab>
+        <Tab text="Gestione Tag">
+            <fx:include source="TagsTab.fxml"/>
+        </Tab>
+        <Tab text="Statistiche">
+            <fx:include source="StatisticsTab.fxml"/>
+        </Tab>
+        <Tab text="Budget">
+            <fx:include source="BudgetsTab.fxml"/>
+        </Tab>
+        <Tab text="Programmate">
+            <fx:include source="ScheduledTab.fxml"/>
+        </Tab>
+        <Tab text="Ammortamento">
+            <fx:include source="AmortizationTab.fxml"/>
+        </Tab>
+        <Tab text="Scadenzario">
+            <fx:include source="DeadlinesTab.fxml"/>
+        </Tab>
+        <Tab text="Impostazioni">
+            <fx:include source="SettingsTab.fxml"/>
+        </Tab>
+    </tabs>
+</TabPane>

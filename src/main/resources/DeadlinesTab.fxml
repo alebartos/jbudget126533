@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unicam.cs.mpgc.jbudget126533.view.DeadlinesTab" stylesheets="@styles.css">
+    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+    <Label text="Scadenzario - Tutte le Scadenze Future" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+    <!-- Filtri e Pulsanti -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Filtra per tipo:"/>
+        <ChoiceBox fx:id="deadlineFilterType" prefWidth="150"/>
+        <Button text="🔄 Aggiorna" onAction="#refreshDeadlines"
+                style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
+        <Button text="✅ Processa" onAction="#processSelectedDeadline"
+                style="-fx-background-color: #27ae60; -fx-text-fill: white;"/>
+    </HBox>
+
+    <!-- Tabella Scadenze -->
+    <TableView fx:id="deadlinesTable" prefHeight="400">
+        <columns>
+            <TableColumn fx:id="deadlineDateColumn" text="Data" minWidth="100"/>
+            <TableColumn fx:id="deadlineStatusColumn" text="Stato" minWidth="80"/>
+            <TableColumn fx:id="deadlineDescriptionColumn" text="Descrizione" minWidth="200"/>
+            <TableColumn fx:id="deadlineAmountColumn" text="Importo" minWidth="100"/>
+            <TableColumn fx:id="deadlineTypeColumn" text="Tipo" minWidth="120"/>
+        </columns>
+    </TableView>
+
+    <!-- Statistiche -->
+    <HBox spacing="20" alignment="CENTER">
+        <VBox style="-fx-background-color: #ecf0f1; -fx-background-radius: 10; -fx-padding: 15;" prefWidth="200">
+            <Label text="Scadenze Totali" style="-fx-font-weight: bold;"/>
+            <Label fx:id="totalDeadlinesLabel" text="0" style="-fx-font-size: 24px;"/>
+        </VBox>
+        <VBox style="-fx-background-color: #ecf0f1; -fx-background-radius: 10; -fx-padding: 15;" prefWidth="200">
+            <Label text="In Scadenza (7gg)" style="-fx-font-weight: bold;"/>
+            <Label fx:id="upcomingDeadlinesLabel" text="0" style="-fx-font-size: 24px; -fx-text-fill: #e67e22;"/>
+        </VBox>
+        <VBox style="-fx-background-color: #ecf0f1; -fx-background-radius: 10; -fx-padding: 15;" prefWidth="200">
+            <Label text="Scadute" style="-fx-font-weight: bold;"/>
+            <Label fx:id="overdueDeadlinesLabel" text="0" style="-fx-font-size: 24px; -fx-text-fill: #e74c3c;"/>
+        </VBox>
+    </HBox>
+</VBox>

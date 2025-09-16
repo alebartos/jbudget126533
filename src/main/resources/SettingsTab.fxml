@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unicam.cs.mpgc.jbudget126533.view.SettingsTab" stylesheets="@styles.css">
+    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+    <Label text="Impostazioni" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+    <!-- IMPOSTAZIONI GENERALI -->
+    <VBox spacing="10" style="-fx-background-color: #ecf0f1; -fx-background-radius: 10; -fx-padding: 15;">
+        <Label text="Impostazioni Generali" style="-fx-font-weight: bold;"/>
+
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Valuta:" prefWidth="100"/>
+            <ChoiceBox fx:id="currencyChoice" prefWidth="150"/>
+        </HBox>
+
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Formato Data:" prefWidth="100"/>
+            <ChoiceBox fx:id="dateFormatChoice" prefWidth="150"/>
+        </HBox>
+
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Notifiche:" prefWidth="100"/>
+            <CheckBox fx:id="notificationsCheckbox" text="Abilita notifiche scadenze"/>
+        </HBox>
+    </VBox>
+
+    <!-- GESTIONE PERSONE -->
+    <VBox spacing="10" style="-fx-background-color: #ecf0f1; -fx-background-radius: 10; -fx-padding: 15;">
+        <Label text="Gestione Persone" style="-fx-font-weight: bold;"/>
+
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <TextField fx:id="newPersonField" promptText="Nome persona" prefWidth="200"/>
+            <Button text="➕ Aggiungi" onAction="#addPerson"
+                    style="-fx-background-color: #27ae60; -fx-text-fill: white;"/>
+        </HBox>
+
+        <ListView fx:id="peopleListView" prefHeight="150"/>
+
+        <HBox spacing="10">
+        </HBox>
+    </VBox>
+
+    <!-- BACKUP E RIPRISTINO -->
+    <VBox spacing="10" style="-fx-background-color: #ecf0f1; -fx-background-radius: 10; -fx-padding: 15;">
+        <Label text="Backup e Ripristino" style="-fx-font-weight: bold;"/>
+
+        <HBox spacing="10">
+            <Button text="💾 Backup Dati" onAction="#backup"
+                    style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
+            <Button text="📂 Ripristina Backup" onAction="#backup"
+                    style="-fx-background-color: #9b59b6; -fx-text-fill: white;"/>
+            <Button text="📤 Esporta CSV" onAction="#backup"
+                    style="-fx-background-color: #27ae60; -fx-text-fill: white;"/>
+            <Button text="📥 Importa CSV" onAction="#backup"
+                    style="-fx-background-color: #e67e22; -fx-text-fill: white;"/>
+        </HBox>
+    </VBox>
+
+    <!-- INFO APPLICAZIONE -->
+    <VBox spacing="10" style="-fx-background-color: #ecf0f1; -fx-background-radius: 10; -fx-padding: 15;">
+        <Label text="Informazioni" style="-fx-font-weight: bold;"/>
+        <Label text="JBudget - Gestione Budget Personale v1.0"/>
+        <Label text="Sviluppato da: [Alessandro Bartolini]"/>
+        <Label text="Licenza: UNICAM #TODO"/>
+    </VBox>
+</VBox>

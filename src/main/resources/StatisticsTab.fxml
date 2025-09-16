@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unicam.cs.mpgc.jbudget126533.view.StatisticsTab" stylesheets="@styles.css">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    <Label text="Statistiche e Analisi" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+
+    <!-- ANALISI PER PERIODO -->
+    <GridPane hgap="10" vgap="10" style="-fx-background-color: #ecf0f1; -fx-background-radius: 10; -fx-padding: 15;">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="25" />
+            <ColumnConstraints percentWidth="25" />
+            <ColumnConstraints percentWidth="25" />
+            <ColumnConstraints percentWidth="25" />
+        </columnConstraints>
+
+        <Label text="Bilancio per Periodo:" GridPane.columnSpan="4" style="-fx-font-weight: bold;" />
+
+        <Label text="Da:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+        <DatePicker fx:id="dateStartForRange" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+
+        <Label text="A:" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+        <DatePicker fx:id="dateEndForRange" GridPane.rowIndex="1" GridPane.columnIndex="3" />
+
+        <Label text="Tipo:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+        <ChoiceBox fx:id="choiceForRange" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+
+        <Label text="Risultato:" GridPane.rowIndex="2" GridPane.columnIndex="2" />
+        <Label fx:id="balanceForRange" text="0.00 €" GridPane.rowIndex="2" GridPane.columnIndex="3" />
+
+        <Button text="Calcola" onAction="#updateBalanceForRange" GridPane.columnIndex="3" GridPane.rowIndex="3"
+                style="-fx-background-color: #3498db; -fx-text-fill: white;" />
+    </GridPane>
+
+    <!-- TREND -->
+    <GridPane hgap="10" vgap="10" style="-fx-background-color: #ecf0f1; -fx-background-radius: 10; -fx-padding: 15;">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="25" />
+            <ColumnConstraints percentWidth="25" />
+            <ColumnConstraints percentWidth="25" />
+            <ColumnConstraints percentWidth="25" />
+        </columnConstraints>
+
+        <Label text="Analisi Trend:" GridPane.columnSpan="4" style="-fx-font-weight: bold;" />
+
+        <Label text="Da:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+        <DatePicker fx:id="dateStartForTrend" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+
+        <Label text="A:" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+        <DatePicker fx:id="dateEndForTrend" GridPane.rowIndex="1" GridPane.columnIndex="3" />
+
+        <Label text="Risultato:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+        <Label fx:id="balanceTrend" text="N/A" wrapText="true" maxWidth="Infinity" maxHeight="Infinity" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" style="-fx-font-size: 14px;" />
+
+        <Button text="Analizza Trend" onAction="#updateBalanceTrend" GridPane.columnIndex="3" GridPane.rowIndex="3"
+                style="-fx-background-color: #9b59b6; -fx-text-fill: white;" />
+    </GridPane>
+
+    <!-- TABELLA TAG -->
+    <VBox spacing="10">
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Analisi per Tag:" style="-fx-font-weight: bold;" />
+            <ChoiceBox fx:id="choiceTypeForEachTag" />
+            <Button text="Mostra" onAction="#showTypeTagTable"
+                    style="-fx-background-color: #e67e22; -fx-text-fill: white;" />
+        </HBox>
+        <TableView fx:id="tagTable" prefHeight="200">
+            <columns>
+                <TableColumn fx:id="tagColumnTagTable" text="Tag" />
+                <TableColumn fx:id="moneyColumnTagTable" text="Importo" />
+            </columns>
+        </TableView>
+    </VBox>
+</VBox>

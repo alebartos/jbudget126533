@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<VBox spacing="20" style="-fx-background-color: #f5f5f5;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unicam.cs.mpgc.jbudget126533.view.DashboardTab" stylesheets="@styles.css">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    <!-- HEADER -->
+    <HBox spacing="20" alignment="CENTER_LEFT">
+        <ImageView fitHeight="50" fitWidth="50" preserveRatio="true">
+            <Image url="@/jbudget.jpg" />
+        </ImageView>
+        <Label text="JBudget - Gestione Budget Personale" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+    </HBox>
+
+    <!-- STATISTICHE RAPIDE -->
+    <HBox spacing="20">
+        <VBox style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);" prefWidth="250">
+            <Label text="Bilancio Totale" style="-fx-font-weight: bold; -fx-text-fill: #7f8c8d;" />
+            <Label fx:id="balance" text="0.00 €" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+            <Button text="Aggiorna" onAction="#updateBalance" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 5;" />
+        </VBox>
+
+        <VBox style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);" prefWidth="250">
+            <Label text="Ultimo Movimento" style="-fx-font-weight: bold; -fx-text-fill: #7f8c8d;" />
+            <Label text="Nessun movimento" style="-fx-font-size: 16px; -fx-text-fill: #2c3e50;" />
+            <Button text="Vedi Tutti" onAction="#showAllTransactions" style="-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-background-radius: 5;" />
+        </VBox>
+    </HBox>
+
+    <!-- AZIONI RAPIDE -->
+    <GridPane hgap="10" vgap="10">
+        <columnConstraints>
+            <ColumnConstraints minWidth="200" halignment="LEFT"/>
+            <ColumnConstraints minWidth="200" halignment="LEFT"/>
+            <ColumnConstraints minWidth="200" halignment="LEFT"/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="80" valignment="CENTER"/>
+            <RowConstraints minHeight="80" valignment="CENTER"/>
+            <RowConstraints minHeight="80" valignment="CENTER"/>
+        </rowConstraints>
+
+        <Button text="➕ Nuova Transazione" onAction="#showAllTransactions" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8;" GridPane.columnIndex="0" GridPane.rowIndex="0" maxWidth="Infinity" maxHeight="30" />
+        <Button text="💰 Budget" onAction="#showBudget" style="-fx-background-color: #1b25e0; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8;" GridPane.columnIndex="2" GridPane.rowIndex="0" maxWidth="Infinity" maxHeight="30" />
+        <Button text="🔄 Transazioni Programmate" onAction="#showTransazioniProgrammate" style="-fx-background-color: #e01bb2; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8;" GridPane.columnIndex="1" GridPane.rowIndex="1" maxWidth="Infinity" maxHeight="30" />
+        <Button text="📊 Statistiche" onAction="#showStatistics" style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8;" GridPane.columnIndex="1" GridPane.rowIndex="0" maxWidth="Infinity" maxHeight="30" />
+        <Button text="🗂️ Ammortamento" onAction="#showAmortization" style="-fx-background-color: #65a5a6; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8;" GridPane.columnIndex="2" GridPane.rowIndex="1" maxWidth="Infinity" maxHeight="30" />
+        <Button text="🏷️ Gestione Tag" onAction="#showTagManager" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8;" GridPane.columnIndex="0" GridPane.rowIndex="1" maxWidth="Infinity" maxHeight="30" />
+        <Button text="📅 Scadenzario" onAction="#showDeadlines" style="-fx-background-color: #b55f68; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8;" GridPane.columnIndex="0" GridPane.rowIndex="2" maxWidth="Infinity" maxHeight="30" />
+        <Button text="⚙️ Impostazioni" onAction="#showSettings" style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8;" GridPane.columnIndex="1" GridPane.rowIndex="2" maxWidth="Infinity" maxHeight="30" />
+    </GridPane>
+</VBox>

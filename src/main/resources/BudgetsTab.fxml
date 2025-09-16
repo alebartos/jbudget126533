@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unicam.cs.mpgc.jbudget126533.view.BudgetsTab" stylesheets="@styles.css">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    <Label text="Gestione Budget" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+
+    <!-- FORM IMPOSTA BUDGET -->
+    <GridPane hgap="10" vgap="10" style="-fx-background-color: #ecf0f1; -fx-background-radius: 10; -fx-padding: 15;">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="30" />
+            <ColumnConstraints percentWidth="70" />
+        </columnConstraints>
+
+        <Label text="Seleziona Tag:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+        <ListView fx:id="budgetTagsListView" prefHeight="100" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+
+        <Label text="Importo Budget:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+        <TextField fx:id="budgetAmountField" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+
+        <Label text="Data Inizio:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+        <DatePicker fx:id="budgetStartDate" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+
+        <Label text="Data Fine:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+        <DatePicker fx:id="budgetEndDate" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+
+        <Button text="Imposta Budget" onAction="#setBudget" GridPane.columnIndex="1" GridPane.rowIndex="4"
+                style="-fx-background-color: #3498db; -fx-text-fill: white;" />
+    </GridPane>
+
+    <!-- TABELLA BUDGET -->
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="🔄 Aggiorna Budget" onAction="#updateBudgets"
+                style="-fx-background-color: #27ae60; -fx-text-fill: white;" />
+        <Button text="🗑️ Rimuovi Budget" onAction="#removeBudget"
+                style="-fx-background-color: #e74c3c; -fx-text-fill: white;" />
+    </HBox>
+
+    <TableView fx:id="budgetTable" prefHeight="300">
+        <columns>
+            <TableColumn fx:id="budgetCategoryColumn" text="Categoria" />
+            <TableColumn fx:id="budgetAllocatedColumn" text="Budget Allocato" />
+            <TableColumn fx:id="budgetSpentColumn" text="Speso" />
+            <TableColumn fx:id="budgetRemainingColumn" text="Rimanente" />
+            <TableColumn fx:id="budgetPercentageColumn" text="Utilizzo %" />
+        </columns>
+    </TableView>
+</VBox>

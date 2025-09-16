@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unicam.cs.mpgc.jbudget126533.view.TagsTab" stylesheets="@styles.css">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    <Label text="Gestione Tag" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+
+    <Label text="Tag selezionati qui appariranno nelle Taglist dei vari menu"
+           style="-fx-text-fill: #27ae60; -fx-font-weight: bold; -fx-padding: 10px;" />
+
+    <HBox spacing="20">
+        <!-- TAG DISPONIBILI -->
+        <VBox spacing="10" prefWidth="250">
+            <Label text="Tag Disponibili" style="-fx-font-weight: bold;" />
+            <ListView fx:id="availableTagsListView" prefHeight="200" />
+        </VBox>
+
+        <!-- PULSANTI AZIONE -->
+        <VBox spacing="10" alignment="CENTER">
+            <Button fx:id="addTagButton" text="➡️ Aggiungi" onAction="#addSelectedTag"
+                    style="-fx-background-color: #3498db; -fx-text-fill: white;" />
+            <Button fx:id="removeTagButton" text="⬅️ Rimuovi" onAction="#removeSelectedTag"
+                    style="-fx-background-color: #e74c3c; -fx-text-fill: white;" />
+        </VBox>
+
+        <!-- TAG SELEZIONATI -->
+        <VBox spacing="10" prefWidth="250">
+            <Label text="Tag Selezionati" style="-fx-font-weight: bold;" />
+            <ListView fx:id="selectedTagsListView" prefHeight="200" />
+        </VBox>
+    </HBox>
+
+    <!-- CREAZIONE NUOVI TAG -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <TextField fx:id="newTagTextField" promptText="Nome nuovo tag" prefWidth="200" />
+        <Button fx:id="createTagButton" text="➕ Crea Tag" onAction="#createNewTag"
+                style="-fx-background-color: #27ae60; -fx-text-fill: white;" />
+    </HBox>
+
+    <!-- GERARCHIA TAG -->
+    <VBox spacing="10">
+        <Label text="Gerarchia Tag" style="-fx-font-weight: bold;" />
+        <TreeView fx:id="tagHierarchyTreeView" prefHeight="150" />
+    </VBox>
+
+    <!-- Aggiungi questo HBox dopo la gerarchia tag -->
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="🔄 Ricarica Tutti" onAction="#refreshAllTags"
+                style="-fx-background-color: #3498db; -fx-text-fill: white;" />
+        <Button text="📤 Esporta" onAction="#exportTags"
+                style="-fx-background-color: #27ae60; -fx-text-fill: white;" />
+        <Button text="📥 Importa" onAction="#importTags"
+                style="-fx-background-color: #e67e22; -fx-text-fill: white;" />
+        <Button text="🗑️ Elimina" onAction="#deleteSelectedTag"
+                style="-fx-background-color: #e74c3c; -fx-text-fill: white;" />
+    </HBox>
+</VBox>
