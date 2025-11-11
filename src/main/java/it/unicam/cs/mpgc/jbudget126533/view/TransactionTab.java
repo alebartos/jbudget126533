@@ -44,7 +44,7 @@ public class TransactionTab implements Initializable {
 
     @FXML public void addTransaction(javafx.event.ActionEvent e) {
         handler.addTransaction(e);
-        // richiedi aggiornamento della dashboard del saldo
+
         DashboardTab dash = ApplicationContext.getController("dashboard", DashboardTab.class);
         if (dash != null) dash.updateBalance(null);
     }
@@ -59,7 +59,6 @@ public class TransactionTab implements Initializable {
         ApplicationContext.nav().goToSettings();
     }
 
-    // Permette ad altri controller di aggiornare la lista persone dopo modifiche
     public void refreshPersons() {
         if (personChoiceBox != null) {
             Person selected = personChoiceBox.getValue();

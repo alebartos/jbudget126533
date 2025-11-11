@@ -11,7 +11,7 @@ public class MainTabController implements Initializable, NavigationService {
 
     @FXML private TabPane mainTabPane;
 
-    // Indici coerenti con l'ordine dei <Tab> in MainTab.fxml
+
     private static final int DASHBOARD = 0;
     private static final int TRANSACTIONS = 1;
     private static final int TAGS = 2;

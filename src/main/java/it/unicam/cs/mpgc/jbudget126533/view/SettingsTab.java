@@ -35,7 +35,7 @@ public class SettingsTab implements Initializable {
         newPersonField.clear();
         refreshPeople();
 
-        // notifica TransactionTab per aggiornare la ChoiceBox delle persone
+
         TransactionTab trx = ApplicationContext.getController("transactions", TransactionTab.class);
         if (trx != null) trx.refreshPersons();
     }

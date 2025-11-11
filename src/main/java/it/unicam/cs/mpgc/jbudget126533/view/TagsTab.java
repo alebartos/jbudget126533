@@ -17,7 +17,7 @@ public class TagsTab implements Initializable {
     @FXML private TextField newTagTextField;
     @FXML private TreeView<ITag> tagHierarchyTreeView;
 
-    // sincronia con le altre tab che usano tag selezionati
+
     @FXML private ListView<ITag> transactionTagsListView; // può essere null in questo FXML
     @FXML private ListView<ITag> budgetTagsListView;      // può essere null in questo FXML
     @FXML private ListView<ITag> scheduledTagsListView;   // può essere null in questo FXML
@@ -31,7 +31,7 @@ public class TagsTab implements Initializable {
                 tagHierarchyTreeView, null, null, null, null);
         handler.initializeTagManagement();
 
-        // Sovrascrive gli items “locali” con la lista condivisa
+
         selectedTagsListView.setItems(ApplicationContext.selectedTags());
     }
 

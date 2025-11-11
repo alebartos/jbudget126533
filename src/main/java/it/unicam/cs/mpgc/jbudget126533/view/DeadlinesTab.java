@@ -19,13 +19,11 @@ public class DeadlinesTab implements Initializable {
     @FXML private ChoiceBox<DeadlineType> deadlineFilterType;
     @FXML private Label totalDeadlinesLabel;
     @FXML private Label overdueDeadlinesLabel;
-    @FXML private Label upcomingDeadlinesLabel; // presente in FXML
+    @FXML private Label upcomingDeadlinesLabel;
 
-    // non presenti nel FXML corrente; passiamo null al handler (è safe per i setText)
     @FXML private Label dueTodayDeadlinesLabel;
     @FXML private Label futureDeadlinesLabel;
 
-    // per refresh tabella transazioni programmate, come da costruttore originale
     @FXML private TableView<ScheduledTransaction> scheduledTable;
 
     private Ledger ledger;

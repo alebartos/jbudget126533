@@ -35,7 +35,7 @@ public class StatisticsTab implements Initializable {
         handler = new StatisticsHandler(ledger, balanceForRange, dateStartForRange, dateEndForRange,
                 choiceForRange, balanceTrend, dateStartForTrend, dateEndForTrend, tagTable, choiceTypeForEachTag);
 
-        // default valori come GUIController
+
         dateStartForRange.setValue(LocalDate.now().minusMonths(1));
         dateEndForRange.setValue(LocalDate.now());
         dateStartForTrend.setValue(LocalDate.now().minusMonths(3));
